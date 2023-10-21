@@ -70,7 +70,7 @@ export default function NavBar () {
                 as={Link}
                 color="primary"
                 href="#"
-                variant="flat"
+                variant="bordered"
                 onClick={() => {
                   router.push('/login')
                 }}
@@ -92,7 +92,7 @@ export default function NavBar () {
                 as={Link}
                 color="primary"
                 href="#"
-                variant="flat"
+                variant="bordered"
                 onClick={() => {
                   router.push('/login')
                 }}

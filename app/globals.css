@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  height: 100vh;
+}
+
 .contentLeague {
   display: grid;
   width: 100%;
@@ -9,9 +13,9 @@
   gap: 10px;
 }
 
-.prueba {
+.gridFormat {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 10px;
 }
 
@@ -35,16 +39,4 @@
   height: 100%;
   left: 7px;
   width: 100%;
-}
-
-.gridFormat {
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(
-      400px,
-      1fr
-    )
-  );
-  gap: 26px;
 }

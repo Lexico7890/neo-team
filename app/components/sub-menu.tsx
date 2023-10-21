@@ -1,23 +1,23 @@
 'use client'
 
-import { Card, CardBody, Link } from '@nextui-org/react'
-import React from 'react'
+import { Card, CardBody } from '@nextui-org/react'
 import { TbTournament } from 'react-icons/tb'
 import { RiTeamFill } from 'react-icons/ri'
 import { BiSolidUser } from 'react-icons/bi'
+import Link from 'next/link'
 
 const SubMenu = () => {
   return (
-    <Card className="w-60 hidden sm:flex md:flex lg:flex h-max">
+    <Card className="w-60 hidden sm:flex md:flex lg:flex h-max sm:gap-6">
       <CardBody className='flex flex-col gap-2'>
-        <Link href="#" color='secondary' underline='hover' className='flex gap-2'>
-          <TbTournament /><p>Torneos</p>
+        <Link href="#" className='flex gap-2 text-[#111111] dark:text-white text-xl'>
+          <TbTournament /><p className='border-b-2 border-[#111111] dark:border-white hover:border-b-4'>Torneos</p>
         </Link>
-        <Link href="#" color='secondary' underline='hover' className='flex gap-2'>
-          <RiTeamFill /><p>Equipos</p>
+        <Link href="#" className='flex gap-2 text-[#111111] dark:text-white text-xl'>
+          <RiTeamFill /><p className='border-b-2 border-[#111111] dark:border-white hover:border-b-4'>Equipos</p>
         </Link>
-        <Link href="#" color='secondary' underline='hover' className='flex gap-2'>
-          <BiSolidUser /><p>Jugadores</p>
+        <Link href="#" className='flex gap-2 text-[#111111] dark:text-white text-xl'>
+          <BiSolidUser /><p className='border-b-2 border-[#111111] dark:border-white hover:border-b-4'>Jugadores</p>
         </Link>
       </CardBody>
     </Card>

@@ -19,6 +19,19 @@ const config: Config = {
         medium: '0px',
         large: '0px'
       }
+    },
+    themes: {
+      light: {
+        colors: {
+          primary: '#111111'
+        }
+      },
+      dark: {
+        colors: {
+          primary: '#f6f6f6'
+        }
+      }
+      // ... custom themes
     }
   })]
 }

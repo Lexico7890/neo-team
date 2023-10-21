@@ -17,16 +17,16 @@ const PageLeague = async () => {
   const dataLeague: League[] = await FetchLegue()
   return (
     <>
-      {dataLeague.map(({ info, name }) => (
+      {dataLeague.map(({ info, name }, index) => (
         <div
-          key={name}
-          className="flex flex-col w-full max-h-[500px] h-auto drop-shadow-lg bg-slate-100 dark:bg-slate-800 p-2 mb-3"
+          key={index}
+          className="flex flex-col w-full max-h-[500px] bg-slate-100 h-auto drop-shadow-lg dark:bg-[#27272B] p-2 mb-3"
         >
           <div className="inline-flex justify-between items-center mb-2">
             <span className="text-2xl">{name}</span>
             <ButtonHeader />
           </div>
-          <div className="w-full h-full bg-slate-600 overflow-y-auto">
+          <div className="w-full h-full overflow-y-auto">
             <CustomTable info={info} />
           </div>
         </div>

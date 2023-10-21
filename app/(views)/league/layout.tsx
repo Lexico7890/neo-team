@@ -25,7 +25,6 @@ const LayoutLeague = ({ children }: { children: React.ReactNode }) => {
       <div className='flex flex-col w-full gap-3'>
         <div className='inline-flex gap-3'>
         <Select
-          color="warning"
           label="Categorías"
           placeholder="Ver categorías"
           // defaultSelectedKeys={["cat"]}
@@ -38,7 +37,6 @@ const LayoutLeague = ({ children }: { children: React.ReactNode }) => {
           ))}
         </Select>
         <Select
-          color="warning"
           label="Tipos"
           placeholder="Ver tipos"
           // defaultSelectedKeys={["cat"]}

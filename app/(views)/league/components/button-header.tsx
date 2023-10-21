@@ -13,20 +13,22 @@ const ButtonHeader = () => {
         onPress={onOpen}
         size="md"
         isIconOnly
-        color="secondary"
+        color="warning"
         aria-label="Like"
         onClick={() => {}}
         className='text-xl'
+        variant='bordered'
       >
         <GoInfo />
       </Button>
       <Button
         size="md"
         isIconOnly
-        color="secondary"
+        color="warning"
         aria-label="Like"
         onClick={() => {}}
         className='text-xl'
+        variant='bordered'
       >
         <RiNumbersFill />
       </Button>

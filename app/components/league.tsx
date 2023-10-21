@@ -32,10 +32,11 @@ const LeagueCard = () => {
       </CardBody>
       <CardFooter>
         <Button
-          color="secondary"
           onClick={() => {
             router.push('/league')
           }}
+          variant='bordered'
+          className='border-2 border-[#111111] text-black text-lg dark:text-white dark:border-white'
         >
           Ver liga
         </Button>
