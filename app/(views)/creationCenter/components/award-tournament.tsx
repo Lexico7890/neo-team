@@ -12,18 +12,20 @@ import {
 } from '@nextui-org/react'
 import { useState } from 'react'
 
-const AwardTournament = () => {
+interface Props {
+  award: [{ name: string, value: number }]
+  setAward: (award: any) => void
+}
+
+const AwardTournament = ({ award, setAward }: Props) => {
   const [nameAward, setName] = useState<string>('')
   const [value, setValue] = useState<string>('')
-  const [award, setAward] = useState<[{ name: string, value: number }]>([] as any)
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
-    console.log(award)
     if (award === undefined) {
       setAward([{ name: nameAward, value: Number(value) }])
     } else {
-      // @ts-expect-error: Unreachable code error
       setAward((prev: any) => [
         ...prev,
         { name: nameAward, value: Number(value) }
@@ -45,14 +47,10 @@ const AwardTournament = () => {
   return (
     <div className="border-1 border-black p-2">
       <h3 className="text-base m-2">Premiación</h3>
-      <form
-        onSubmit={(event) => {
-          handleSubmit(event)
-        }}
+      <div
         className="flex gap-2 flex-col "
       >
         <Input
-          isRequired
           name="name"
           type="text"
           variant="bordered"
@@ -77,10 +75,12 @@ const AwardTournament = () => {
             handleChangeValue(e)
           }}
         />
-        <Button size="sm" variant="bordered" type="submit">
+        <Button size="sm" variant="bordered" type="submit" onClick={(event) => {
+          handleSubmit(event)
+        }}>
           Agregar
         </Button>
-      </form>
+      </div>
       <Table aria-label="Example static collection table">
         <TableHeader>
           <TableColumn>Nombre premio</TableColumn>

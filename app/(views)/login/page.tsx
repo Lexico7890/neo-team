@@ -21,19 +21,15 @@ const LoginPage = () => {
 
   const handleLoginGoogle = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault()
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        queryParams: {
-          access_type: 'offline',
-          prompt: 'consent'
-        }
+        redirectTo: 'http://localhost:3000/api/login'
       }
     })
     if (error !== null) {
       throw new Error('No se pudo completar el ingreso')
     }
-    console.log(data)
   }
 
   return (
@@ -52,10 +48,9 @@ const LoginPage = () => {
           Continue con Discord
         </Button>
         <Button
-          color="primary"
           endContent={<BsGoogle />}
           radius="none"
-          className="w-[198px]"
+          className="w-[198px] bg-blue-600 text-white"
           onClick={(e) => { handleLoginGoogle(e) }}
         >
           Continue con google
