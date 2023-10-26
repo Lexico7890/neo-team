@@ -47,9 +47,7 @@ const AwardTournament = ({ award, setAward }: Props) => {
   return (
     <div className="border-1 border-black p-2">
       <h3 className="text-base m-2">Premiación</h3>
-      <div
-        className="flex gap-2 flex-col "
-      >
+      <div className="flex gap-2 flex-col ">
         <Input
           name="name"
           type="text"
@@ -75,13 +73,25 @@ const AwardTournament = ({ award, setAward }: Props) => {
             handleChangeValue(e)
           }}
         />
-        <Button size="sm" variant="bordered" type="submit" onClick={(event) => {
-          handleSubmit(event)
-        }}>
+        <Button
+          size="sm"
+          variant="bordered"
+          type="submit"
+          onClick={(event) => {
+            handleSubmit(event)
+          }}
+        >
           Agregar
         </Button>
       </div>
-      <Table aria-label="Example static collection table">
+      <Table
+        aria-label="Table for award tournament"
+        isHeaderSticky
+        classNames={{
+          base: 'max-h-[200px] overflow-auto',
+          table: 'min-h-[80px]'
+        }}
+      >
         <TableHeader>
           <TableColumn>Nombre premio</TableColumn>
           <TableColumn>Valor</TableColumn>

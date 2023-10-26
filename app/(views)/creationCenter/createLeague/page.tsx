@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import { type ChangeEvent, useState } from 'react'
 import CardCreation from '../components/card-creation'
 import {
   Button,
@@ -20,8 +20,11 @@ import {
   maxLength,
   number,
   minValue
+
 } from 'valibot'
-import { type Session, createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { toast, Toaster } from 'sonner'
+import useGetSupabase from '@/app/hooks/useGetSupabase'
+import { createClient } from '@supabase/supabase-js'
 
 const LeagueSchema = object({
   nameLeague: string('Debe agregar un nombre a la liga', [
@@ -33,14 +36,15 @@ const LeagueSchema = object({
     maxLength(50, 'El nombre del torneo debe contener menos de 50 caracteres')
   ]),
   valueTournament: number('Debe agregar un valor de inscripción al torneo', [
-    minValue(4, 'El valor debe ser mayor a 0')
+    minValue(1, 'El valor debe ser mayor a 0')
   ]),
   description: string('Debe agregar una descripción al torneo', [
-    minLength(10, 'La descripción debe contener al menos 3 caracteres'),
+    minLength(10, 'La descripción debe contener al menos 10 caracteres'),
     maxLength(500, 'El nombre debe contener menos de 50 caracteres')
   ]),
   category: string('Debe seleccionar una categoría'),
   gender: string('Debe seleccionar un genero'),
+  variant: string('Debe seleccionar una sub categoría'),
   contactName: string('Debe agregar un nombre al contacto', [
     minLength(3, 'El nombre del contacto debe contener al menos 3 caracteres'),
     maxLength(
@@ -57,13 +61,12 @@ const LeagueSchema = object({
 type LeagueData = Output<typeof LeagueSchema>
 
 async function Fetch (formData: any, award: any, idUser: string | undefined) {
-  console.log(formData)
   const result = await fetch('/api/league', {
     method: 'POST',
     body: JSON.stringify({ formData, award, idUser })
   })
   if (!result.ok) {
-    console.error('error front')
+    console.error('Upsssss, Algo estuvo mal')
   }
   return await result.json()
 }
@@ -76,58 +79,56 @@ const PageCreateLeague = () => {
     description: '',
     category: '',
     gender: '',
+    variant: '',
     contactName: '',
     contactNumber: ''
   })
   const [award, setAward] = useState<[{ name: string, value: number }]>(
     [] as any
   )
-  const [isError, setError] = useState<boolean>(false)
-  const [messageError, setMessageError] = useState<string>('')
-  const [category, setCategory] = useState<any[] | null>([])
-  const [gender, setGender] = useState<any[] | null>([])
-  const [session, getSession] = useState<Session | null>(null)
+  const [imageLeague, setImage] = useState<File | undefined>(undefined)
 
-  const supabase = createClientComponentClient()
+  const { category, gender, session, subCategory } = useGetSupabase()
+  // const supabase = createClient()
+
+  const handleChargeImage = (event: ChangeEvent<HTMLInputElement>) => {
+    const target = event.target as HTMLInputElement
+    const file: File = (target.files as FileList)[0]
+    if (file instanceof File) {
+      setImage(file)
+    }
+  }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     try {
+      if (award.length < 1) {
+        throw new Error(
+          'Se debe agregar por lo menos un item en la premiación'
+        )
+      }
       parse(LeagueSchema, formData)
-      setError(false)
-      const id = session?.user.id
-      const data = await Fetch(formData, award, id)
-      console.log(data)
+      if (imageLeague !== undefined) {
+        const { data, error } = await supabase.storage.from('image_neo_team').upload('image_test.jpg', imageLeague)
+        if (error !== null) {
+          console.log(error)
+          throw new Error('No se pudo cargar la imagen ', error)
+        }
+        console.log(data)
+      }
+      // const id = session?.user.id
+      /* toast.promise(Fetch(formData, award, id), {
+        loading: 'Creando la liga, un momento por favor...',
+        success: 'Liga creada con éxito',
+        error: 'No se pudo crear la liga, comuníquese con el administrador'
+      }) */
     } catch (error: any) {
-      setMessageError(error.message)
-      setError(true)
+      toast.error(error.message)
     }
   }
 
-  useEffect(() => {
-    const getData = async () => {
-      const { data } = await supabase.auth.getSession()
-      getSession(data.session)
-      const { data: category, error } = await supabase
-        .from('category')
-        .select('*')
-      if (error !== null) {
-        throw new Error('No se pudo completar la consulta de categoría')
-      }
-      setCategory(category)
-      const { data: gender, error: errorGender } = await supabase
-        .from('gender')
-        .select('*')
-      if (errorGender !== null) {
-        throw new Error('No se pudo completar la consulta de genero')
-      }
-      setGender(gender)
-    }
-    getData()
-  }, [])
-
   return (
-    <div className="flex gap-10 m-2 sm:m-12 h-auto">
+    <div className="flex gap-10 h-auto">
       <div className="hidden md:block">
         <CardCreation
           title="Crear Liga"
@@ -172,7 +173,7 @@ const PageCreateLeague = () => {
                   id="file_input"
                   type="file"
                   onChange={(e) => {
-                    console.log(e.target.value)
+                    handleChargeImage(e)
                   }}
                 />
               </div>
@@ -271,6 +272,31 @@ const PageCreateLeague = () => {
                     </Select>
                       )}
                 </Select>
+                <Select
+                  label="Seleccione una sub categoría"
+                  className="max-w-full"
+                  isRequired
+                  onChange={(event) => {
+                    setFormData({
+                      ...formData,
+                      variant: event.target.value
+                    })
+                  }}
+                >
+                  {subCategory !== null
+                    ? (
+                        subCategory.map(({ id, name }) => (
+                      <SelectItem key={id} value={id}>
+                        {name}
+                      </SelectItem>
+                        ))
+                      )
+                    : (
+                    <Select>
+                      <span>Sin datos</span>
+                    </Select>
+                      )}
+                </Select>
               </div>
               <div className="flex flex-col gap-2">
                 <AwardTournament award={award} setAward={setAward} />
@@ -309,7 +335,7 @@ const PageCreateLeague = () => {
               Crear liga
             </Button>
           </form>
-          {isError && <span className="text-red-800">{messageError}</span>}
+          <Toaster richColors />
         </div>
       </div>
     </div>

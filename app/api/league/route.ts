@@ -12,6 +12,15 @@ export async function GET () {
   return data
 }
 
+export async function POST (request: NextRequest) {
+  const { formData, award, idUser } = await request.json()
+  const supabase = createServerComponentClient({ cookies })
+  const idLeague = await CreateLeague(supabase, idUser, formData.nameLeague)
+  const idTournament = await CreateTournament(supabase, idLeague, formData)
+  const isOk = await CreateAwards(supabase, award, idTournament)
+  return NextResponse.json({ result: isOk })
+}
+
 async function CreateLeague (supabase: any, id: string, nameLeague: string) {
   const { data: league, error } = await supabase.from('league').insert({
     name: nameLeague,
@@ -60,15 +69,4 @@ async function CreateAwards (supabase: any, awards: [{ name: string, value: numb
     }
   })
   return true
-}
-
-export async function POST (request: NextRequest) {
-  const { formData, award, idUser } = await request.json()
-  // console.log(award)
-  const supabase = createServerComponentClient({ cookies })
-  const idLeague = await CreateLeague(supabase, idUser, formData.nameLeague)
-  const idTournament = await CreateTournament(supabase, idLeague, formData)
-  const isOk = await CreateAwards(supabase, award, idTournament)
-  console.log(isOk)
-  return NextResponse.json({ result: 'ok' })
 }
