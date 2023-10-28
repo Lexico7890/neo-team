@@ -55,6 +55,9 @@ const LeagueSchema = object({
   contactNumber: string('Debe agregar un numero de contacto', [
     minLength(7, 'Numero de contacto invalido'),
     maxLength(10, 'Numero de contacto invalido')
+  ]),
+  imageLeague: string('Debe agregar una imagen a la liga', [
+    minLength(3, 'La imagen debe contener al menos 3 caracteres')
   ])
 })
 
@@ -81,7 +84,8 @@ const PageCreateLeague = () => {
     gender: '',
     variant: '',
     contactName: '',
-    contactNumber: ''
+    contactNumber: '',
+    imageLeague: ''
   })
   const [award, setAward] = useState<[{ name: string, value: number }]>(
     [] as any
@@ -89,7 +93,9 @@ const PageCreateLeague = () => {
   const [imageLeague, setImage] = useState<File | undefined>(undefined)
 
   const { category, gender, session, subCategory } = useGetSupabase()
-  // const supabase = createClient()
+
+  // @ts-expect-error: Unreachable code error
+  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
   const handleChargeImage = (event: ChangeEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement
@@ -109,19 +115,24 @@ const PageCreateLeague = () => {
       }
       parse(LeagueSchema, formData)
       if (imageLeague !== undefined) {
-        const { data, error } = await supabase.storage.from('image_neo_team').upload('image_test.jpg', imageLeague)
+        const { data, error } = await supabase.storage.from('image_neo_team/leagueImage').upload(`image_test${Date.toString()}.jpg`, imageLeague)
         if (error !== null) {
           console.log(error)
           throw new Error('No se pudo cargar la imagen ', error)
         }
-        console.log(data)
+        // @ts-expect-error: Unreachable code error
+        const { data: url, errorUrl } = supabase.storage.from(process.env.NEXT_BUCKET_IMAGE).getPublicUrl(data.path)
+        if (errorUrl !== null) {
+          throw new Error('No se obtuvo la url de la imagen')
+        }
+        formData.imageLeague = url.publicUrl
       }
-      // const id = session?.user.id
-      /* toast.promise(Fetch(formData, award, id), {
+      const id = session?.user.id
+      toast.promise(Fetch(formData, award, id), {
         loading: 'Creando la liga, un momento por favor...',
         success: 'Liga creada con éxito',
         error: 'No se pudo crear la liga, comuníquese con el administrador'
-      }) */
+      })
     } catch (error: any) {
       toast.error(error.message)
     }
