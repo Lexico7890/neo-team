@@ -12,22 +12,27 @@ export async function GET () {
   return data
 }
 
-export async function POST (request: NextRequest) {
+export async function POST (request: NextRequest, response: NextResponse) {
   const { formData, award, idUser } = await request.json()
   const supabase = createServerComponentClient({ cookies })
-  const idLeague = await CreateLeague(supabase, idUser, formData.nameLeague)
+  const idLeague = await CreateLeague(supabase, idUser, formData.nameLeague, formData.imageLeague)
+  if (idLeague === '23505') {
+    return NextResponse.json({ result: 'Internal server Error' }, { status: 500, statusText: 'El nombre de la liga ya existe, intenta con otro' })
+  }
   const idTournament = await CreateTournament(supabase, idLeague, formData)
   const isOk = await CreateAwards(supabase, award, idTournament)
   return NextResponse.json({ result: isOk })
 }
 
-async function CreateLeague (supabase: any, id: string, nameLeague: string) {
+async function CreateLeague (supabase: any, id: string, nameLeague: string, image: File) {
   const { data: league, error } = await supabase.from('league').insert({
     name: nameLeague,
-    createdBy: id
+    createdBy: id,
+    url_image: image
   }).select('*')
   if (error !== null) {
-    throw new Error('Se produjo un error al intentar crear la liga')
+    console.log('entro liga')
+    return error.code
   }
   return league[0].id
 }

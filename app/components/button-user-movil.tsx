@@ -65,7 +65,7 @@ const ButtonUserMovil = () => {
         </DropdownItem>
         <DropdownItem key="settings">Mi perfil</DropdownItem>
         <DropdownItem key="team_settings">Mis estadísticas</DropdownItem>
-        <DropdownItem key="team_settings">
+        <DropdownItem key="creation team">
           <Link href="/creationCenter">Centro de creación</Link>
         </DropdownItem>
         <DropdownItem key="logout" color="danger" onClick={handleSignOut}>

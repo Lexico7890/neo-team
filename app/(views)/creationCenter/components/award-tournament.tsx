@@ -33,7 +33,6 @@ const AwardTournament = ({ award, setAward }: Props) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
-    console.log(name, value)
     if (name === 'nameAward') {
       setName(value)
     } else if (name === 'value') {

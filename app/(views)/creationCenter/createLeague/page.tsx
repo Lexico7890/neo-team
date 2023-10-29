@@ -1,6 +1,6 @@
 'use client'
 
-import { type ChangeEvent, useState } from 'react'
+import { type ChangeEvent, useState, memo } from 'react'
 import CardCreation from '../components/card-creation'
 import {
   Button,
@@ -24,7 +24,6 @@ import {
 } from 'valibot'
 import { toast, Toaster } from 'sonner'
 import useGetSupabase from '@/app/hooks/useGetSupabase'
-import { createClient } from '@supabase/supabase-js'
 
 const LeagueSchema = object({
   nameLeague: string('Debe agregar un nombre a la liga', [
@@ -56,9 +55,7 @@ const LeagueSchema = object({
     minLength(7, 'Numero de contacto invalido'),
     maxLength(10, 'Numero de contacto invalido')
   ]),
-  imageLeague: string('Debe agregar una imagen a la liga', [
-    minLength(3, 'La imagen debe contener al menos 3 caracteres')
-  ])
+  imageLeague: string('Debe agregar una imagen a la liga')
 })
 
 type LeagueData = Output<typeof LeagueSchema>
@@ -69,7 +66,7 @@ async function Fetch (formData: any, award: any, idUser: string | undefined) {
     body: JSON.stringify({ formData, award, idUser })
   })
   if (!result.ok) {
-    console.error('Upsssss, Algo estuvo mal')
+    throw new Error(result.statusText)
   }
   return await result.json()
 }
@@ -91,16 +88,18 @@ const PageCreateLeague = () => {
     [] as any
   )
   const [imageLeague, setImage] = useState<File | undefined>(undefined)
+  const [extensionImage, setExtensionImage] = useState<string>('')
+  const [isBlock, setBlock] = useState<boolean>(false)
 
-  const { category, gender, session, subCategory } = useGetSupabase()
-
-  // @ts-expect-error: Unreachable code error
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+  const { category, gender, session, subCategory, supabase, league, tournament } = useGetSupabase()
 
   const handleChargeImage = (event: ChangeEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement
     const file: File = (target.files as FileList)[0]
     if (file instanceof File) {
+      const fileName = file.name
+      const fileExtension = fileName.slice(((fileName.lastIndexOf('.') - 1) >>> 0) + 2)
+      setExtensionImage(fileExtension)
       setImage(file)
     }
   }
@@ -114,17 +113,13 @@ const PageCreateLeague = () => {
         )
       }
       parse(LeagueSchema, formData)
+      setBlock(true)
       if (imageLeague !== undefined) {
-        const { data, error } = await supabase.storage.from('image_neo_team/leagueImage').upload(`image_test${Date.toString()}.jpg`, imageLeague)
+        const { data, error } = await supabase.storage.from('image_neo_team/imageLeague').upload(`image_${Date.now().toString()}.${extensionImage}`, imageLeague)
         if (error !== null) {
-          console.log(error)
           throw new Error('No se pudo cargar la imagen ', error)
         }
-        // @ts-expect-error: Unreachable code error
-        const { data: url, errorUrl } = supabase.storage.from(process.env.NEXT_BUCKET_IMAGE).getPublicUrl(data.path)
-        if (errorUrl !== null) {
-          throw new Error('No se obtuvo la url de la imagen')
-        }
+        const { data: url } = supabase.storage.from('image_neo_team/imageLeague').getPublicUrl(data.path)
         formData.imageLeague = url.publicUrl
       }
       const id = session?.user.id
@@ -135,6 +130,8 @@ const PageCreateLeague = () => {
       })
     } catch (error: any) {
       toast.error(error.message)
+    } finally {
+      setBlock(false)
     }
   }
 
@@ -165,6 +162,7 @@ const PageCreateLeague = () => {
                 type="text"
                 variant="bordered"
                 label="Nombre de la liga"
+                defaultValue={league.length > 0 ? league[0].name : undefined}
                 onChange={(event) => {
                   setFormData({
                     ...formData,
@@ -342,6 +340,7 @@ const PageCreateLeague = () => {
               variant="ghost"
               className="hover:text-white my-4"
               type="submit"
+              disabled={isBlock}
             >
               Crear liga
             </Button>
@@ -353,4 +352,4 @@ const PageCreateLeague = () => {
   )
 }
 
-export default PageCreateLeague
+export default memo(PageCreateLeague)

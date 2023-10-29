@@ -1,23 +1,24 @@
-'use client'
-
 import {
-  Button,
   Card,
   CardBody,
   CardFooter,
   CardHeader
 } from '@nextui-org/react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import ButtonListLeague from './client/button-list-league'
 
-const LeagueCard = () => {
-  const router = useRouter()
+interface Props {
+  name: string
+  image: string | null
+}
+
+const LeagueCard = ({ name, image }: Props) => {
   return (
     <Card className="w-full" radius='none'>
-      <CardHeader className="text-3xl font-bold">Titulo liga</CardHeader>
+      <CardHeader className="text-3xl font-bold">{name}</CardHeader>
       <CardBody className="flex flex-col sm:flex-row items-center gap-10">
         <Image
-          src="/image/laLigaLogo.png"
+          src={image ?? '/image/laLigaLogo.png'}
           height={100}
           width={100}
           alt="Logo de la liga"
@@ -31,15 +32,7 @@ const LeagueCard = () => {
         </div>
       </CardBody>
       <CardFooter>
-        <Button
-          onClick={() => {
-            router.push('/league')
-          }}
-          variant='bordered'
-          className='border-2 border-[#111111] text-black text-lg dark:text-white dark:border-white'
-        >
-          Ver liga
-        </Button>
+        <ButtonListLeague />
       </CardFooter>
     </Card>
   )
