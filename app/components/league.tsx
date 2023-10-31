@@ -9,16 +9,17 @@ import ButtonListLeague from './client/button-list-league'
 
 interface Props {
   name: string
-  image: string | null
+  image: string
 }
 
 const LeagueCard = ({ name, image }: Props) => {
+  console.log(image)
   return (
     <Card className="w-full" radius='none'>
       <CardHeader className="text-3xl font-bold">{name}</CardHeader>
       <CardBody className="flex flex-col sm:flex-row items-center gap-10">
         <Image
-          src={image ?? '/image/laLigaLogo.png'}
+          src={image !== '' ? image : '/image/footyLogo.png'}
           height={100}
           width={100}
           alt="Logo de la liga"

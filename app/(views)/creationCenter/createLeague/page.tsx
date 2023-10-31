@@ -2,15 +2,7 @@
 
 import { type ChangeEvent, useState, memo } from 'react'
 import CardCreation from '../components/card-creation'
-import {
-  Button,
-  Divider,
-  Input,
-  Select,
-  SelectItem,
-  Textarea
-} from '@nextui-org/react'
-import AwardTournament from '../components/award-tournament'
+import { Button, Divider } from '@nextui-org/react'
 import {
   minLength,
   object,
@@ -20,10 +12,12 @@ import {
   maxLength,
   number,
   minValue
-
 } from 'valibot'
 import { toast, Toaster } from 'sonner'
 import useGetSupabase from '@/app/hooks/useGetSupabase'
+import LeagueContainer from './components/client/league-container'
+import TournamentContainer from './components/client/tournament-container'
+import ListTournament from './components/server/list-tournament'
 
 const LeagueSchema = object({
   nameLeague: string('Debe agregar un nombre a la liga', [
@@ -90,15 +84,18 @@ const PageCreateLeague = () => {
   const [imageLeague, setImage] = useState<File | undefined>(undefined)
   const [extensionImage, setExtensionImage] = useState<string>('')
   const [isBlock, setBlock] = useState<boolean>(false)
+  const [showForm, setShowForm] = useState<boolean>(false)
 
-  const { category, gender, session, subCategory, supabase, league, tournament } = useGetSupabase()
+  const { category, gender, session, subCategory, supabase, tournament } = useGetSupabase()
 
   const handleChargeImage = (event: ChangeEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement
     const file: File = (target.files as FileList)[0]
     if (file instanceof File) {
       const fileName = file.name
-      const fileExtension = fileName.slice(((fileName.lastIndexOf('.') - 1) >>> 0) + 2)
+      const fileExtension = fileName.slice(
+        ((fileName.lastIndexOf('.') - 1) >>> 0) + 2
+      )
       setExtensionImage(fileExtension)
       setImage(file)
     }
@@ -115,11 +112,18 @@ const PageCreateLeague = () => {
       parse(LeagueSchema, formData)
       setBlock(true)
       if (imageLeague !== undefined) {
-        const { data, error } = await supabase.storage.from('image_neo_team/imageLeague').upload(`image_${Date.now().toString()}.${extensionImage}`, imageLeague)
+        const { data, error } = await supabase.storage
+          .from('image_neo_team/imageLeague')
+          .upload(
+            `image_${Date.now().toString()}.${extensionImage}`,
+            imageLeague
+          )
         if (error !== null) {
           throw new Error('No se pudo cargar la imagen ', error)
         }
-        const { data: url } = supabase.storage.from('image_neo_team/imageLeague').getPublicUrl(data.path)
+        const { data: url } = supabase.storage
+          .from('image_neo_team/imageLeague')
+          .getPublicUrl(data.path)
         formData.imageLeague = url.publicUrl
       }
       const id = session?.user.id
@@ -148,205 +152,57 @@ const PageCreateLeague = () => {
         />
       </div>
       <div className="w-full flex flex-col gap-4">
-        <h1 className="text-2xl">Creación de ligas</h1>
-        <div className="border-1 border-black w-full p-2 sm:p-10">
-          <h3 className="text-lg my-4">Información de liga</h3>
-          <form
-            onSubmit={(event) => {
-              handleSubmit(event)
-            }}
+        <div className='flex justify-between items-center'>
+          <h1 className="text-2xl">Administrador de ligas</h1>
+          <Button
+            color="primary"
+            variant="ghost"
+            className="hover:text-white my-4"
+            onClick={() => { setShowForm(true) }}
           >
-            <div className="gridFormat">
-              <Input
-                isRequired
-                type="text"
-                variant="bordered"
-                label="Nombre de la liga"
-                defaultValue={league.length > 0 ? league[0].name : undefined}
-                onChange={(event) => {
-                  setFormData({
-                    ...formData,
-                    nameLeague: event.target.value
-                  })
-                }}
-              />
-              <div>
-                <label
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  htmlFor="file_input"
-                >
-                  Cargar imagen de liga
-                </label>
-                <input
-                  className="block w-full text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                  id="file_input"
-                  type="file"
-                  onChange={(e) => {
-                    handleChargeImage(e)
-                  }}
-                />
-              </div>
-            </div>
-            <Divider className="my-4" />
-            <h3 className="text-lg my-4">Crear Torneo</h3>
-            <div className="gridFormat">
-              <div className="flex flex-col gap-2">
-                <Input
-                  isRequired
-                  type="text"
-                  variant="bordered"
-                  label="Nombre de torneo"
-                  onChange={(event) => {
-                    setFormData({
-                      ...formData,
-                      nameTournament: event.target.value
-                    })
-                  }}
-                />
-                <Input
-                  type="number"
-                  label="Valor del torneo"
-                  placeholder="0.00"
-                  endContent={
-                    <div className="pointer-events-none flex items-center">
-                      <span className="text-default-400 text-small">$</span>
-                    </div>
-                  }
-                  onChange={(event) => {
-                    setFormData({
-                      ...formData,
-                      valueTournament: Number(event.target.value)
-                    })
-                  }}
-                />
-                <Textarea
-                  label="Description"
-                  variant="bordered"
-                  placeholder="Estos datos se mostraran en la descripción del torneo, habla de los mas importante"
-                  className="max-w-full"
-                  onChange={(event) => {
-                    setFormData({
-                      ...formData,
-                      description: event.target.value
-                    })
-                  }}
-                />
-                <Select
-                  label="Seleccione la categoría"
-                  className="max-w-full"
-                  isRequired
-                  onChange={(event) => {
-                    setFormData({
-                      ...formData,
-                      category: event.target.value
-                    })
-                  }}
-                >
-                  {category !== null
-                    ? (
-                        category.map(({ id, name }) => (
-                      <SelectItem key={id} value={id}>
-                        {name}
-                      </SelectItem>
-                        ))
-                      )
-                    : (
-                    <Select>
-                      <span>Sin datos</span>
-                    </Select>
-                      )}
-                </Select>
-                <Select
-                  label="Seleccione el genero"
-                  className="max-w-full"
-                  isRequired
-                  onChange={(event) => {
-                    setFormData({
-                      ...formData,
-                      gender: event.target.value
-                    })
-                  }}
-                >
-                  {gender !== null
-                    ? (
-                        gender.map(({ id, name }) => (
-                      <SelectItem key={id} value={id}>
-                        {name}
-                      </SelectItem>
-                        ))
-                      )
-                    : (
-                    <Select>
-                      <span>Sin datos</span>
-                    </Select>
-                      )}
-                </Select>
-                <Select
-                  label="Seleccione una sub categoría"
-                  className="max-w-full"
-                  isRequired
-                  onChange={(event) => {
-                    setFormData({
-                      ...formData,
-                      variant: event.target.value
-                    })
-                  }}
-                >
-                  {subCategory !== null
-                    ? (
-                        subCategory.map(({ id, name }) => (
-                      <SelectItem key={id} value={id}>
-                        {name}
-                      </SelectItem>
-                        ))
-                      )
-                    : (
-                    <Select>
-                      <span>Sin datos</span>
-                    </Select>
-                      )}
-                </Select>
-              </div>
-              <div className="flex flex-col gap-2">
-                <AwardTournament award={award} setAward={setAward} />
-                <Input
-                  isRequired
-                  type="text"
-                  variant="bordered"
-                  label="Nombre de contacto"
-                  onChange={(event) => {
-                    setFormData({
-                      ...formData,
-                      contactName: event.target.value
-                    })
-                  }}
-                />
-                <Input
-                  isRequired
-                  type="tel"
-                  variant="bordered"
-                  label="Numero de teléfono de contacto"
-                  onChange={(event) => {
-                    setFormData({
-                      ...formData,
-                      contactNumber: event.target.value
-                    })
-                  }}
-                />
-              </div>
-            </div>
-            <Button
-              color="primary"
-              variant="ghost"
-              className="hover:text-white my-4"
-              type="submit"
-              disabled={isBlock}
-            >
-              Crear liga
-            </Button>
-          </form>
-          <Toaster richColors />
+            Crear liga
+          </Button>
         </div>
+        <div>
+          <ListTournament tournament={tournament}/>
+        </div>
+        {showForm && (
+          <div className="border-1 border-black w-full p-2 sm:p-10">
+            <h3 className="text-lg my-4">Información de liga</h3>
+            <form
+              onSubmit={(event) => {
+                handleSubmit(event)
+              }}
+            >
+              <LeagueContainer
+                formData={formData}
+                handleChargeImage={handleChargeImage}
+                setFormData={setFormData}
+              />
+              <Divider className="my-4" />
+              <h3 className="text-lg my-4">Crear Torneo</h3>
+              <TournamentContainer
+                award={award}
+                category={category}
+                formData={formData}
+                gender={gender}
+                setAward={setAward}
+                setFormData={setFormData}
+                subCategory={subCategory}
+              />
+              <Button
+                color="primary"
+                variant="ghost"
+                className="hover:text-white my-4"
+                type="submit"
+                disabled={isBlock}
+              >
+                Enviar
+              </Button>
+            </form>
+            <Toaster richColors />
+          </div>
+        )}
       </div>
     </div>
   )

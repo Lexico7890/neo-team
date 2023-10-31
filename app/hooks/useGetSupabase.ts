@@ -7,14 +7,18 @@ import {
 import { useEffect, useState } from 'react'
 import { type Database } from '../types/database'
 import { type League } from '../types/league'
+import { type Category } from '../types/category'
+import { type Gender } from '../types/gender'
+import { type SubCategory } from '../types/sub-category'
+import { type Tournament } from '../types/tournament'
 
 const useGetSupabase = () => {
-  const [category, setCategory] = useState<any[] | null>([])
-  const [gender, setGender] = useState<any[] | null>([])
+  const [category, setCategory] = useState<Category[]>([])
+  const [gender, setGender] = useState<Gender[]>([])
   const [session, getSession] = useState<Session | null>(null)
-  const [subCategory, setSubCategory] = useState<any[] | null>([])
+  const [subCategory, setSubCategory] = useState<SubCategory[]>([])
   const [league, setLeague] = useState<League[]>([])
-  const [tournament, setTournament] = useState<any[] | null>([])
+  const [tournament, setTournament] = useState<Tournament[]>([])
 
   const supabase = createClientComponentClient<Database>()
 
