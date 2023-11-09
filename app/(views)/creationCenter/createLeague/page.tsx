@@ -1,6 +1,6 @@
 'use client'
 
-import { type ChangeEvent, useState, memo } from 'react'
+import { useState, memo, useEffect } from 'react'
 import CardCreation from '../components/card-creation'
 import { Button, Divider } from '@nextui-org/react'
 import {
@@ -15,15 +15,11 @@ import {
 } from 'valibot'
 import { toast, Toaster } from 'sonner'
 import useGetSupabase from '@/app/hooks/useGetSupabase'
-import LeagueContainer from './components/client/league-container'
 import TournamentContainer from './components/client/tournament-container'
 import ListTournament from './components/server/list-tournament'
+import ModalCreateLeague from './components/server/modal-create-league'
 
-const LeagueSchema = object({
-  nameLeague: string('Debe agregar un nombre a la liga', [
-    minLength(3, 'El nombre de la liga debe contener al menos 3 caracteres'),
-    maxLength(50, 'El nombre de la liga debe contener menos de 50 caracteres')
-  ]),
+const TournamentSchema = object({
   nameTournament: string('Debe agregar un nombre al torneo', [
     minLength(3, 'El nombre del torneo debe contener al menos 3 caracteres'),
     maxLength(50, 'El nombre del torneo debe contener menos de 50 caracteres')
@@ -48,11 +44,10 @@ const LeagueSchema = object({
   contactNumber: string('Debe agregar un numero de contacto', [
     minLength(7, 'Numero de contacto invalido'),
     maxLength(10, 'Numero de contacto invalido')
-  ]),
-  imageLeague: string('Debe agregar una imagen a la liga')
+  ])
 })
 
-type LeagueData = Output<typeof LeagueSchema>
+type TournamentData = Output<typeof TournamentSchema>
 
 async function Fetch (formData: any, award: any, idUser: string | undefined) {
   const result = await fetch('/api/league', {
@@ -66,8 +61,7 @@ async function Fetch (formData: any, award: any, idUser: string | undefined) {
 }
 
 const PageCreateLeague = () => {
-  const [formData, setFormData] = useState<LeagueData>({
-    nameLeague: '',
+  const [formData, setFormData] = useState<TournamentData>({
     nameTournament: '',
     valueTournament: 0,
     description: '',
@@ -75,31 +69,16 @@ const PageCreateLeague = () => {
     gender: '',
     variant: '',
     contactName: '',
-    contactNumber: '',
-    imageLeague: ''
+    contactNumber: ''
   })
   const [award, setAward] = useState<[{ name: string, value: number }]>(
     [] as any
   )
-  const [imageLeague, setImage] = useState<File | undefined>(undefined)
-  const [extensionImage, setExtensionImage] = useState<string>('')
   const [isBlock, setBlock] = useState<boolean>(false)
   const [showForm, setShowForm] = useState<boolean>(false)
+  const [showModalLeague, setShowModal] = useState<boolean>(false)
 
-  const { category, gender, session, subCategory, supabase, tournament } = useGetSupabase()
-
-  const handleChargeImage = (event: ChangeEvent<HTMLInputElement>) => {
-    const target = event.target as HTMLInputElement
-    const file: File = (target.files as FileList)[0]
-    if (file instanceof File) {
-      const fileName = file.name
-      const fileExtension = fileName.slice(
-        ((fileName.lastIndexOf('.') - 1) >>> 0) + 2
-      )
-      setExtensionImage(fileExtension)
-      setImage(file)
-    }
-  }
+  const { category, gender, session, subCategory, tournament, league } = useGetSupabase()
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -109,23 +88,8 @@ const PageCreateLeague = () => {
           'Se debe agregar por lo menos un item en la premiación'
         )
       }
-      parse(LeagueSchema, formData)
+      parse(TournamentSchema, formData)
       setBlock(true)
-      if (imageLeague !== undefined) {
-        const { data, error } = await supabase.storage
-          .from('image_neo_team/imageLeague')
-          .upload(
-            `image_${Date.now().toString()}.${extensionImage}`,
-            imageLeague
-          )
-        if (error !== null) {
-          throw new Error('No se pudo cargar la imagen ', error)
-        }
-        const { data: url } = supabase.storage
-          .from('image_neo_team/imageLeague')
-          .getPublicUrl(data.path)
-        formData.imageLeague = url.publicUrl
-      }
       const id = session?.user.id
       toast.promise(Fetch(formData, award, id), {
         loading: 'Creando la liga, un momento por favor...',
@@ -139,8 +103,13 @@ const PageCreateLeague = () => {
     }
   }
 
+  useEffect(() => {
+    league.length === 0 ? setShowModal(true) : setShowModal(false)
+  }, [league])
+
   return (
     <div className="flex gap-10 h-auto">
+      <ModalCreateLeague isOpen={showModalLeague} />
       <div className="hidden md:block">
         <CardCreation
           title="Crear Liga"
@@ -148,9 +117,9 @@ const PageCreateLeague = () => {
           height={300}
           width={300}
           isThereButton={false}
-          path={null}
+          path=''
         />
-      </div>
+      ModalCreateLeague</div>
       <div className="w-full flex flex-col gap-4">
         <div className='flex justify-between items-center'>
           <h1 className="text-2xl">Administrador de ligas</h1>
@@ -174,11 +143,6 @@ const PageCreateLeague = () => {
                 handleSubmit(event)
               }}
             >
-              <LeagueContainer
-                formData={formData}
-                handleChargeImage={handleChargeImage}
-                setFormData={setFormData}
-              />
               <Divider className="my-4" />
               <h3 className="text-lg my-4">Crear Torneo</h3>
               <TournamentContainer

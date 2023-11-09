@@ -1,12 +1,19 @@
 import { type Tournament } from '@/app/types/tournament'
-import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow
+} from '@nextui-org/react'
 
 interface Props {
   tournament: Tournament[]
 }
 
 const ListTournament = ({ tournament }: Props) => {
-  console.log(tournament)
   return (
     <Table aria-label="Tabla de información de las ligas">
       <TableHeader>
@@ -19,21 +26,29 @@ const ListTournament = ({ tournament }: Props) => {
         <TableColumn>ACCIONES</TableColumn>
       </TableHeader>
       <TableBody emptyContent={'No hay torneos creados en el momento'}>
-        {tournament.map(({ id, name, value, category, gender, contact_name: contactName, contact_number: contactNumber }) => (
-          <TableRow key={id}>
-            <TableCell>{name}</TableCell>
-            <TableCell>{value}</TableCell>
-            <TableCell>{category}</TableCell>
-            <TableCell>{gender}</TableCell>
-            <TableCell>{contactName}</TableCell>
-            <TableCell>{contactNumber}</TableCell>
-            <TableCell>
-              <Button>
-                información
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
+        {tournament.map(
+          ({
+            id,
+            name,
+            value,
+            nombre_categoria: nombreCategoría,
+            nombre_genero: nombreGenero,
+            contact_name: contactName,
+            contact_number: contactNumber
+          }) => (
+            <TableRow key={id}>
+              <TableCell>{name}</TableCell>
+              <TableCell>{value}</TableCell>
+              <TableCell>{nombreCategoría}</TableCell>
+              <TableCell>{nombreGenero}</TableCell>
+              <TableCell>{contactName}</TableCell>
+              <TableCell>{contactNumber}</TableCell>
+              <TableCell>
+                <Button>información</Button>
+              </TableCell>
+            </TableRow>
+          )
+        )}
       </TableBody>
     </Table>
   )

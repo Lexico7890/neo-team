@@ -24,12 +24,8 @@ const useGetSupabase = () => {
 
   useEffect(() => {
     const getData = async () => {
-      let user: string = ''
-      const { data } = await supabase.auth.getSession()
-      getSession(data.session)
-      if (data.session?.user.id === null) {
-        user = data.session.user.id
-      }
+      const { data: session } = await supabase.auth.getSession()
+      getSession(session.session)
       const { data: category, error } = await supabase
         .from('category')
         .select('*')
@@ -54,16 +50,13 @@ const useGetSupabase = () => {
       const { data: league, error: errorLeague } = await supabase
         .from('league')
         .select('*')
+        .eq('createdBy', session.session?.user.id as string)
       if (errorLeague !== null) {
         throw new Error('No se pudo completar la consulta de ligas')
       }
-      console.log('ligas: ', league)
-      league.length > 0 && setLeague(league.filter(item => item.createdBy === user))
+      setLeague(league)
       const { data: listTournaments, error: errorListTournament } =
-        await supabase
-          .from('tournament')
-          .select('*')
-          .eq('league_id', league[0].id)
+        await supabase.rpc('get_tournaments' as never)
       if (errorListTournament !== null) {
         throw new Error('No se pudo completar la consulta de torneos')
       }

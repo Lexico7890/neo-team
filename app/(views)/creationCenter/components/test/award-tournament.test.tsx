@@ -1,5 +1,5 @@
 import React from 'react'
-import { fireEvent, prettyDOM, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import AwardTournament from '../award-tournament'
 import '@testing-library/jest-dom'
 
@@ -9,6 +9,12 @@ describe('<AwardTournament />', () => {
   const mockHandle = jest.fn()
 
   const component = render(<AwardTournament award={award} setAward={mockHandle}/>)
+
+  test('click botton create league', () => {
+    const button = component.getByText('Crear liga')
+    fireEvent.click(button)
+    expect(mockHandle).toHaveBeenCalled()
+  })
 
   const inputName = component.getAllByLabelText('Nombre premiación')
   const inputValue = component.getAllByLabelText('Valor premio')
@@ -33,8 +39,8 @@ describe('<AwardTournament />', () => {
   })
 
   test('Agregar un premio a la tabla', () => {
-    const mockSetAward = jest.fn()
-    const element = render(<AwardTournament award={award} setAward={mockSetAward} />)
+    // const mockSetAward = jest.fn()
+    // const element = render(<AwardTournament award={award} setAward={mockSetAward} />)
 
     const nameInput = screen.getByLabelText('Nombre premiación')
     const valueInput = screen.getByLabelText('Valor premio')
@@ -44,11 +50,11 @@ describe('<AwardTournament />', () => {
     fireEvent.change(valueInput, { target: { value: '100' } })
     fireEvent.click(addButton)
 
-    const li = element.container.querySelector('td')
+    /* const li = element.container.querySelector('td')
     console.log(prettyDOM(li as any))
 
     expect(mockSetAward).toHaveBeenCalled()
-    /* expect(nameInput).toHaveValue('')
+    expect(nameInput).toHaveValue('')
     expect(valueInput).toHaveValue('') */
   })
 })

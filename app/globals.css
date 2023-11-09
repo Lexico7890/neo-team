@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .articleButton {
+    @apply flex flex-col gap-1 justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10;
+  }
+}
+
 body {
   height: 100vh;
 }
@@ -19,28 +25,76 @@ body {
   gap: 10px;
 }
 
-.customShadow::after {
-  content: "";
-  position: absolute;
-  border: 1px solid #000;
-  z-index: -10;
-  bottom: -7px;
-  height: 100%;
-  left: 7px;
-  width: 100%;
+.sectionCreation {
+  display: flex;
+  height: 500px;
+  width: 700px;
 }
 
-.customShadowBlack::after {
-  content: "";
-  position: absolute;
-  border: 1px solid #fff;
-  z-index: -10;
-  bottom: -7px;
+.sectionCreation div {
+  width: 50px;
+  flex-grow: 1;
+  object-fit: cover;
+  opacity: .8;
+  transition: .5s ease;
   height: 100%;
-  left: 7px;
-  width: 100%;
+}
+
+.sectionCreation div:hover {
+  cursor: crosshair;
+  width: 300px;
+  opacity: 1;
+  filter: contrast(120%);
 }
 
 .toastPru {
   background-color: red;
+}
+
+.pruebaButton {
+  transform: translate(10px, -50px);
+}
+
+input[type='file']{
+  display: none;
+}
+
+.image-uploader {
+  position: relative;
+  text-align: center;
+  margin: 0px 20px 10px 20px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  border: 2px dashed #aaa;
+  align-items: center;
+}
+
+.file-input {
+  display: flex;
+  position: absolute;
+  top: 50%;
+}
+
+.drop-zone {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: transparent;
+  position: absolute;
+  z-index: 10;
+}
+
+.uploaded-image {
+  max-width: 200px;
+  max-height: 100%;
+  transition: opacity 0.5s;
+}
+
+.uploaded-image.loading {
+  opacity: 0.5;
 }

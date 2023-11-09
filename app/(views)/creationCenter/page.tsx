@@ -22,25 +22,16 @@ const DATA_MENU = [
 
 const PageCreationCenter = () => {
   return (
-    <section>
-      <div className="w-full text-center my-4">
-        <span className="sm:text-4xl text-2xl font-bold">
-          Centro de creación
-        </span>
-      </div>
-      <div className="sm:p-6 p-2 md:flex gap-10">
-        {DATA_MENU.map(({ title, image, path }) => (
-          <div className="w-full flex justify-center" key={title}>
-            <CardCreation
-            title={title}
-            urlImage={image}
-            isThereButton={true}
-            path={path}
-          />
-          </div>
-        ))}
-      </div>
-    </section>
+    <div className="flex flex-col justify-center items-center gap-6">
+      <span className="sm:text-4xl text-2xl font-bold">Centro de creación</span>
+      <section className="sectionCreation">
+        {
+          DATA_MENU.map(({ title, image, path }) => (
+            <CardCreation path={path} title={title} urlImage={image} key={title}/>
+          ))
+        }
+      </section>
+    </div>
   )
 }
 
