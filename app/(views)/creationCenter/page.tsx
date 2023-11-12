@@ -27,7 +27,7 @@ const PageCreationCenter = () => {
       <section className="sectionCreation">
         {
           DATA_MENU.map(({ title, image, path }) => (
-            <CardCreation path={path} title={title} urlImage={image} key={title}/>
+            <CardCreation path={path} title={title} urlImage={image} key={title} isThereButton={true}/>
           ))
         }
       </section>

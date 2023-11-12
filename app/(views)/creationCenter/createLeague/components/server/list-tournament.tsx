@@ -20,8 +20,8 @@ const ListTournament = ({ tournament }: Props) => {
         <TableColumn>NOMBRE</TableColumn>
         <TableColumn>VALOR</TableColumn>
         <TableColumn>CATEGORÍA</TableColumn>
+        <TableColumn>SUB CATEGORÍA</TableColumn>
         <TableColumn>GENERO</TableColumn>
-        <TableColumn>NOMBRE CONTACTO</TableColumn>
         <TableColumn>TEL. CONTACTO</TableColumn>
         <TableColumn>ACCIONES</TableColumn>
       </TableHeader>
@@ -33,18 +33,20 @@ const ListTournament = ({ tournament }: Props) => {
             value,
             nombre_categoria: nombreCategoría,
             nombre_genero: nombreGenero,
-            contact_name: contactName,
+            sub_categoria: variant,
             contact_number: contactNumber
           }) => (
             <TableRow key={id}>
               <TableCell>{name}</TableCell>
               <TableCell>{value}</TableCell>
               <TableCell>{nombreCategoría}</TableCell>
+              <TableCell>{variant}</TableCell>
               <TableCell>{nombreGenero}</TableCell>
-              <TableCell>{contactName}</TableCell>
               <TableCell>{contactNumber}</TableCell>
               <TableCell>
-                <Button>información</Button>
+                <Button variant="solid" color="warning">
+                  Ver mas
+                </Button>
               </TableCell>
             </TableRow>
           )

@@ -22,6 +22,7 @@ const LeagueContainer = ({
         type="text"
         variant="bordered"
         label="Nombre de la liga"
+        value={formData.nameLeague}
         onChange={(event) => {
           setFormData({
             ...formData,
@@ -29,7 +30,7 @@ const LeagueContainer = ({
           })
         }}
       />
-      <ChargerImageComponent handleChargeImage={handleChargeImage} />
+      <ChargerImageComponent handleChargeImage={handleChargeImage} imageProp={formData.imageLeague} />
     </div>
   )
 }

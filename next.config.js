@@ -2,6 +2,9 @@
 const nextConfig = {
   images: {
     domains: ["eprmauzzggwoeydncjpq.supabase.co"]
+  },
+  env: {
+    IMAGE_APP: process.env.IMAGE_APP
   }
 }
 

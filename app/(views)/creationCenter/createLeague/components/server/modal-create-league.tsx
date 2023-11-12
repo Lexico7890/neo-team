@@ -8,11 +8,12 @@ import {
   ModalBody,
   ModalHeader
 } from '@nextui-org/react'
-import React, { useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import LeagueContainer from '../client/league-container'
 import { object, string, type Output, minLength, maxLength, parse } from 'valibot'
 import { Toaster, toast } from 'sonner'
 import useGetSupabase from '@/app/hooks/useGetSupabase'
+import { type League } from '@/app/types/league'
 
 const LeagueSchema = object({
   nameLeague: string('Debe agregar un nombre a la liga', [
@@ -24,15 +25,19 @@ const LeagueSchema = object({
 
 interface Props {
   isOpen: boolean
+  setIsOpen: (value: boolean) => void
+  handleCreateLeague: () => void
+  league: League[]
+  isEdit: boolean
+  setEdit: (value: boolean) => void
 }
 
 type LeagueData = Output<typeof LeagueSchema>
 
-async function Fetch (formData: any, idUser?: string) {
-  console.log(formData)
+async function Fetch (formData: any, isEdit: boolean, idUser?: string, informationLeague?: any) {
   const result = await fetch('/api/league', {
     method: 'POST',
-    body: JSON.stringify({ formData, idUser })
+    body: JSON.stringify({ formData, idUser, isEdit, informationLeague })
   })
   if (!result.ok) {
     throw new Error(result.statusText)
@@ -40,13 +45,14 @@ async function Fetch (formData: any, idUser?: string) {
   return await result.json()
 }
 
-const ModalCreateLeague = ({ isOpen }: Props) => {
+const ModalCreateLeague = ({ isOpen, setIsOpen, handleCreateLeague, league, isEdit, setEdit }: Props) => {
   const [formData, setFormData] = useState<LeagueData>({
     nameLeague: '',
     imageLeague: ''
   })
   const [imageLeague, setImage] = useState<File | undefined>()
   const [extensionImage, setExtensionImage] = useState<string | undefined>('')
+  const [isBlock, setBlock] = useState<boolean>(false)
 
   const { session, supabase } = useGetSupabase()
 
@@ -55,11 +61,20 @@ const ModalCreateLeague = ({ isOpen }: Props) => {
     setExtensionImage(extension)
   }
 
+  useEffect(() => {
+    if (league.length > 0) {
+      setFormData({
+        nameLeague: league[0].name,
+        imageLeague: league[0].url_image ?? ''
+      })
+    }
+  }, [league])
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    console.log('ima ', imageLeague)
     try {
       parse(LeagueSchema, formData)
+      setBlock(true)
       if (imageLeague !== undefined) {
         const { data, error } = await supabase.storage
           .from('image_neo_team/imageLeague')
@@ -74,20 +89,31 @@ const ModalCreateLeague = ({ isOpen }: Props) => {
           .from('image_neo_team/imageLeague')
           .getPublicUrl(data.path)
         formData.imageLeague = url.publicUrl
+      } else {
+        if (process.env.IMAGE_APP !== undefined) {
+          formData.imageLeague = process.env.IMAGE_APP
+        }
       }
       const id = session?.user.id
-      toast.promise(Fetch(formData, id), {
+      toast.promise(Fetch(formData, isEdit, id, league[0]), {
         loading: 'Creando la liga, un momento por favor...',
-        success: 'Liga creada con éxito',
+        success: () => {
+          setTimeout(() => {
+            setBlock(false)
+            handleCreateLeague()
+          }, 2000)
+          return 'Liga creada con éxito'
+        },
         error: 'No se pudo crear la liga, comuníquese con el administrador'
       })
     } catch (error: any) {
       toast.error(error.message)
+      setBlock(false)
     }
   }
 
   return (
-    <Modal backdrop="blur" isOpen={isOpen}>
+    <Modal backdrop="blur" isOpen={isOpen} hideCloseButton={league.length === 0 ?? true}>
       <ModalContent>
         {(onClose) => (
           <>
@@ -107,7 +133,10 @@ const ModalCreateLeague = ({ isOpen }: Props) => {
               />
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
+              <Button color="danger" variant="light" onPress={() => {
+                setEdit(false)
+                setIsOpen(false)
+              }} isDisabled={league.length === 0 ?? true}>
                 Close
               </Button>
               <Button
@@ -115,6 +144,7 @@ const ModalCreateLeague = ({ isOpen }: Props) => {
                 variant="ghost"
                 className="hover:text-white"
                 type="submit"
+                isDisabled={isBlock}
               >
                 Enviar
               </Button>
@@ -128,4 +158,4 @@ const ModalCreateLeague = ({ isOpen }: Props) => {
   )
 }
 
-export default ModalCreateLeague
+export default memo(ModalCreateLeague)

@@ -19,7 +19,7 @@ const LeagueCard = ({ name, image }: Props) => {
       <CardHeader className="text-3xl font-bold">{name}</CardHeader>
       <CardBody className="flex flex-col sm:flex-row items-center gap-10">
         <Image
-          src={image !== '' ? image : '/image/footyLogo.png'}
+          src={image}
           height={100}
           width={100}
           alt="Logo de la liga"

@@ -6,6 +6,7 @@ import useGetLeague from './hooks/useGetLeague'
 
 export default function Home () {
   const { league } = useGetLeague()
+  console.log(league)
   return (
     <main>
       <NavBar />

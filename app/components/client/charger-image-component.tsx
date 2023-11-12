@@ -4,14 +4,14 @@ import { AiFillDelete } from 'react-icons/ai'
 
 interface Props {
   handleChargeImage: (image: File, extension: string) => void
+  imageProp: string
 }
 
-const ChargerImageComponent = ({ handleChargeImage }: Props) => {
-  const [image, setImage] = useState<string | null>(null)
+const ChargerImageComponent = ({ handleChargeImage, imageProp }: Props) => {
+  const [image, setImage] = useState<string>(imageProp)
   const [loading, setLoading] = useState<boolean>(false)
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('entro')
     const target = event.target as HTMLInputElement
     const file: File = (target.files as FileList)[0]
     if (file instanceof File) {
@@ -38,8 +38,6 @@ const ChargerImageComponent = ({ handleChargeImage }: Props) => {
           handleChargeImage(selectedImage, fileExtension)
           setImage(URL.createObjectURL(selectedImage as any))
         }
-        /* setImage(reader.result as string)
-        handleChargeImage(file, fileExtension) */
       }
       reader.readAsDataURL(selectedImage)
     }
@@ -55,11 +53,11 @@ const ChargerImageComponent = ({ handleChargeImage }: Props) => {
   }
 
   const handleDeleteImage = () => {
-    setImage(null)
+    setImage('')
   }
   return (
     <div className="image-uploader">
-      {image !== null
+      {image.length > 0
         ? (
         <>
           <div className="absolute top-0 left-0">

@@ -31,6 +31,7 @@ async function CreateTournament (
     description: formData.description,
     category: formData.category,
     gender: formData.gender,
+    variant: formData.variant,
     contact_name: formData.contactName,
     contact_number: formData.contactNumber,
     league_id: idLeague
