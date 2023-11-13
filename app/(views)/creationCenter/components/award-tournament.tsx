@@ -1,6 +1,6 @@
 'use client'
 
-import { type Database } from '@/app/types/database'
+import { type Award } from '@/app/types/award'
 import {
   Button,
   Input,
@@ -11,8 +11,7 @@ import {
   TableHeader,
   TableRow
 } from '@nextui-org/react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { RiDeleteBin4Line } from 'react-icons/ri'
 import {
   type Output,
@@ -26,7 +25,7 @@ import {
 } from 'valibot'
 
 interface Props {
-  award: [{ name: string, value: number }]
+  award: Award[]
   setAward: (award: any) => void
   idTournament: string | null
 }
@@ -51,16 +50,16 @@ const AwardTournament = ({ award, setAward, idTournament }: Props) => {
   const [showError, setShowError] = useState<boolean>(false)
   const [messageError, setMessageError] = useState<string>('')
 
-  const supabase = createClientComponentClient<Database>()
-
   const handleSubmit = () => {
-    setAward((prev: Array<{ name: string, value: number }>) => [
+    setAward((prev: Award[]) => [
       ...prev,
       { name: formData.nameAward, value: formData.value }
     ])
   }
 
-  const handleSubmitForm = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleSubmitForm = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     event.preventDefault()
     try {
       parse(AwardSchema, formData)
@@ -72,63 +71,54 @@ const AwardTournament = ({ award, setAward, idTournament }: Props) => {
     }
   }
 
-  useEffect(() => {
-    if (idTournament !== null) {
-      const getAwardsTournament = async () => {
-        const { data, error } = await supabase.from('award').select('*').eq('tournament_id', idTournament)
-        if (error !== null) {
-          throw new Error(error.message)
-        }
-        setAward(data)
-      }
-      getAwardsTournament()
-    }
-  }, [])
-
   return (
     <div className="border-1 border-black dark:border-white p-2">
       <h3 className="text-base m-2">Premiación</h3>
       <div className="flex gap-2 flex-col ">
-          <Input
-            name="nameAward"
-            type="text"
-            variant="bordered"
-            label="Nombre premiación"
-            value={formData.nameAward}
-            onChange={(event) => {
-              setFormData({
-                ...formData,
-                nameAward: event.target.value
-              })
-            }}
-          />
-          <Input
-            type="number"
-            label="Valor premio"
-            placeholder="0.00"
-            name="value"
-            value={formData.value.toString()}
-            endContent={
-              <div className="pointer-events-none flex items-center">
-                <span className="text-default-400 text-small">$</span>
-              </div>
-            }
-            onChange={(event) => {
-              setFormData({
-                ...formData,
-                value: Number(event.target.value)
-              })
-            }}
-          />
-          {showError && <span className='text-xs text-red-400'>{messageError}</span>}
-          <Button
-            size="sm"
-            variant="bordered"
-            type="submit"
-            onClick={(event) => { handleSubmitForm(event) }}
-          >
-            Agregar
-          </Button>
+        <Input
+          name="nameAward"
+          type="text"
+          variant="bordered"
+          label="Nombre premiación"
+          value={formData.nameAward}
+          onChange={(event) => {
+            setFormData({
+              ...formData,
+              nameAward: event.target.value
+            })
+          }}
+        />
+        <Input
+          type="number"
+          label="Valor premio"
+          placeholder="0.00"
+          name="value"
+          value={formData.value.toString()}
+          endContent={
+            <div className="pointer-events-none flex items-center">
+              <span className="text-default-400 text-small">$</span>
+            </div>
+          }
+          onChange={(event) => {
+            setFormData({
+              ...formData,
+              value: Number(event.target.value)
+            })
+          }}
+        />
+        {showError && (
+          <span className="text-xs text-red-400">{messageError}</span>
+        )}
+        <Button
+          size="sm"
+          variant="bordered"
+          type="submit"
+          onClick={(event) => {
+            handleSubmitForm(event)
+          }}
+        >
+          Agregar
+        </Button>
       </div>
       <Table
         aria-label="Table for award tournament"

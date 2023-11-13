@@ -3,16 +3,7 @@
 import { useEffect, useState } from 'react'
 import CardCreation from '../components/card-creation'
 import { Button } from '@nextui-org/react'
-import {
-  minLength,
-  object,
-  type Output,
-  parse,
-  string,
-  maxLength,
-  number,
-  minValue
-} from 'valibot'
+import { parse } from 'valibot'
 import { toast, Toaster } from 'sonner'
 import useGetSupabase from '@/app/hooks/useGetSupabase'
 import TournamentContainer from './components/client/tournament-container'
@@ -21,52 +12,15 @@ import ModalCreateLeague from './components/server/modal-create-league'
 import Image from 'next/image'
 import { FaRegWindowClose } from 'react-icons/fa'
 import { type Tournament } from '@/app/types/tournament'
+import { type Award } from '@/app/types/award'
+import { type TournamentData, TournamentSchema } from '@/app/types/schema/tournament-schema'
+import { INIT_FORM_DATA } from '@/app/data/constant'
+import { useSupabaseStore } from '@/app/zustand/store'
 
-const INIT_FORM_DATA = {
-  nameTournament: '',
-  valueTournament: 0,
-  description: '',
-  category: '',
-  gender: '',
-  variant: '',
-  contactName: '',
-  contactNumber: ''
-} as const
-
-const TournamentSchema = object({
-  nameTournament: string('Debe agregar un nombre al torneo', [
-    minLength(3, 'El nombre del torneo debe contener al menos 3 caracteres'),
-    maxLength(50, 'El nombre del torneo debe contener menos de 50 caracteres')
-  ]),
-  valueTournament: number('Debe agregar un valor de inscripción al torneo', [
-    minValue(1, 'El valor debe ser mayor a 0')
-  ]),
-  description: string('Debe agregar una descripción al torneo', [
-    minLength(10, 'La descripción debe contener al menos 10 caracteres'),
-    maxLength(500, 'El nombre debe contener menos de 50 caracteres')
-  ]),
-  category: string('Debe seleccionar una categoría'),
-  gender: string('Debe seleccionar un genero'),
-  variant: string('Debe seleccionar una sub categoría'),
-  contactName: string('Debe agregar un nombre al contacto', [
-    minLength(3, 'El nombre del contacto debe contener al menos 3 caracteres'),
-    maxLength(
-      50,
-      'El nombre del contacto debe contener menos de 50 caracteres'
-    )
-  ]),
-  contactNumber: string('Debe agregar un numero de contacto', [
-    minLength(7, 'Numero de contacto invalido'),
-    maxLength(10, 'Numero de contacto invalido')
-  ])
-})
-
-type TournamentData = Output<typeof TournamentSchema>
-
-async function Fetch (formData: any, award: any, idLeague: string, isEdit: boolean, idTournamentEdit: string | null) {
+async function Fetch (formData: any, award: any, idLeague: string) {
   const result = await fetch('/api/tournament', {
     method: 'POST',
-    body: JSON.stringify({ formData, award, idLeague, isEdit, idTournamentEdit })
+    body: JSON.stringify({ formData, award, idLeague })
   })
   if (!result.ok) {
     throw new Error(result.statusText)
@@ -76,9 +30,6 @@ async function Fetch (formData: any, award: any, idLeague: string, isEdit: boole
 
 const PageCreateLeague = () => {
   const {
-    category,
-    gender,
-    subCategory,
     tournament,
     league,
     isLoading,
@@ -86,16 +37,17 @@ const PageCreateLeague = () => {
     handleLeague,
     session
   } = useGetSupabase()
+  const [category, gender, subCategory] = useSupabaseStore(state => [
+    state.category,
+    state.gender,
+    state.subCategory
+  ])
   const [formData, setFormData] = useState<TournamentData>(INIT_FORM_DATA)
-  const [award, setAward] = useState<[{ name: string, value: number }]>(
-    [] as any
-  )
+  const [award, setAward] = useState<Award[]>([])
   const [isBlock, setBlock] = useState<boolean>(false)
   const [showForm, setShowForm] = useState<boolean>(false)
   const [showModalLeague, setShowModal] = useState<boolean>(true)
   const [isEdit, setEdit] = useState<boolean>(false)
-  const [editTournament, setEditTournament] = useState<boolean>(false)
-  const [idTournament, setIdTournament] = useState<string | null>(null)
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -107,7 +59,7 @@ const PageCreateLeague = () => {
       }
       parse(TournamentSchema, formData)
       setBlock(true)
-      toast.promise(Fetch(formData, award, league[0].id, editTournament, idTournament), {
+      toast.promise(Fetch(formData, award, league[0].id), {
         loading: 'Creando la liga, un momento por favor...',
         success: () => {
           handleTournament()
@@ -140,9 +92,7 @@ const PageCreateLeague = () => {
       contactName: item.contact_name,
       contactNumber: item.contact_number
     }
-    setIdTournament(item.id)
     setFormData(selectItem)
-    setEditTournament(true)
     setShowForm(true)
   }
 
@@ -207,7 +157,6 @@ const PageCreateLeague = () => {
             variant="ghost"
             className="buttonPrimary"
             onClick={() => {
-              setIdTournament(null)
               setFormData(INIT_FORM_DATA)
               setShowForm(true)
             }}
@@ -238,9 +187,7 @@ const PageCreateLeague = () => {
               }}
             >
               <h3 className="text-lg my-4">
-                {!editTournament
-                  ? 'Crear Torneo'
-                  : `Editar torneo ${formData.nameTournament}`}
+                Crear Torneo
               </h3>
               <TournamentContainer
                 award={award}
@@ -250,7 +197,6 @@ const PageCreateLeague = () => {
                 setAward={setAward}
                 setFormData={setFormData}
                 subCategory={subCategory}
-                idTournament={idTournament}
               />
               <Button
                 color="primary"

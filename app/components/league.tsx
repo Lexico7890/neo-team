@@ -13,7 +13,6 @@ interface Props {
 }
 
 const LeagueCard = ({ name, image }: Props) => {
-  console.log(image)
   return (
     <Card className="w-full" radius='none'>
       <CardHeader className="text-3xl font-bold">{name}</CardHeader>

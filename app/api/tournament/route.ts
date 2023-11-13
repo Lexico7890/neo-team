@@ -2,25 +2,18 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export async function GET () {
-  const data = await fetch(
-    'https://run.mocky.io/v3/fe7ca563-db5c-42fd-8103-d7c404a86211'
-  )
-  if (!data.ok) {
-    throw new Error('Error en la petición')
-  }
-  return data
-}
-
 export async function POST (request: NextRequest, response: NextResponse) {
+  let isOk: boolean = false
   const { formData, award, idLeague, isEdit, idTournamentEdit } =
     await request.json()
   const supabase = createServerComponentClient({ cookies })
   if (isEdit === true) {
     await EditTournament(idTournamentEdit, supabase, idLeague, formData)
+    isOk = await EditAwards(supabase, idTournamentEdit, award)
+  } else {
+    const idTournament = await CreateTournament(supabase, idLeague, formData)
+    isOk = await CreateAwards(supabase, award, idTournament)
   }
-  const idTournament = await CreateTournament(supabase, idLeague, formData)
-  const isOk = await CreateAwards(supabase, award, idTournament)
   return NextResponse.json({ result: isOk })
 }
 
@@ -78,8 +71,8 @@ async function EditTournament (
 
 async function CreateAwards (
   supabase: any,
-  awards: [{ name: string, value: number }],
-  idTournament: any
+  idTournament: any,
+  awards: [{ name: string, value: number }]
 ) {
   const awardsWithIdTournament = awards.map((item) => ({
     ...item,
@@ -104,6 +97,31 @@ async function CreateAwards (
   return true
 }
 
-async function EditAwards () {
-
+async function EditAwards (
+  supabase: any,
+  awards: [{ id: string, name: string, value: number }],
+  idTournament: any
+) {
+  const awardsWithIdTournament = awards.map((item) => ({
+    ...item,
+    tournament_id: idTournament
+  }))
+  awardsWithIdTournament.map(async (item) => {
+    const { error } = await supabase
+      .from('award')
+      .update({
+        name: item.name,
+        value: item.value,
+        tournament_id: item.tournament_id
+      })
+      .eq('id', item.id)
+      .select('id')
+    if (error !== null) {
+      throw new Error(
+        'Se produjo un error al intentar crear la premiacion ',
+        error
+      )
+    }
+  })
+  return true
 }

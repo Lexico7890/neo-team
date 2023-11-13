@@ -3,16 +3,16 @@ import AwardTournament from '../../../components/award-tournament'
 import { type Category } from '@/app/types/category'
 import { type Gender } from '@/app/types/gender'
 import { type SubCategory } from '@/app/types/sub-category'
+import { type Award } from '@/app/types/award'
 
 interface Props {
   setFormData: (value: any) => void
   formData: any
   category: Category[]
   gender: Gender[]
-  award: [{ name: string, value: number }]
+  award: Award[]
   setAward: (value: any) => void
   subCategory: SubCategory[]
-  idTournament: string | null
 }
 
 const TournamentContainer = ({
@@ -22,8 +22,7 @@ const TournamentContainer = ({
   gender,
   award,
   setAward,
-  subCategory,
-  idTournament
+  subCategory
 }: Props) => {
   return (
     <div className="gridFormat">
@@ -164,7 +163,7 @@ const TournamentContainer = ({
         <AwardTournament
           award={award}
           setAward={setAward}
-          idTournament={idTournament}
+          idTournament={null}
         />
         <Input
           isRequired
