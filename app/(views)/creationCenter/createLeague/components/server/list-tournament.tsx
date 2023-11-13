@@ -11,9 +11,10 @@ import {
 
 interface Props {
   tournament: Tournament[]
+  showMore: (item: Tournament) => void
 }
 
-const ListTournament = ({ tournament }: Props) => {
+const ListTournament = ({ tournament, showMore }: Props) => {
   return (
     <Table aria-label="Tabla de información de las ligas">
       <TableHeader>
@@ -27,24 +28,16 @@ const ListTournament = ({ tournament }: Props) => {
       </TableHeader>
       <TableBody emptyContent={'No hay torneos creados en el momento'}>
         {tournament.map(
-          ({
-            id,
-            name,
-            value,
-            nombre_categoria: nombreCategoría,
-            nombre_genero: nombreGenero,
-            sub_categoria: variant,
-            contact_number: contactNumber
-          }) => (
-            <TableRow key={id}>
-              <TableCell>{name}</TableCell>
-              <TableCell>{value}</TableCell>
-              <TableCell>{nombreCategoría}</TableCell>
-              <TableCell>{variant}</TableCell>
-              <TableCell>{nombreGenero}</TableCell>
-              <TableCell>{contactNumber}</TableCell>
+          (item) => (
+            <TableRow key={item.id}>
+              <TableCell>{item.name}</TableCell>
+              <TableCell>{item.value}</TableCell>
+              <TableCell>{item.nombre_categoria}</TableCell>
+              <TableCell>{item.sub_categoria}</TableCell>
+              <TableCell>{item.nombre_genero}</TableCell>
+              <TableCell>{item.contact_number}</TableCell>
               <TableCell>
-                <Button variant="solid" color="warning">
+                <Button variant="ghost" color="warning" onClick={() => { showMore(item) }}>
                   Ver mas
                 </Button>
               </TableCell>

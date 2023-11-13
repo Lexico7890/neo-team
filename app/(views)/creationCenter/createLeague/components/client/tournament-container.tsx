@@ -12,6 +12,7 @@ interface Props {
   award: [{ name: string, value: number }]
   setAward: (value: any) => void
   subCategory: SubCategory[]
+  idTournament: string | null
 }
 
 const TournamentContainer = ({
@@ -21,7 +22,8 @@ const TournamentContainer = ({
   gender,
   award,
   setAward,
-  subCategory
+  subCategory,
+  idTournament
 }: Props) => {
   return (
     <div className="gridFormat">
@@ -31,6 +33,7 @@ const TournamentContainer = ({
           type="text"
           variant="bordered"
           label="Nombre de torneo"
+          value={formData.nameTournament}
           onChange={(event) => {
             setFormData({
               ...formData,
@@ -41,6 +44,7 @@ const TournamentContainer = ({
         <Input
           type="number"
           label="Valor del torneo"
+          value={formData.valueTournament}
           placeholder="0.00"
           endContent={
             <div className="pointer-events-none flex items-center">
@@ -56,6 +60,7 @@ const TournamentContainer = ({
         />
         <Textarea
           label="Description"
+          value={formData.description}
           variant="bordered"
           placeholder="Estos datos se mostraran en la descripción del torneo, habla de los mas importante"
           className="max-w-full"
@@ -69,6 +74,11 @@ const TournamentContainer = ({
         <Select
           label="Seleccione la categoría"
           className="max-w-full"
+          defaultSelectedKeys={
+            formData.category === ''
+              ? ['Infantil']
+              : [`${formData.category}`]
+          }
           isRequired
           onChange={(event) => {
             setFormData({
@@ -79,8 +89,8 @@ const TournamentContainer = ({
         >
           {category !== null
             ? (
-                category.map(({ id, name }) => (
-              <SelectItem key={id} value={id}>
+                category.map(({ name }) => (
+              <SelectItem key={name} value={name}>
                 {name}
               </SelectItem>
                 ))
@@ -95,6 +105,9 @@ const TournamentContainer = ({
           label="Seleccione el genero"
           className="max-w-full"
           isRequired
+          defaultSelectedKeys={
+            formData.gender === '' ? ['Masculino'] : [`${formData.gender}`]
+          }
           onChange={(event) => {
             setFormData({
               ...formData,
@@ -104,8 +117,8 @@ const TournamentContainer = ({
         >
           {gender !== null
             ? (
-                gender.map(({ id, name }) => (
-              <SelectItem key={id} value={id}>
+                gender.map(({ name }) => (
+              <SelectItem key={name} value={name}>
                 {name}
               </SelectItem>
                 ))
@@ -119,6 +132,11 @@ const TournamentContainer = ({
         <Select
           label="Seleccione una sub categoría"
           className="max-w-full"
+          defaultSelectedKeys={
+            formData.variant === ''
+              ? ['Futbol 5']
+              : [`${formData.variant}`]
+          }
           isRequired
           onChange={(event) => {
             setFormData({
@@ -129,8 +147,8 @@ const TournamentContainer = ({
         >
           {subCategory !== null
             ? (
-                subCategory.map(({ id, name }) => (
-              <SelectItem key={id} value={id}>
+                subCategory.map(({ name }) => (
+              <SelectItem key={name} value={name}>
                 {name}
               </SelectItem>
                 ))
@@ -143,11 +161,16 @@ const TournamentContainer = ({
         </Select>
       </div>
       <div className="flex flex-col gap-2">
-        <AwardTournament award={award} setAward={setAward} />
+        <AwardTournament
+          award={award}
+          setAward={setAward}
+          idTournament={idTournament}
+        />
         <Input
           isRequired
           type="text"
           variant="bordered"
+          value={formData.contactName}
           label="Nombre de contacto"
           onChange={(event) => {
             setFormData({
@@ -160,6 +183,7 @@ const TournamentContainer = ({
           isRequired
           type="tel"
           variant="bordered"
+          value={formData.contactNumber}
           label="Numero de teléfono de contacto"
           onChange={(event) => {
             setFormData({

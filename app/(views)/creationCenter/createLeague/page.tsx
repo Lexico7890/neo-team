@@ -20,6 +20,18 @@ import ListTournament from './components/server/list-tournament'
 import ModalCreateLeague from './components/server/modal-create-league'
 import Image from 'next/image'
 import { FaRegWindowClose } from 'react-icons/fa'
+import { type Tournament } from '@/app/types/tournament'
+
+const INIT_FORM_DATA = {
+  nameTournament: '',
+  valueTournament: 0,
+  description: '',
+  category: '',
+  gender: '',
+  variant: '',
+  contactName: '',
+  contactNumber: ''
+} as const
 
 const TournamentSchema = object({
   nameTournament: string('Debe agregar un nombre al torneo', [
@@ -51,10 +63,10 @@ const TournamentSchema = object({
 
 type TournamentData = Output<typeof TournamentSchema>
 
-async function Fetch (formData: any, award: any, idLeague: string) {
+async function Fetch (formData: any, award: any, idLeague: string, isEdit: boolean, idTournamentEdit: string | null) {
   const result = await fetch('/api/tournament', {
     method: 'POST',
-    body: JSON.stringify({ formData, award, idLeague })
+    body: JSON.stringify({ formData, award, idLeague, isEdit, idTournamentEdit })
   })
   if (!result.ok) {
     throw new Error(result.statusText)
@@ -74,16 +86,7 @@ const PageCreateLeague = () => {
     handleLeague,
     session
   } = useGetSupabase()
-  const [formData, setFormData] = useState<TournamentData>({
-    nameTournament: '',
-    valueTournament: 0,
-    description: '',
-    category: '',
-    gender: '',
-    variant: '',
-    contactName: '',
-    contactNumber: ''
-  })
+  const [formData, setFormData] = useState<TournamentData>(INIT_FORM_DATA)
   const [award, setAward] = useState<[{ name: string, value: number }]>(
     [] as any
   )
@@ -91,6 +94,8 @@ const PageCreateLeague = () => {
   const [showForm, setShowForm] = useState<boolean>(false)
   const [showModalLeague, setShowModal] = useState<boolean>(true)
   const [isEdit, setEdit] = useState<boolean>(false)
+  const [editTournament, setEditTournament] = useState<boolean>(false)
+  const [idTournament, setIdTournament] = useState<string | null>(null)
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -102,7 +107,7 @@ const PageCreateLeague = () => {
       }
       parse(TournamentSchema, formData)
       setBlock(true)
-      toast.promise(Fetch(formData, award, league[0].id), {
+      toast.promise(Fetch(formData, award, league[0].id, editTournament, idTournament), {
         loading: 'Creando la liga, un momento por favor...',
         success: () => {
           handleTournament()
@@ -122,6 +127,23 @@ const PageCreateLeague = () => {
     handleLeague(session?.user.id as string)
     setEdit(false)
     setShowModal(false)
+  }
+
+  const handleEditTournament = (item: Tournament) => {
+    const selectItem: TournamentData = {
+      nameTournament: item.name,
+      valueTournament: item.value,
+      description: item.description,
+      category: item.nombre_categoria,
+      gender: item.nombre_genero,
+      variant: item.sub_categoria,
+      contactName: item.contact_name,
+      contactNumber: item.contact_number
+    }
+    setIdTournament(item.id)
+    setFormData(selectItem)
+    setEditTournament(true)
+    setShowForm(true)
   }
 
   useEffect(() => {
@@ -185,6 +207,8 @@ const PageCreateLeague = () => {
             variant="ghost"
             className="buttonPrimary"
             onClick={() => {
+              setIdTournament(null)
+              setFormData(INIT_FORM_DATA)
               setShowForm(true)
             }}
           >
@@ -192,7 +216,10 @@ const PageCreateLeague = () => {
           </Button>
         </div>
         <div>
-          <ListTournament tournament={tournament} />
+          <ListTournament
+            tournament={tournament}
+            showMore={handleEditTournament}
+          />
         </div>
         {showForm && (
           <div className="border-1 border-black dark:border-white w-full p-2 sm:p-10 relative">
@@ -210,7 +237,11 @@ const PageCreateLeague = () => {
                 handleSubmit(event)
               }}
             >
-              <h3 className="text-lg my-4">Crear Torneo</h3>
+              <h3 className="text-lg my-4">
+                {!editTournament
+                  ? 'Crear Torneo'
+                  : `Editar torneo ${formData.nameTournament}`}
+              </h3>
               <TournamentContainer
                 award={award}
                 category={category}
@@ -219,6 +250,7 @@ const PageCreateLeague = () => {
                 setAward={setAward}
                 setFormData={setFormData}
                 subCategory={subCategory}
+                idTournament={idTournament}
               />
               <Button
                 color="primary"

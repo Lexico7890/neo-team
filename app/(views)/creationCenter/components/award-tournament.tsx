@@ -1,5 +1,6 @@
 'use client'
 
+import { type Database } from '@/app/types/database'
 import {
   Button,
   Input,
@@ -10,7 +11,8 @@ import {
   TableHeader,
   TableRow
 } from '@nextui-org/react'
-import { useState } from 'react'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useEffect, useState } from 'react'
 import { RiDeleteBin4Line } from 'react-icons/ri'
 import {
   type Output,
@@ -26,6 +28,7 @@ import {
 interface Props {
   award: [{ name: string, value: number }]
   setAward: (award: any) => void
+  idTournament: string | null
 }
 
 const AwardSchema = object({
@@ -40,13 +43,15 @@ const AwardSchema = object({
 
 type AwardData = Output<typeof AwardSchema>
 
-const AwardTournament = ({ award, setAward }: Props) => {
+const AwardTournament = ({ award, setAward, idTournament }: Props) => {
   const [formData, setFormData] = useState<AwardData>({
     nameAward: '',
     value: 0
   })
   const [showError, setShowError] = useState<boolean>(false)
   const [messageError, setMessageError] = useState<string>('')
+
+  const supabase = createClientComponentClient<Database>()
 
   const handleSubmit = () => {
     setAward((prev: Array<{ name: string, value: number }>) => [
@@ -66,6 +71,19 @@ const AwardTournament = ({ award, setAward }: Props) => {
       setShowError(true)
     }
   }
+
+  useEffect(() => {
+    if (idTournament !== null) {
+      const getAwardsTournament = async () => {
+        const { data, error } = await supabase.from('award').select('*').eq('tournament_id', idTournament)
+        if (error !== null) {
+          throw new Error(error.message)
+        }
+        setAward(data)
+      }
+      getAwardsTournament()
+    }
+  }, [])
 
   return (
     <div className="border-1 border-black dark:border-white p-2">
