@@ -2,87 +2,34 @@
 
 import { useEffect, useState } from 'react'
 import CardCreation from '../components/card-creation'
-import { Button } from '@nextui-org/react'
-import { parse } from 'valibot'
-import { toast, Toaster } from 'sonner'
-import useGetSupabase from '@/app/hooks/useGetSupabase'
-import TournamentContainer from './components/client/tournament-container'
+import { Button, useDisclosure } from '@nextui-org/react'
 import ListTournament from './components/server/list-tournament'
 import ModalCreateLeague from './components/server/modal-create-league'
 import Image from 'next/image'
-import { FaRegWindowClose } from 'react-icons/fa'
-import { type Tournament } from '@/app/types/tournament'
-import { type Award } from '@/app/types/award'
-import { type TournamentData, TournamentSchema } from '@/app/types/schema/tournament-schema'
-import { INIT_FORM_DATA } from '@/app/data/constant'
 import { useSupabaseStore } from '@/app/zustand/store'
-
-async function Fetch (formData: any, award: any, idLeague: string) {
-  const result = await fetch('/api/tournament', {
-    method: 'POST',
-    body: JSON.stringify({ formData, award, idLeague })
-  })
-  if (!result.ok) {
-    throw new Error(result.statusText)
-  }
-  return await result.json()
-}
+import ModalCreateTournament from './components/client/modal-create-tournament'
 
 const PageCreateLeague = () => {
-  const {
-    tournament,
-    league,
-    isLoading,
-    handleTournament,
-    handleLeague,
-    session
-  } = useGetSupabase()
-  const [category, gender, subCategory] = useSupabaseStore(state => [
+  const [category, gender, subCategory, getLeagueId, leagueId, tournament, getTournament] = useSupabaseStore(state => [
     state.category,
     state.gender,
-    state.subCategory
+    state.subCategory,
+    state.getLeagueId,
+    state.leagueId,
+    state.tournament,
+    state.getTournament
   ])
-  const [formData, setFormData] = useState<TournamentData>(INIT_FORM_DATA)
-  const [award, setAward] = useState<Award[]>([])
-  const [isBlock, setBlock] = useState<boolean>(false)
-  const [showForm, setShowForm] = useState<boolean>(false)
   const [showModalLeague, setShowModal] = useState<boolean>(true)
   const [isEdit, setEdit] = useState<boolean>(false)
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    try {
-      if (award.length < 1) {
-        throw new Error(
-          'Se debe agregar por lo menos un item en la premiación'
-        )
-      }
-      parse(TournamentSchema, formData)
-      setBlock(true)
-      toast.promise(Fetch(formData, award, league[0].id), {
-        loading: 'Creando la liga, un momento por favor...',
-        success: () => {
-          handleTournament()
-          setShowForm(false)
-          return 'Liga creada con éxito'
-        },
-        error: 'No se pudo crear la liga, comuníquese con el administrador'
-      })
-    } catch (error: any) {
-      toast.error(error.message)
-    } finally {
-      setBlock(false)
-    }
-  }
+  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
 
   const handleCreateLeague = () => {
-    handleLeague(session?.user.id as string)
     setEdit(false)
     setShowModal(false)
   }
 
-  const handleEditTournament = (item: Tournament) => {
-    const selectItem: TournamentData = {
+  const handleEditTournament = (item: any) => {
+    /* const selectItem: TournamentData = {
       nameTournament: item.name,
       valueTournament: item.value,
       description: item.description,
@@ -93,37 +40,48 @@ const PageCreateLeague = () => {
       contactNumber: item.contact_number
     }
     setFormData(selectItem)
-    setShowForm(true)
+    setShowForm(true) */
   }
 
   useEffect(() => {
-    if (league.length > 0) {
+    getLeagueId()
+    getTournament()
+    if (leagueId.id !== '') {
       setShowModal(false)
     }
-  }, [league])
+  }, [leagueId])
 
   return (
     <div className="flex gap-10 h-auto">
+      <ModalCreateTournament
+          isOpen={isOpen}
+          category={category}
+          gender={gender}
+          subCategory={subCategory}
+          leagueId={leagueId.id}
+          onClose={onClose}
+          onOpenChange={onOpenChange}
+        />
       <ModalCreateLeague
-        isOpen={!isLoading && showModalLeague}
+        isOpen={showModalLeague}
         setIsOpen={setShowModal}
         handleCreateLeague={handleCreateLeague}
-        league={league}
+        league={leagueId}
         isEdit={isEdit}
         setEdit={setEdit}
       />
       <div className="hidden md:block">
-        {league.length > 0
+        {leagueId.id !== ''
           ? (
           <>
             <Image
-              src={league[0].url_image ?? ''}
+              src={leagueId.url_image ?? ''}
               height={250}
               width={250}
               alt="image of league"
             />
             <div className="flex flex-col">
-              <span className="text-xl font-bold">{league[0].name}</span>
+              <span className="text-xl font-bold">{leagueId.name}</span>
               <Button
                 color="primary"
                 variant="ghost"
@@ -140,7 +98,7 @@ const PageCreateLeague = () => {
             )
           : (
           <CardCreation
-            title={league.length === 0 ? 'Crear Liga' : league[0].name}
+            title={leagueId.id !== '' ? 'Crear Liga' : leagueId.name}
             urlImage="/image/imageLeague.jpg"
             height={300}
             width={300}
@@ -157,8 +115,7 @@ const PageCreateLeague = () => {
             variant="ghost"
             className="buttonPrimary"
             onClick={() => {
-              setFormData(INIT_FORM_DATA)
-              setShowForm(true)
+              onOpen()
             }}
           >
             Crear Torneo
@@ -170,47 +127,6 @@ const PageCreateLeague = () => {
             showMore={handleEditTournament}
           />
         </div>
-        {showForm && (
-          <div className="border-1 border-black dark:border-white w-full p-2 sm:p-10 relative">
-            <div
-              className="absolute top-5 right-5 cursor-pointer"
-              onClick={() => {
-                setShowForm(false)
-                setAward([] as any)
-              }}
-            >
-              <FaRegWindowClose />
-            </div>
-            <form
-              onSubmit={(event) => {
-                handleSubmit(event)
-              }}
-            >
-              <h3 className="text-lg my-4">
-                Crear Torneo
-              </h3>
-              <TournamentContainer
-                award={award}
-                category={category}
-                formData={formData}
-                gender={gender}
-                setAward={setAward}
-                setFormData={setFormData}
-                subCategory={subCategory}
-              />
-              <Button
-                color="primary"
-                variant="ghost"
-                className="hover:text-white my-4"
-                type="submit"
-                disabled={isBlock}
-              >
-                Enviar
-              </Button>
-            </form>
-            <Toaster richColors />
-          </div>
-        )}
       </div>
     </div>
   )

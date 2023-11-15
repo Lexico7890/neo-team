@@ -47,7 +47,6 @@ const useGetSupabase = () => {
   }
 
   useEffect(() => {
-    console.log('entro')
     const getData = async () => {
       try {
         setLoading(true)

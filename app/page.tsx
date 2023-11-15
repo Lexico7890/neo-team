@@ -3,21 +3,22 @@
 import { useEffect } from 'react'
 import LeagueCard from './components/league'
 import NavBar from './components/navbar'
-import useGetLeague from './hooks/useGetLeague'
 import { useSupabaseStore } from './zustand/store'
 
 export default function Home () {
-  const { league } = useGetLeague()
-  const [getCategory, getGender, getSubCategory] = useSupabaseStore(state => [
+  const [getCategory, getGender, getSubCategory, getLeague, league] = useSupabaseStore(state => [
     state.getCategory,
     state.getGender,
-    state.getSubCategory
+    state.getSubCategory,
+    state.getLeague,
+    state.league
   ])
 
   useEffect(() => {
     getCategory()
     getGender()
     getSubCategory()
+    getLeague()
   }, [])
 
   return (

@@ -27,7 +27,7 @@ interface Props {
   isOpen: boolean
   setIsOpen: (value: boolean) => void
   handleCreateLeague: () => void
-  league: League[]
+  league: League
   isEdit: boolean
   setEdit: (value: boolean) => void
 }
@@ -62,10 +62,10 @@ const ModalCreateLeague = ({ isOpen, setIsOpen, handleCreateLeague, league, isEd
   }
 
   useEffect(() => {
-    if (league.length > 0) {
+    if (league.id !== '') {
       setFormData({
-        nameLeague: league[0].name,
-        imageLeague: league[0].url_image ?? ''
+        nameLeague: league.name,
+        imageLeague: league.url_image ?? ''
       })
     }
   }, [league])
@@ -95,7 +95,7 @@ const ModalCreateLeague = ({ isOpen, setIsOpen, handleCreateLeague, league, isEd
         }
       }
       const id = session?.user.id
-      toast.promise(Fetch(formData, isEdit, id, league[0]), {
+      toast.promise(Fetch(formData, isEdit, id, league), {
         loading: 'Creando la liga, un momento por favor...',
         success: () => {
           setTimeout(() => {
@@ -113,7 +113,7 @@ const ModalCreateLeague = ({ isOpen, setIsOpen, handleCreateLeague, league, isEd
   }
 
   return (
-    <Modal backdrop="blur" isOpen={isOpen} hideCloseButton={league.length === 0 ?? true}>
+    <Modal backdrop="blur" isOpen={isOpen} hideCloseButton={league.id === '' ?? true}>
       <ModalContent>
         {(onClose) => (
           <>
@@ -136,7 +136,7 @@ const ModalCreateLeague = ({ isOpen, setIsOpen, handleCreateLeague, league, isEd
               <Button color="danger" variant="light" onPress={() => {
                 setEdit(false)
                 setIsOpen(false)
-              }} isDisabled={league.length === 0 ?? true}>
+              }} isDisabled={league.id === '' ?? true}>
                 Close
               </Button>
               <Button
