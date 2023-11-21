@@ -2,7 +2,6 @@
 
 import { Button, Modal, ModalContent } from '@nextui-org/react'
 import React, { useState } from 'react'
-import { FaRegWindowClose } from 'react-icons/fa'
 import TournamentContainer from './tournament-container'
 import { Toaster, toast } from 'sonner'
 import { type Award } from '@/app/types/award'
@@ -12,6 +11,7 @@ import { INIT_FORM_DATA } from '@/app/data/constant'
 import { type Category } from '@/app/types/category'
 import { type Gender } from '@/app/types/gender'
 import { type SubCategory } from '@/app/types/sub-category'
+import { useSupabaseStore } from '@/app/zustand/store'
 
 interface Props {
   leagueId: string
@@ -37,6 +37,9 @@ async function Fetch (formData: any, award: any, idLeague: string) {
 const ModalCreateTournament = ({ leagueId, isOpen, category, gender, subCategory, onClose, onOpenChange }: Props) => {
   const [award, setAward] = useState<Award[]>([])
   const [formData, setFormData] = useState<TournamentData>(INIT_FORM_DATA)
+  const [getTournament] = useSupabaseStore((state) => [
+    state.getTournament
+  ])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -49,7 +52,11 @@ const ModalCreateTournament = ({ leagueId, isOpen, category, gender, subCategory
       parse(TournamentSchema, formData)
       toast.promise(Fetch(formData, award, leagueId), {
         loading: 'Creando la liga, un momento por favor...',
-        success: () => {
+        success: (data) => {
+          getTournament(leagueId)
+          setTimeout(() => {
+            onClose()
+          }, 2000)
           return 'Liga creada con éxito'
         },
         error: 'No se pudo crear la liga, comuníquese con el administrador'
@@ -60,7 +67,10 @@ const ModalCreateTournament = ({ leagueId, isOpen, category, gender, subCategory
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} backdrop='opaque' size='5xl' onOpenChange={onOpenChange} hideCloseButton={false}>
+    <Modal isOpen={isOpen} onClose={() => {
+      onClose()
+      setAward([])
+    }} backdrop='opaque' size='5xl' onOpenChange={onOpenChange} hideCloseButton={false}>
       <ModalContent>
       {(onClose) => (
         <div className="border-1 border-black dark:border-white w-full p-2 sm:p-10">

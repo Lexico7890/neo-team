@@ -2,19 +2,25 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
 
+const supabase = createServerComponentClient({ cookies })
+
 export async function POST (request: NextRequest, response: NextResponse) {
   let isOk: boolean = false
   const { formData, award, idLeague, isEdit, idTournamentEdit } =
     await request.json()
-  const supabase = createServerComponentClient({ cookies })
   if (isEdit === true) {
     await EditTournament(idTournamentEdit, supabase, idLeague, formData)
     isOk = await EditAwards(supabase, idTournamentEdit, award)
   } else {
     const idTournament = await CreateTournament(supabase, idLeague, formData)
-    isOk = await CreateAwards(supabase, award, idTournament)
+    isOk = await CreateAwards(supabase, idTournament, award)
   }
   return NextResponse.json({ result: isOk })
+}
+
+export async function PUT (request: NextRequest, response: NextResponse) {
+  const { idTournamentEdit, formData, idLeague } = await request.json()
+  await EditTournament(idTournamentEdit, supabase, idLeague, formData)
 }
 
 async function CreateTournament (
@@ -64,7 +70,7 @@ async function EditTournament (
     .eq('id', id)
     .select('id')
   if (error !== null) {
-    throw new Error('Se produjo un error al intentar crear el torneo')
+    throw new Error('Se produjo un error al intentar editar el torneo')
   }
   return data[0].id
 }

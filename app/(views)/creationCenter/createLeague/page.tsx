@@ -10,14 +10,24 @@ import { useSupabaseStore } from '@/app/zustand/store'
 import ModalCreateTournament from './components/client/modal-create-tournament'
 
 const PageCreateLeague = () => {
-  const [category, gender, subCategory, getLeagueId, leagueId, tournament, getTournament] = useSupabaseStore(state => [
+  const [
+    category,
+    gender,
+    subCategory,
+    getLeagueId,
+    leagueId,
+    tournament,
+    getTournament,
+    league
+  ] = useSupabaseStore((state) => [
     state.category,
     state.gender,
     state.subCategory,
     state.getLeagueId,
     state.leagueId,
     state.tournament,
-    state.getTournament
+    state.getTournament,
+    state.league
   ])
   const [showModalLeague, setShowModal] = useState<boolean>(true)
   const [isEdit, setEdit] = useState<boolean>(false)
@@ -45,23 +55,23 @@ const PageCreateLeague = () => {
 
   useEffect(() => {
     getLeagueId()
-    getTournament()
     if (leagueId.id !== '') {
       setShowModal(false)
+      getTournament(leagueId.id)
     }
-  }, [leagueId])
+  }, [leagueId, league])
 
   return (
     <div className="flex gap-10 h-auto">
       <ModalCreateTournament
-          isOpen={isOpen}
-          category={category}
-          gender={gender}
-          subCategory={subCategory}
-          leagueId={leagueId.id}
-          onClose={onClose}
-          onOpenChange={onOpenChange}
-        />
+        isOpen={isOpen}
+        category={category}
+        gender={gender}
+        subCategory={subCategory}
+        leagueId={leagueId.id}
+        onClose={onClose}
+        onOpenChange={onOpenChange}
+      />
       <ModalCreateLeague
         isOpen={showModalLeague}
         setIsOpen={setShowModal}
@@ -74,18 +84,20 @@ const PageCreateLeague = () => {
         {leagueId.id !== ''
           ? (
           <>
+            <div className='min-h-[200px]'>
             <Image
               src={leagueId.url_image ?? ''}
               height={250}
               width={250}
               alt="image of league"
             />
+            </div>
             <div className="flex flex-col">
-              <span className="text-xl font-bold">{leagueId.name}</span>
+              <span className="text-xl font-bold text-center">{leagueId.name}</span>
               <Button
                 color="primary"
                 variant="ghost"
-                className="buttonPrimary w-28"
+                className="buttonPrimary"
                 onClick={() => {
                   setEdit(true)
                   setShowModal(true)

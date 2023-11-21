@@ -43,7 +43,6 @@ const TournamentContainer = ({
         <Input
           type="number"
           label="Valor del torneo"
-          value={formData.valueTournament}
           placeholder="0.00"
           endContent={
             <div className="pointer-events-none flex items-center">
@@ -73,11 +72,6 @@ const TournamentContainer = ({
         <Select
           label="Seleccione la categoría"
           className="max-w-full"
-          defaultSelectedKeys={
-            formData.category === ''
-              ? ['Infantil']
-              : [`${formData.category}`]
-          }
           isRequired
           onChange={(event) => {
             setFormData({
@@ -88,8 +82,8 @@ const TournamentContainer = ({
         >
           {category !== null
             ? (
-                category.map(({ name }) => (
-              <SelectItem key={name} value={name}>
+                category.map(({ name, id }) => (
+              <SelectItem key={id} value={id}>
                 {name}
               </SelectItem>
                 ))
@@ -104,9 +98,6 @@ const TournamentContainer = ({
           label="Seleccione el genero"
           className="max-w-full"
           isRequired
-          defaultSelectedKeys={
-            formData.gender === '' ? ['Masculino'] : [`${formData.gender}`]
-          }
           onChange={(event) => {
             setFormData({
               ...formData,
@@ -116,8 +107,8 @@ const TournamentContainer = ({
         >
           {gender !== null
             ? (
-                gender.map(({ name }) => (
-              <SelectItem key={name} value={name}>
+                gender.map(({ name, id }) => (
+              <SelectItem key={id} value={id}>
                 {name}
               </SelectItem>
                 ))
@@ -131,11 +122,6 @@ const TournamentContainer = ({
         <Select
           label="Seleccione una sub categoría"
           className="max-w-full"
-          defaultSelectedKeys={
-            formData.variant === ''
-              ? ['Futbol 5']
-              : [`${formData.variant}`]
-          }
           isRequired
           onChange={(event) => {
             setFormData({
@@ -146,8 +132,8 @@ const TournamentContainer = ({
         >
           {subCategory !== null
             ? (
-                subCategory.map(({ name }) => (
-              <SelectItem key={name} value={name}>
+                subCategory.map(({ name, id }) => (
+              <SelectItem key={id} value={id}>
                 {name}
               </SelectItem>
                 ))

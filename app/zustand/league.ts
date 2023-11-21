@@ -34,8 +34,15 @@ export const createLeagueSlice: StateCreator<LeagueSlice> = (set) => ({
     const { data: session } = await supabase.auth.getSession()
     set((state) => {
       const foundLeague = state.league.find(item => item.createdBy === session.session?.user.id)
-      console.log('f', foundLeague)
-      console.log('fs', state.league)
+      if (foundLeague === undefined) {
+        return {
+          id: '',
+          name: '',
+          created_at: '',
+          createdBy: '',
+          url_image: ''
+        }
+      }
       return { leagueId: foundLeague }
     })
   }

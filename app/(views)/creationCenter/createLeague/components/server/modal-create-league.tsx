@@ -14,6 +14,7 @@ import { object, string, type Output, minLength, maxLength, parse } from 'valibo
 import { Toaster, toast } from 'sonner'
 import useGetSupabase from '@/app/hooks/useGetSupabase'
 import { type League } from '@/app/types/league'
+import { useSupabaseStore } from '@/app/zustand/store'
 
 const LeagueSchema = object({
   nameLeague: string('Debe agregar un nombre a la liga', [
@@ -50,6 +51,11 @@ const ModalCreateLeague = ({ isOpen, setIsOpen, handleCreateLeague, league, isEd
     nameLeague: '',
     imageLeague: ''
   })
+  const [
+    getLeague
+  ] = useSupabaseStore((state) => [
+    state.getLeague
+  ])
   const [imageLeague, setImage] = useState<File | undefined>()
   const [extensionImage, setExtensionImage] = useState<string | undefined>('')
   const [isBlock, setBlock] = useState<boolean>(false)
@@ -98,6 +104,7 @@ const ModalCreateLeague = ({ isOpen, setIsOpen, handleCreateLeague, league, isEd
       toast.promise(Fetch(formData, isEdit, id, league), {
         loading: 'Creando la liga, un momento por favor...',
         success: () => {
+          getLeague()
           setTimeout(() => {
             setBlock(false)
             handleCreateLeague()

@@ -7,4 +7,4 @@ export const INIT_FORM_DATA = {
   variant: '',
   contactName: '',
   contactNumber: ''
-} as const
+}

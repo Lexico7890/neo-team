@@ -5,40 +5,67 @@ import { type Award } from '@/app/types/award'
 import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react'
 import AwardTournament from '../../components/award-tournament'
 import { INIT_FORM_DATA } from '@/app/data/constant'
-import { type TournamentData } from '@/app/types/schema/tournament-schema'
-import useGetSupabase from '@/app/hooks/useGetSupabase'
-import { type Tournament } from '@/app/types/tournament'
+import { TournamentSchema, type TournamentData } from '@/app/types/schema/tournament-schema'
 import { FaLongArrowAltLeft } from 'react-icons/fa'
 import { useRouter } from 'next/navigation'
 import { useSupabaseStore } from '@/app/zustand/store'
+import { parse } from 'valibot'
+import { Toaster, toast } from 'sonner'
+
+async function FetchTournament (formData: any, idTournamentEdit: string, idLeague: string) {
+  const result = await fetch('/api/tournament', {
+    method: 'PUT',
+    body: JSON.stringify({ idTournamentEdit, formData, idLeague })
+  })
+  if (!result.ok) {
+    throw new Error(result.statusText)
+  }
+  return await result.json()
+}
 
 const PageTournamentEdit = ({ params }: { params: { id: string } }) => {
   const { id } = params
   const router = useRouter()
-  const { handleTournamentId } = useGetSupabase()
   const [formData, setFormData] = useState<TournamentData>(INIT_FORM_DATA)
   const [award, setAward] = useState<Award[]>([])
-  const [category, gender, subCategory] = useSupabaseStore(state => [
+  const [category, gender, subCategory, tournament, leagueId] = useSupabaseStore(state => [
     state.category,
     state.gender,
-    state.subCategory
+    state.subCategory,
+    state.tournament,
+    state.leagueId
   ])
 
+  const handleSubmitTournament = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    try {
+      parse(TournamentSchema, formData)
+      toast.promise(FetchTournament(formData, id, leagueId.id), {
+        loading: 'Modificando torneo, un momento por favor...',
+        success: (data) => {
+          return 'Torneo modificado con éxito'
+        },
+        error: 'No se pudo modificar el torneo, comuníquese con el administrador'
+      })
+    } catch (error: any) {
+      toast.error(error.message)
+    }
+  }
+
   useEffect(() => {
-    const getTournament = async () => {
-      const data: Tournament[] = await handleTournamentId(id)
+    const tournamentEdit = tournament.find((item) => item.id === id)
+    if (tournamentEdit !== undefined) {
       setFormData({
-        nameTournament: data[0].name,
-        valueTournament: data[0].value,
-        description: data[0].description,
-        category: data[0].nombre_categoria,
-        gender: data[0].nombre_genero,
-        variant: data[0].sub_categoria,
-        contactName: data[0].contact_name,
-        contactNumber: data[0].contact_number
+        nameTournament: tournamentEdit.name,
+        valueTournament: tournamentEdit.value,
+        description: tournamentEdit.description,
+        category: tournamentEdit.nombre_categoria,
+        gender: tournamentEdit.nombre_genero,
+        variant: tournamentEdit.sub_categoria,
+        contactName: tournamentEdit.contact_name,
+        contactNumber: tournamentEdit.contact_number
       })
     }
-    getTournament()
   }, [])
 
   return (
@@ -56,6 +83,7 @@ const PageTournamentEdit = ({ params }: { params: { id: string } }) => {
       </Button>
       <section className="grid grid-cols-3 justify-between gap-6">
         <article className="col-span-2 w-full">
+          <form onSubmit={(e) => { handleSubmitTournament(e) }}>
           <h2 className="text-xl font-semibold m-4">Editar Torneo</h2>
           <div className="gridFormat border-1 border-black dark:border-white p-2">
             <div className="flex flex-col gap-2">
@@ -136,7 +164,7 @@ const PageTournamentEdit = ({ params }: { params: { id: string } }) => {
                 color="primary"
                 variant="ghost"
                 className="buttonPrimary w-32"
-                onClick={() => {}}
+                type='submit'
               >
                 Modificar torneo
               </Button>
@@ -230,6 +258,7 @@ const PageTournamentEdit = ({ params }: { params: { id: string } }) => {
               </Select>
             </div>
           </div>
+          </form>
         </article>
         <article className="w-full">
           <h2 className="text-xl font-semibold m-4">Editar Premiación</h2>
@@ -242,6 +271,7 @@ const PageTournamentEdit = ({ params }: { params: { id: string } }) => {
           </div>
         </article>
       </section>
+      <Toaster richColors />
     </div>
   )
 }

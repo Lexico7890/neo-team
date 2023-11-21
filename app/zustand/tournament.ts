@@ -5,17 +5,19 @@ import { type StateCreator } from 'zustand'
 
 export interface TournamentSlice {
   tournament: Tournament[]
-  getTournament: () => void
+  getTournament: (leagueid: string) => void
 }
 
 const supabase = createClientComponentClient<Database>()
 
 export const createTournamentSlice: StateCreator<TournamentSlice> = (set) => ({
   tournament: [],
-  getTournament: async () => {
+  getTournament: async (leagueid) => {
+    console.log('idd ', leagueid)
     const { data: listTournaments, error: errorListTournament } =
-        await supabase.rpc('get_tournaments' as never)
+        await supabase.rpc('get_tournaments_id' as never, { leagueid } as any)
     if (errorListTournament !== null) {
+      console.error(errorListTournament.message)
       throw new Error('No se pudo completar la consulta de torneos')
     }
     set({ tournament: listTournaments })
