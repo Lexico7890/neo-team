@@ -1,9 +1,11 @@
 'use client'
 
 import { type Award } from '@/app/types/award'
+import { useSupabaseStore } from '@/app/zustand/store'
 import {
   Button,
   Input,
+  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -11,7 +13,7 @@ import {
   TableHeader,
   TableRow
 } from '@nextui-org/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RiDeleteBin4Line } from 'react-icons/ri'
 import {
   type Output,
@@ -25,9 +27,7 @@ import {
 } from 'valibot'
 
 interface Props {
-  award: Award[]
-  setAward: (award: any) => void
-  idTournament: string | null
+  idTournament: string
 }
 
 const AwardSchema = object({
@@ -42,20 +42,20 @@ const AwardSchema = object({
 
 type AwardData = Output<typeof AwardSchema>
 
-const AwardTournament = ({ award, setAward, idTournament }: Props) => {
+const AwardTournament = ({ idTournament }: Props) => {
   const [formData, setFormData] = useState<AwardData>({
     nameAward: '',
     value: 0
   })
   const [showError, setShowError] = useState<boolean>(false)
   const [messageError, setMessageError] = useState<string>('')
+  const [loadingData, setLoadingData] = useState<boolean>(false)
+  const [getAward, award] = useSupabaseStore((state) => [
+    state.getAward,
+    state.award
+  ])
 
-  const handleSubmit = () => {
-    setAward((prev: Award[]) => [
-      ...prev,
-      { name: formData.nameAward, value: formData.value }
-    ])
-  }
+  const handleSubmit = () => {}
 
   const handleSubmitForm = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -70,6 +70,14 @@ const AwardTournament = ({ award, setAward, idTournament }: Props) => {
       setShowError(true)
     }
   }
+
+  useEffect(() => {
+    setLoadingData(true)
+    getAward(idTournament)
+    setTimeout(() => {
+      setLoadingData(false)
+    }, 2000)
+  }, [])
 
   return (
     <div className="border-1 border-black dark:border-white p-2">
@@ -120,43 +128,56 @@ const AwardTournament = ({ award, setAward, idTournament }: Props) => {
           Agregar
         </Button>
       </div>
-      <Table
-        aria-label="Table for award tournament"
-        isHeaderSticky
-        classNames={{
-          base: 'max-h-[200px] overflow-auto',
-          table: 'min-h-[80px]'
-        }}
-      >
-        <TableHeader>
-          <TableColumn>Nombre premio</TableColumn>
-          <TableColumn>Valor</TableColumn>
-          <TableColumn>Eliminar</TableColumn>
-        </TableHeader>
-        <TableBody>
-          {award.map((item, index) => (
-            <TableRow key={index}>
-              <TableCell>{item?.name}</TableCell>
-              <TableCell>${item?.value}</TableCell>
-              <TableCell>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  isIconOnly
-                  color="danger"
-                  onClick={() => {
-                    const updatedAward = [...award]
-                    updatedAward.splice(index, 1)
-                    setAward(updatedAward)
-                  }}
-                >
-                  <RiDeleteBin4Line />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      {loadingData
+        ? (
+        <div className="w-full flex justify-center items-center">
+          <Spinner
+            label="Cargando información de torneo..."
+            color="primary"
+            labelColor="primary"
+            size="lg"
+          />
+        </div>
+          )
+        : (
+        <Table
+          aria-label="Table for award tournament"
+          isHeaderSticky
+          classNames={{
+            base: 'max-h-[200px] overflow-auto',
+            table: 'min-h-[80px]'
+          }}
+        >
+          <TableHeader>
+            <TableColumn>Nombre premio</TableColumn>
+            <TableColumn>Valor</TableColumn>
+            <TableColumn>Eliminar</TableColumn>
+          </TableHeader>
+          <TableBody>
+            {award.map((item, index) => (
+              <TableRow key={index}>
+                <TableCell>{item?.name}</TableCell>
+                <TableCell>${item?.value}</TableCell>
+                <TableCell>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    isIconOnly
+                    color="danger"
+                    onClick={() => {
+                      const updatedAward = [...award]
+                      updatedAward.splice(index, 1)
+                      setAward(updatedAward)
+                    }}
+                  >
+                    <RiDeleteBin4Line />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+          )}
     </div>
   )
 }

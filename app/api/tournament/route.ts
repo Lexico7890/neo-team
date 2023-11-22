@@ -20,7 +20,8 @@ export async function POST (request: NextRequest, response: NextResponse) {
 
 export async function PUT (request: NextRequest, response: NextResponse) {
   const { idTournamentEdit, formData, idLeague } = await request.json()
-  await EditTournament(idTournamentEdit, supabase, idLeague, formData)
+  const isOk = await EditTournament(idTournamentEdit, supabase, idLeague, formData)
+  return NextResponse.json({ result: isOk })
 }
 
 async function CreateTournament (
@@ -54,7 +55,7 @@ async function EditTournament (
   idLeague: string,
   formData: any
 ) {
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('tournament')
     .update({
       name: formData.nameTournament,
@@ -72,7 +73,7 @@ async function EditTournament (
   if (error !== null) {
     throw new Error('Se produjo un error al intentar editar el torneo')
   }
-  return data[0].id
+  return true
 }
 
 async function CreateAwards (

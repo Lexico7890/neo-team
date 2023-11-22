@@ -13,7 +13,6 @@ const supabase = createClientComponentClient<Database>()
 export const createTournamentSlice: StateCreator<TournamentSlice> = (set) => ({
   tournament: [],
   getTournament: async (leagueid) => {
-    console.log('idd ', leagueid)
     const { data: listTournaments, error: errorListTournament } =
         await supabase.rpc('get_tournaments_id' as never, { leagueid } as any)
     if (errorListTournament !== null) {
