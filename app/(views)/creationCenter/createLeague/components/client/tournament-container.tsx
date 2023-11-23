@@ -149,7 +149,6 @@ const TournamentContainer = ({
         <AwardTournament
           award={award}
           setAward={setAward}
-          idTournament={null}
         />
         <Input
           isRequired

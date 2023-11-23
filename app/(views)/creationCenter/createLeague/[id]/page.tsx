@@ -9,7 +9,6 @@ import {
   Spinner,
   Textarea
 } from '@nextui-org/react'
-import AwardTournament from '../../components/award-tournament'
 import { INIT_FORM_DATA } from '@/app/data/constant'
 import {
   TournamentSchema,
@@ -20,6 +19,7 @@ import { useRouter } from 'next/navigation'
 import { useSupabaseStore } from '@/app/zustand/store'
 import { parse } from 'valibot'
 import { Toaster, toast } from 'sonner'
+import AwardTournamentEdit from '../../components/award-tournament-edit'
 
 async function FetchTournament (
   formData: any,
@@ -190,7 +190,7 @@ const PageTournamentEdit = ({ params }: { params: { id: string } }) => {
                   <Select
                     label="Seleccione la categoría"
                     className="max-w-full"
-                    defaultSelectedKeys={[`${formData.category}`]}
+                    defaultSelectedKeys={formData.category === '' ? ['Infantil'] : [`${formData.category}`]}
                     isRequired
                     onChange={(event) => {
                       setFormData({
@@ -253,7 +253,7 @@ const PageTournamentEdit = ({ params }: { params: { id: string } }) => {
                     label="Seleccione el genero"
                     className="max-w-full"
                     isRequired
-                    defaultSelectedKeys={[`${formData.gender}`]}
+                    defaultSelectedKeys={formData.gender === '' ? ['Masculino'] : [`${formData.gender}`]}
                     onChange={(event) => {
                       setFormData({
                         ...formData,
@@ -278,7 +278,7 @@ const PageTournamentEdit = ({ params }: { params: { id: string } }) => {
                   <Select
                     label="Seleccione una sub categoría"
                     className="max-w-full"
-                    defaultSelectedKeys={[`${formData.variant}`]}
+                    defaultSelectedKeys={formData.variant === '' ? ['Futbol 5'] : [`${formData.variant}`]}
                     isRequired
                     onChange={(event) => {
                       setFormData({
@@ -308,16 +308,8 @@ const PageTournamentEdit = ({ params }: { params: { id: string } }) => {
             )}
         <article className="w-full">
           <h2 className="text-xl font-semibold m-4">Editar Premiación</h2>
-          <div className="max-h-[406px] overflow-auto">
-            <AwardTournament idTournament={id} />
-            <Button
-              color="primary"
-              variant="ghost"
-              className="buttonPrimary w-full"
-              type="submit"
-            >
-              Modificar premiación
-            </Button>
+          <div className="overflow-auto">
+            <AwardTournamentEdit idTournament={id} />
           </div>
         </article>
       </section>

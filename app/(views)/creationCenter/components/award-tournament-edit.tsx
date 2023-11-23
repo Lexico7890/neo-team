@@ -1,9 +1,10 @@
 'use client'
 
-import { type Award } from '@/app/types/award'
+import { useSupabaseStore } from '@/app/zustand/store'
 import {
   Button,
   Input,
+  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -11,7 +12,7 @@ import {
   TableHeader,
   TableRow
 } from '@nextui-org/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RiDeleteBin4Line } from 'react-icons/ri'
 import {
   type Output,
@@ -25,8 +26,7 @@ import {
 } from 'valibot'
 
 interface Props {
-  award: Award[]
-  setAward: (award: Award[]) => void
+  idTournament: string
 }
 
 const AwardSchema = object({
@@ -41,20 +41,23 @@ const AwardSchema = object({
 
 type AwardData = Output<typeof AwardSchema>
 
-const AwardTournament = ({ award, setAward }: Props) => {
+const AwardTournamentEdit = ({ idTournament }: Props) => {
   const [formData, setFormData] = useState<AwardData>({
     nameAward: '',
     value: 0
   })
   const [showError, setShowError] = useState<boolean>(false)
   const [messageError, setMessageError] = useState<string>('')
+  const [loadingData, setLoadingData] = useState<boolean>(false)
+  const [getAward, award, deleteAward, setAward] = useSupabaseStore((state) => [
+    state.getAward,
+    state.award,
+    state.deleteAward,
+    state.setAward
+  ])
 
   const handleSubmit = () => {
-    // @ts-expect-error:next-line
-    setAward((prev: Award[]) => [
-      ...prev,
-      { name: formData.nameAward, value: formData.value }
-    ])
+    setAward(formData, idTournament)
   }
 
   const handleSubmitForm = (
@@ -70,6 +73,16 @@ const AwardTournament = ({ award, setAward }: Props) => {
       setShowError(true)
     }
   }
+
+  useEffect(() => {
+    setLoadingData(true)
+    getAward(idTournament)
+    setTimeout(() => {
+      setLoadingData(false)
+    }, 2000)
+  }, [])
+
+  console.log('award ', award)
 
   return (
     <div className="border-1 border-black dark:border-white p-2">
@@ -120,6 +133,18 @@ const AwardTournament = ({ award, setAward }: Props) => {
           Agregar
         </Button>
       </div>
+      {loadingData
+        ? (
+        <div className="w-full flex justify-center items-center">
+          <Spinner
+            label="Cargando información de torneo..."
+            color="primary"
+            labelColor="primary"
+            size="lg"
+          />
+        </div>
+          )
+        : (
         <Table
           aria-label="Table for award tournament"
           isHeaderSticky
@@ -147,7 +172,7 @@ const AwardTournament = ({ award, setAward }: Props) => {
                     onClick={() => {
                       const updatedAward = [...award]
                       updatedAward.splice(index, 1)
-                      setAward(updatedAward)
+                      deleteAward(item.id, idTournament)
                     }}
                   >
                     <RiDeleteBin4Line />
@@ -157,8 +182,9 @@ const AwardTournament = ({ award, setAward }: Props) => {
             ))}
           </TableBody>
         </Table>
+          )}
     </div>
   )
 }
 
-export default AwardTournament
+export default AwardTournamentEdit
