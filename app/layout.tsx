@@ -1,7 +1,9 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Nunito } from 'next/font/google'
-import { Providers } from './providers'
+import Script from 'next/script'
+import { ThemeProvider } from '@/components/theme-provider'
+import NavBar from './components/navbar'
 
 const inter = Nunito({ subsets: ['latin'] })
 
@@ -17,8 +19,17 @@ export default function RootLayout ({
 }) {
   return (
     <html lang="en">
+      <Script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/datepicker.min.js" />
       <body className={inter.className}>
-        <Providers>{children}</Providers>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <NavBar />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )

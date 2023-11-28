@@ -1,9 +1,10 @@
 import {
   Card,
-  CardBody,
+  CardContent,
   CardFooter,
-  CardHeader
-} from '@nextui-org/react'
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
 import Image from 'next/image'
 import ButtonListLeague from './client/button-list-league'
 
@@ -14,9 +15,9 @@ interface Props {
 
 const LeagueCard = ({ name, image }: Props) => {
   return (
-    <Card className="w-full" radius='none'>
-      <CardHeader className="text-3xl font-bold">{name}</CardHeader>
-      <CardBody className="flex flex-col sm:flex-row items-center gap-10">
+    <Card>
+      <CardHeader className="text-3xl font-bold"><CardTitle>{name}</CardTitle></CardHeader>
+      <CardContent className="flex flex-col sm:flex-row items-center gap-10 min-h-[124px]">
         <Image
           src={image ?? ''}
           height={100}
@@ -24,13 +25,13 @@ const LeagueCard = ({ name, image }: Props) => {
           alt="Logo de la liga"
           className='sm:ml-6'
         />
-        <div className="contentLeague">
+        <div className="flex gap-3">
           <span>Cantidad de torneos: 2</span>
           <span>Cantidad de equipos: 10</span>
           <span>Cantidad de jugadores: 50</span>
           <span>Cantidad de partidos: 100</span>
         </div>
-      </CardBody>
+      </CardContent>
       <CardFooter>
         <ButtonListLeague />
       </CardFooter>

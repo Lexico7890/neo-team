@@ -109,6 +109,69 @@ export interface Database {
           }
         ]
       }
+      match: {
+        Row: {
+          created_at: string
+          date_game: string | null
+          deescription: string | null
+          id: string
+          time_game: string | null
+          value: number | null
+        }
+        Insert: {
+          created_at?: string
+          date_game?: string | null
+          deescription?: string | null
+          id?: string
+          time_game?: string | null
+          value?: number | null
+        }
+        Update: {
+          created_at?: string
+          date_game?: string | null
+          deescription?: string | null
+          id?: string
+          time_game?: string | null
+          value?: number | null
+        }
+        Relationships: []
+      }
+      match_history: {
+        Row: {
+          created_at: string
+          id: number
+          match_id: string | null
+          team_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          match_id?: string | null
+          team_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          match_id?: string | null
+          team_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'match_history_match_id_fkey'
+            columns: ['match_id']
+            isOneToOne: false
+            referencedRelation: 'match'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'match_history_team_id_fkey'
+            columns: ['team_id']
+            isOneToOne: false
+            referencedRelation: 'team'
+            referencedColumns: ['id']
+          }
+        ]
+      }
       rol: {
         Row: {
           created_at: string
@@ -127,6 +190,122 @@ export interface Database {
         }
         Relationships: []
       }
+      sanction: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: number
+          name: string | null
+          tournament_id: string | null
+          value: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: number
+          name?: string | null
+          tournament_id?: string | null
+          value?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: number
+          name?: string | null
+          tournament_id?: string | null
+          value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'sanction_tournament_id_fkey'
+            columns: ['tournament_id']
+            isOneToOne: false
+            referencedRelation: 'tournament'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+      team: {
+        Row: {
+          campus: string | null
+          created_at: string
+          id: string
+          image: string | null
+          main_color: string
+          name: string
+          second_color: string
+        }
+        Insert: {
+          campus?: string | null
+          created_at?: string
+          id?: string
+          image?: string | null
+          main_color: string
+          name: string
+          second_color: string
+        }
+        Update: {
+          campus?: string | null
+          created_at?: string
+          id?: string
+          image?: string | null
+          main_color?: string
+          name?: string
+          second_color?: string
+        }
+        Relationships: []
+      }
+      team_position: {
+        Row: {
+          created_at: string
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+        }
+        Relationships: []
+      }
+      team_user: {
+        Row: {
+          created_at: string
+          id: number
+          team_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          team_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          team_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'team_user_team_id_fkey'
+            columns: ['team_id']
+            isOneToOne: false
+            referencedRelation: 'team'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'team_user_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
+      }
       tournament: {
         Row: {
           category: string
@@ -136,6 +315,7 @@ export interface Database {
           description: string
           gender: string
           id: string
+          isFlag: boolean | null
           league_id: string
           name: string
           value: number
@@ -149,6 +329,7 @@ export interface Database {
           description: string
           gender: string
           id?: string
+          isFlag?: boolean | null
           league_id: string
           name: string
           value: number
@@ -162,6 +343,7 @@ export interface Database {
           description?: string
           gender?: string
           id?: string
+          isFlag?: boolean | null
           league_id?: string
           name?: string
           value?: number
@@ -198,30 +380,164 @@ export interface Database {
           }
         ]
       }
+      tournament_history: {
+        Row: {
+          created_at: string
+          final: string | null
+          id: number
+          start: string | null
+          team_id: string | null
+          tournament_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          final?: string | null
+          id?: number
+          start?: string | null
+          team_id?: string | null
+          tournament_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          final?: string | null
+          id?: number
+          start?: string | null
+          team_id?: string | null
+          tournament_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'tournament_history_team_id_fkey'
+            columns: ['team_id']
+            isOneToOne: false
+            referencedRelation: 'team'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'tournament_history_tournament_id_fkey'
+            columns: ['tournament_id']
+            isOneToOne: false
+            referencedRelation: 'tournament'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+      user_log: {
+        Row: {
+          created_at: string
+          id: string
+          team: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          team?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          team?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'user_log_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+      user_match: {
+        Row: {
+          attend: boolean | null
+          created_at: string
+          goal: number | null
+          id: number
+          match_id: string | null
+          red_card: number | null
+          user_id: string | null
+          yellow_card: number | null
+        }
+        Insert: {
+          attend?: boolean | null
+          created_at?: string
+          goal?: number | null
+          id?: number
+          match_id?: string | null
+          red_card?: number | null
+          user_id?: string | null
+          yellow_card?: number | null
+        }
+        Update: {
+          attend?: boolean | null
+          created_at?: string
+          goal?: number | null
+          id?: number
+          match_id?: string | null
+          red_card?: number | null
+          user_id?: string | null
+          yellow_card?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'user_match_match_id_fkey'
+            columns: ['match_id']
+            isOneToOne: false
+            referencedRelation: 'match'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'user_match_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
+      }
       users: {
         Row: {
           avatar_url: string | null
+          bird_date: string | null
           created_at: string
           email: string | null
           id: string
+          is_completed: boolean | null
           name: string
-          number_id: string | null
+          number: string | null
+          phone_number: string | null
+          position_id: number | null
+          rol_id: string | null
         }
         Insert: {
           avatar_url?: string | null
+          bird_date?: string | null
           created_at?: string
           email?: string | null
           id: string
+          is_completed?: boolean | null
           name: string
-          number_id?: string | null
+          number?: string | null
+          phone_number?: string | null
+          position_id?: number | null
+          rol_id?: string | null
         }
         Update: {
           avatar_url?: string | null
+          bird_date?: string | null
           created_at?: string
           email?: string | null
           id?: string
+          is_completed?: boolean | null
           name?: string
-          number_id?: string | null
+          number?: string | null
+          phone_number?: string | null
+          position_id?: number | null
+          rol_id?: string | null
         }
         Relationships: [
           {
@@ -229,6 +545,20 @@ export interface Database {
             columns: ['id']
             isOneToOne: true
             referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_position_id_fkey'
+            columns: ['position_id']
+            isOneToOne: false
+            referencedRelation: 'team_position'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_rol_id_fkey'
+            columns: ['rol_id']
+            isOneToOne: false
+            referencedRelation: 'rol'
             referencedColumns: ['id']
           }
         ]
@@ -256,7 +586,8 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      get_tournaments: {
+      get_tournaments:
+      | {
         Args: Record<PropertyKey, never>
         Returns: Array<{
           id: string
@@ -266,6 +597,43 @@ export interface Database {
           description: string
           nombre_categoria: string
           nombre_genero: string
+          sub_categoria: string
+          contact_name: string
+          contact_number: string
+          league_id: string
+        }>
+      }
+      | {
+        Args: {
+          tournamentid: string
+        }
+        Returns: Array<{
+          id: string
+          created_at: string
+          name: string
+          value: number
+          description: string
+          nombre_categoria: string
+          nombre_genero: string
+          sub_categoria: string
+          contact_name: string
+          contact_number: string
+          league_id: string
+        }>
+      }
+      get_tournaments_id: {
+        Args: {
+          leagueid: string
+        }
+        Returns: Array<{
+          id: string
+          created_at: string
+          name: string
+          value: number
+          description: string
+          nombre_categoria: string
+          nombre_genero: string
+          sub_categoria: string
           contact_name: string
           contact_number: string
           league_id: string

@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react'
 import LeagueCard from './components/league'
-import NavBar from './components/navbar'
 import { useSupabaseStore } from './zustand/store'
 
 export default function Home () {
@@ -23,8 +22,7 @@ export default function Home () {
 
   return (
     <main>
-      <NavBar />
-        <div className="flex max-lg:flex-col w-full gap-3 p-3">
+        <div className="flex max-lg:flex-col w-full gap-3 p-3 ">
           {league?.map((item) => (
             <LeagueCard key={item.id} image={item.url_image} name={item.name}/>
           ))}
@@ -32,3 +30,7 @@ export default function Home () {
     </main>
   )
 }
+
+/**
+ *
+ */
