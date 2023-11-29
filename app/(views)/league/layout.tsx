@@ -1,7 +1,5 @@
 'use client'
 
-import NavBar from '@/app/components/navbar'
-import SubMenu from '@/app/components/sub-menu'
 import { Select, SelectItem } from '@nextui-org/react'
 
 const categories = [
@@ -19,9 +17,7 @@ const levels = [
 const LayoutLeague = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
-      <NavBar />
       <div className='p-3 flex gap-3 h-auto'>
-      <SubMenu />
       <div className='flex flex-col w-full gap-3'>
         <div className='inline-flex gap-3'>
         <Select

@@ -33,11 +33,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'award_tournament_id_fkey'
-            columns: ['tournament_id']
+            foreignKeyName: "award_tournament_id_fkey"
+            columns: ["tournament_id"]
             isOneToOne: false
-            referencedRelation: 'tournament'
-            referencedColumns: ['id']
+            referencedRelation: "tournament"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -101,11 +101,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'league_createdBy_fkey'
-            columns: ['createdBy']
+            foreignKeyName: "league_createdBy_fkey"
+            columns: ["createdBy"]
             isOneToOne: true
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -157,18 +157,18 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'match_history_match_id_fkey'
-            columns: ['match_id']
+            foreignKeyName: "match_history_match_id_fkey"
+            columns: ["match_id"]
             isOneToOne: false
-            referencedRelation: 'match'
-            referencedColumns: ['id']
+            referencedRelation: "match"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'match_history_team_id_fkey'
-            columns: ['team_id']
+            foreignKeyName: "match_history_team_id_fkey"
+            columns: ["team_id"]
             isOneToOne: false
-            referencedRelation: 'team'
-            referencedColumns: ['id']
+            referencedRelation: "team"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -177,16 +177,19 @@ export interface Database {
           created_at: string
           id: string
           name: string
+          show: boolean | null
         }
         Insert: {
           created_at?: string
           id?: string
           name: string
+          show?: boolean | null
         }
         Update: {
           created_at?: string
           id?: string
           name?: string
+          show?: boolean | null
         }
         Relationships: []
       }
@@ -217,11 +220,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'sanction_tournament_id_fkey'
-            columns: ['tournament_id']
+            foreignKeyName: "sanction_tournament_id_fkey"
+            columns: ["tournament_id"]
             isOneToOne: false
-            referencedRelation: 'tournament'
-            referencedColumns: ['id']
+            referencedRelation: "tournament"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -259,14 +262,20 @@ export interface Database {
         Row: {
           created_at: string
           id: number
+          name: string | null
+          symbol: string | null
         }
         Insert: {
           created_at?: string
           id?: number
+          name?: string | null
+          symbol?: string | null
         }
         Update: {
           created_at?: string
           id?: number
+          name?: string | null
+          symbol?: string | null
         }
         Relationships: []
       }
@@ -291,18 +300,18 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'team_user_team_id_fkey'
-            columns: ['team_id']
+            foreignKeyName: "team_user_team_id_fkey"
+            columns: ["team_id"]
             isOneToOne: false
-            referencedRelation: 'team'
-            referencedColumns: ['id']
+            referencedRelation: "team"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'team_user_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "team_user_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -351,32 +360,32 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'tournament_category_fkey'
-            columns: ['category']
+            foreignKeyName: "tournament_category_fkey"
+            columns: ["category"]
             isOneToOne: false
-            referencedRelation: 'category'
-            referencedColumns: ['id']
+            referencedRelation: "category"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'tournament_gender_fkey'
-            columns: ['gender']
+            foreignKeyName: "tournament_gender_fkey"
+            columns: ["gender"]
             isOneToOne: false
-            referencedRelation: 'gender'
-            referencedColumns: ['id']
+            referencedRelation: "gender"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'tournament_league_id_fkey'
-            columns: ['league_id']
+            foreignKeyName: "tournament_league_id_fkey"
+            columns: ["league_id"]
             isOneToOne: false
-            referencedRelation: 'league'
-            referencedColumns: ['id']
+            referencedRelation: "league"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'tournament_variant_fkey'
-            columns: ['variant']
+            foreignKeyName: "tournament_variant_fkey"
+            columns: ["variant"]
             isOneToOne: false
-            referencedRelation: 'variant'
-            referencedColumns: ['id']
+            referencedRelation: "variant"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -407,18 +416,18 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'tournament_history_team_id_fkey'
-            columns: ['team_id']
+            foreignKeyName: "tournament_history_team_id_fkey"
+            columns: ["team_id"]
             isOneToOne: false
-            referencedRelation: 'team'
-            referencedColumns: ['id']
+            referencedRelation: "team"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'tournament_history_tournament_id_fkey'
-            columns: ['tournament_id']
+            foreignKeyName: "tournament_history_tournament_id_fkey"
+            columns: ["tournament_id"]
             isOneToOne: false
-            referencedRelation: 'tournament'
-            referencedColumns: ['id']
+            referencedRelation: "tournament"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -443,11 +452,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'user_log_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "user_log_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -484,18 +493,18 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'user_match_match_id_fkey'
-            columns: ['match_id']
+            foreignKeyName: "user_match_match_id_fkey"
+            columns: ["match_id"]
             isOneToOne: false
-            referencedRelation: 'match'
-            referencedColumns: ['id']
+            referencedRelation: "match"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'user_match_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "user_match_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -541,25 +550,25 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_id_fkey'
-            columns: ['id']
+            foreignKeyName: "users_id_fkey"
+            columns: ["id"]
             isOneToOne: true
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_position_id_fkey'
-            columns: ['position_id']
+            foreignKeyName: "users_position_id_fkey"
+            columns: ["position_id"]
             isOneToOne: false
-            referencedRelation: 'team_position'
-            referencedColumns: ['id']
+            referencedRelation: "team_position"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_rol_id_fkey'
-            columns: ['rol_id']
+            foreignKeyName: "users_rol_id_fkey"
+            columns: ["rol_id"]
             isOneToOne: false
-            referencedRelation: 'rol'
-            referencedColumns: ['id']
+            referencedRelation: "rol"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -587,45 +596,45 @@ export interface Database {
     }
     Functions: {
       get_tournaments:
-      | {
-        Args: Record<PropertyKey, never>
-        Returns: Array<{
-          id: string
-          created_at: string
-          name: string
-          value: number
-          description: string
-          nombre_categoria: string
-          nombre_genero: string
-          sub_categoria: string
-          contact_name: string
-          contact_number: string
-          league_id: string
-        }>
-      }
-      | {
-        Args: {
-          tournamentid: string
-        }
-        Returns: Array<{
-          id: string
-          created_at: string
-          name: string
-          value: number
-          description: string
-          nombre_categoria: string
-          nombre_genero: string
-          sub_categoria: string
-          contact_name: string
-          contact_number: string
-          league_id: string
-        }>
-      }
+        | {
+            Args: Record<PropertyKey, never>
+            Returns: {
+              id: string
+              created_at: string
+              name: string
+              value: number
+              description: string
+              nombre_categoria: string
+              nombre_genero: string
+              sub_categoria: string
+              contact_name: string
+              contact_number: string
+              league_id: string
+            }[]
+          }
+        | {
+            Args: {
+              tournamentid: string
+            }
+            Returns: {
+              id: string
+              created_at: string
+              name: string
+              value: number
+              description: string
+              nombre_categoria: string
+              nombre_genero: string
+              sub_categoria: string
+              contact_name: string
+              contact_number: string
+              league_id: string
+            }[]
+          }
       get_tournaments_id: {
         Args: {
           leagueid: string
         }
-        Returns: Array<{
+        Returns: {
           id: string
           created_at: string
           name: string
@@ -637,7 +646,7 @@ export interface Database {
           contact_name: string
           contact_number: string
           league_id: string
-        }>
+        }[]
       }
     }
     Enums: {

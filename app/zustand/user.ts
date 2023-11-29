@@ -1,14 +1,13 @@
 import { type StateCreator } from 'zustand'
 import { type User } from '../types/user'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { type Database } from '../types/database'
+import useInstanceSupabaseServer from '../hooks/useInstanceSupabaseServer'
 
 export interface UserSlice {
   user: User
   getUser: (userId: string) => void
 }
 
-const supabase = createClientComponentClient<Database>()
+const { supabase } = useInstanceSupabaseServer()
 
 export const createUserSlice: StateCreator<UserSlice> = (set) => ({
   user: {

@@ -1,14 +1,13 @@
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { type Tournament } from '../types/tournament'
-import { type Database } from '../types/database'
 import { type StateCreator } from 'zustand'
+import useInstanceSupabaseServer from '../hooks/useInstanceSupabaseServer'
 
 export interface TournamentSlice {
   tournament: Tournament[]
   getTournament: (leagueid: string) => void
 }
 
-const supabase = createClientComponentClient<Database>()
+const { supabase } = useInstanceSupabaseServer()
 
 export const createTournamentSlice: StateCreator<TournamentSlice> = (set) => ({
   tournament: [],

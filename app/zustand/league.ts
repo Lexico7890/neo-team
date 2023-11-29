@@ -1,7 +1,6 @@
 import { type StateCreator } from 'zustand'
 import { type League } from '../types/league'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { type Database } from '../types/database'
+import useInstanceSupabaseServer from '../hooks/useInstanceSupabaseServer'
 
 export interface LeagueSlice {
   league: League[]
@@ -10,7 +9,7 @@ export interface LeagueSlice {
   getLeagueId: () => void
 }
 
-const supabase = createClientComponentClient<Database>()
+const { supabase } = useInstanceSupabaseServer()
 
 export const createLeagueSlice: StateCreator<LeagueSlice> = (set) => ({
   league: [],

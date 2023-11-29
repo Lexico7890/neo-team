@@ -1,6 +1,5 @@
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import useInstanceSupabaseServer from '../hooks/useInstanceSupabaseServer'
 import { type Award } from '../types/award'
-import { type Database } from '../types/database'
 import { type StateCreator } from 'zustand'
 
 export interface AwardSlice {
@@ -10,7 +9,7 @@ export interface AwardSlice {
   setAward: (award: { nameAward: string, value: number }, idTournament: string) => void
 }
 
-const supabase = createClientComponentClient<Database>()
+const { supabase } = useInstanceSupabaseServer()
 
 export const createAwardSlice: StateCreator<AwardSlice> = (set, get) => ({
   award: [],

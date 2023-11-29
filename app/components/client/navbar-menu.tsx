@@ -15,6 +15,7 @@ import { ButtonDarkMode } from './button-dark-mode'
 import { type Session } from '@supabase/auth-helpers-nextjs'
 import ButtonLogin from './button-login'
 import { useSupabaseStore } from '@/app/zustand/store'
+import Link from 'next/link'
 
 const components: Array<{ title: string, href: string, description: string }> =
   [
@@ -56,7 +57,9 @@ const NavbarMenu = ({ session }: { session: Session | null }) => {
         ? (
         <nav className="flex justify-between items-center w-full h-16 px-10 py-2">
           <div>
+            <Link href='/'>
             <FootyBallLogo height={120} width={120} />
+            </Link>
           </div>
           <div className="flex gap-2">
             <ButtonDarkMode />
