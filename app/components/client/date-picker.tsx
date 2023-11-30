@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { format } from 'date-fns'
 import { Calendar as CalendarIcon } from 'lucide-react'
+import { es } from 'date-fns/locale'
 
 interface Props {
   date: Date | undefined
@@ -37,6 +38,10 @@ const DatePicker = ({ date, setDate }: Props) => {
           selected={date}
           onSelect={setDate}
           initialFocus
+          locale={es}
+          captionLayout='dropdown'
+          fromYear={1965}
+          toYear={new Date().getFullYear()}
         />
       </PopoverContent>
     </Popover>

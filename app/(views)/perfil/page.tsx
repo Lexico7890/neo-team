@@ -8,8 +8,9 @@ const PerfilPage = async () => {
   const { data: { session } } = await supabase.auth.getSession()
   const { data: rol } = await supabase.from('rol').select('*').eq('show', true)
   const { data: position } = await supabase.from('team_position').select('*')
+  const { data: gender } = await supabase.from('gender').select('*').ilike('name', '%ino%')
   if (session === null) return redirect('/')
-  return <UserInformation items={rol} position={position}/>
+  return <UserInformation items={rol} position={position} gender={gender}/>
 }
 
 export default PerfilPage

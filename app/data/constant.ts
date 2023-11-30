@@ -8,3 +8,13 @@ export const INIT_FORM_DATA = {
   contactName: '',
   contactNumber: ''
 }
+
+export const INIT_USER_DATA = {
+  nameUser: '',
+  emailUser: '',
+  dateBirth: '',
+  phoneNumber: '',
+  gender: '',
+  rol: '',
+  numberIdentity: 0
+}

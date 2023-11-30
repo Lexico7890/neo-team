@@ -514,6 +514,7 @@ export interface Database {
           bird_date: string | null
           created_at: string
           email: string | null
+          gender: string | null
           id: string
           is_completed: boolean | null
           name: string
@@ -527,6 +528,7 @@ export interface Database {
           bird_date?: string | null
           created_at?: string
           email?: string | null
+          gender?: string | null
           id: string
           is_completed?: boolean | null
           name: string
@@ -540,6 +542,7 @@ export interface Database {
           bird_date?: string | null
           created_at?: string
           email?: string | null
+          gender?: string | null
           id?: string
           is_completed?: boolean | null
           name?: string
@@ -549,6 +552,13 @@ export interface Database {
           rol_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "users_gender_fkey"
+            columns: ["gender"]
+            isOneToOne: false
+            referencedRelation: "gender"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "users_id_fkey"
             columns: ["id"]
