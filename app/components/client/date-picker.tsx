@@ -29,14 +29,16 @@ const DatePicker = ({ date, setDate }: Props) => {
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date !== undefined ? format(date, 'PPP') : <span>Fecha de nacimiento</span>}
+          {date !== undefined ? format(date, 'd MMMM yyyy', { locale: es }) : <span>Fecha de nacimiento</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
           mode="single"
           selected={date}
-          onSelect={setDate}
+          onSelect={(event) => {
+            setDate(event)
+          }}
           initialFocus
           locale={es}
           captionLayout='dropdown'
