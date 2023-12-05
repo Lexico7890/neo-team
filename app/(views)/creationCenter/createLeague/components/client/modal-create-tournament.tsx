@@ -24,7 +24,6 @@ interface Props {
 }
 
 async function Fetch (formData: any, award: any, idLeague: string) {
-  console.log(formData)
   const result = await fetch('/api/tournament', {
     method: 'POST',
     body: JSON.stringify({ formData, award, idLeague })

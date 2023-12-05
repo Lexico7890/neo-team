@@ -12,9 +12,10 @@ export const INIT_FORM_DATA = {
 export const INIT_USER_DATA = {
   nameUser: '',
   emailUser: '',
-  dateBirth: '',
+  dateBirth: new Date(),
   phoneNumber: '',
   gender: '',
   rol: '',
-  numberIdentity: 0
+  numberIdentity: '',
+  position: ''
 }

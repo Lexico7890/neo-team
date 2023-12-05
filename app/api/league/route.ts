@@ -7,7 +7,6 @@ export async function POST (request: NextRequest, response: NextResponse) {
   const supabase = createServerComponentClient({ cookies })
   let idLeague: any
   if (isEdit === true) {
-    console.log('entro a update')
     idLeague = await UpdateLeague(
       supabase,
       informationLeague,
@@ -49,7 +48,6 @@ async function CreateLeague (
     })
     .select('*')
   if (error !== null) {
-    console.log('entro liga ', error)
     return error.code
   }
   return league[0]
@@ -61,7 +59,6 @@ async function UpdateLeague (
   nameLeague: string,
   image: File
 ) {
-  console.log(informationLeague)
   const { data: league, error } = await supabase
     .from('league')
     .update({
@@ -74,7 +71,6 @@ async function UpdateLeague (
     .eq('id', informationLeague.id)
     .select('*')
   if (error !== null) {
-    console.log('entro liga ', error)
     return error.code
   }
   return league[0]
