@@ -27,7 +27,6 @@ import userDefaultImage from '../../../../public/image/userDefaultImage.jpg'
 import { Toaster, toast } from 'sonner'
 
 async function Fetch (userData: any, userId: string) {
-  console.log('entro a fetch')
   const result = await fetch(`/api/user/${userId}`, {
     method: 'POST',
     body: JSON.stringify({ userData })
@@ -47,9 +46,10 @@ const UserInformation = ({
   position: Position[] | null
   gender: Gender[] | null
 }) => {
-  const [user, getUser] = useSupabaseStore((state) => [state.user, state.getUser])
+  const [user] = useSupabaseStore((state) => [state.user])
   const [rolSelected, setRolSelected] = useState<string>('')
   const [userData, setUserData] = useState<UserDataPlayer | UserDataReferee>(INIT_USER_DATA)
+  const [loading, setLoading] = useState<boolean>(true)
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -63,7 +63,6 @@ const UserInformation = ({
       toast.promise(Fetch(userData, user.id), {
         loading: 'Guardando los datos, por favor espere...',
         success: () => {
-          getUser(user.id)
           return 'Datos guardados con éxito'
         },
         error: 'No se pudo guardar los datos, comuníquese con el administrador'
@@ -74,6 +73,7 @@ const UserInformation = ({
   }
 
   const updateUserData = () => {
+    console.log('entro')
     const objectDate = new Date()
     const day = objectDate.getDate()
     const month = objectDate.getMonth()
@@ -87,6 +87,7 @@ const UserInformation = ({
     userData.rol = user.rol_id ?? ''
     userData.numberIdentity = user.number_identity ?? ''
     userData.position = user.position_id?.toString() ?? ''
+    setLoading(false)
   }
 
   const handleDateBirth = (date: Date | undefined) => {
@@ -110,7 +111,13 @@ const UserInformation = ({
 
   return (
     <div className="w-full max-w-[1300px] ">
-      <form
+      {
+        loading
+          ? (
+          <p>Cargando...</p>
+            )
+          : (
+          <form
         onSubmit={(event) => {
           handleSubmit(event)
         }}
@@ -311,6 +318,8 @@ const UserInformation = ({
           </Button>
         </div>
       </form>
+            )
+      }
       <Toaster richColors />
     </div>
   )

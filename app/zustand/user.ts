@@ -5,6 +5,7 @@ import useInstanceSupabaseServer from '../hooks/useInstanceSupabaseServer'
 export interface UserSlice {
   user: User
   getUser: (userId: string) => void
+  setUser: (user: User) => void
 }
 
 const { supabase } = useInstanceSupabaseServer()
@@ -21,7 +22,9 @@ export const createUserSlice: StateCreator<UserSlice> = (set) => ({
     is_completed: false,
     number: '',
     phone_number: '',
-    position_id: 0
+    position_id: 0,
+    number_identity: '',
+    gender: ''
   },
   getUser: async (userId) => {
     const { data, error } = await supabase.from('users').select('*').eq('id', userId)
@@ -29,5 +32,6 @@ export const createUserSlice: StateCreator<UserSlice> = (set) => ({
       throw new Error('No se pudo completar la consulta de usuario')
     }
     set({ user: data[0] })
-  }
+  },
+  setUser: (user) => { set({ user }) }
 })

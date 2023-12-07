@@ -4,9 +4,10 @@ import useInstanceSupabaseServer from '../hooks/useInstanceSupabaseServer'
 
 export interface LeagueSlice {
   league: League[]
-  getLeague: () => void
+  getLeague: () => Promise<void>
   leagueId: League
   getLeagueId: () => void
+  setLeague: (league: League[]) => void
 }
 
 const { supabase } = useInstanceSupabaseServer()
@@ -44,5 +45,6 @@ export const createLeagueSlice: StateCreator<LeagueSlice> = (set) => ({
       }
       return { leagueId: foundLeague }
     })
-  }
+  },
+  setLeague: (league) => { set({ league }) }
 })

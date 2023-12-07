@@ -12,10 +12,10 @@ import {
 import { forwardRef, useEffect } from 'react'
 import FootyBallLogo from '../../assets/footy-ball-logo'
 import { ButtonDarkMode } from './button-dark-mode'
-import { type Session } from '@supabase/auth-helpers-nextjs'
 import ButtonLogin from './button-login'
 import { useSupabaseStore } from '@/app/zustand/store'
 import Link from 'next/link'
+import { type User } from '@sentry/nextjs'
 
 const components: Array<{ title: string, href: string, description: string }> =
   [
@@ -41,19 +41,18 @@ const components: Array<{ title: string, href: string, description: string }> =
     }
   ]
 
-const NavbarMenu = ({ session }: { session: Session | null }) => {
-  const [getUser, user] = useSupabaseStore((state) => [
-    state.getUser,
-    state.user
+const NavbarMenu = ({ user }: { user: User | null }) => {
+  const [setUser] = useSupabaseStore((state) => [
+    state.setUser
   ])
   useEffect(() => {
-    if (user.name === '') {
-      session !== null && getUser(session.user.id)
+    if (user !== null) {
+      setUser(user[0])
     }
-  }, [])
+  }, [user])
   return (
     <>
-      {session === null
+      {user === null
         ? (
         <nav className="flex justify-between items-center w-full h-16 px-10 py-2">
           <div>
@@ -72,7 +71,7 @@ const NavbarMenu = ({ session }: { session: Session | null }) => {
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuTrigger>Mas opciones</NavigationMenuTrigger>
+                <NavigationMenuTrigger>Información</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                     <li className="row-span-3">
@@ -86,7 +85,7 @@ const NavbarMenu = ({ session }: { session: Session | null }) => {
                             Bienvenido
                           </div>
                           <p className="text-sm leading-tight text-muted-foreground">
-                            {user.name}
+                            {user[0].name}
                           </p>
                         </a>
                       </NavigationMenuLink>
@@ -94,8 +93,8 @@ const NavbarMenu = ({ session }: { session: Session | null }) => {
                     <ListItem href="/perfil" title="Mi perfil">
                       Gestiona y actualiza tus datos personales
                     </ListItem>
-                    <ListItem href="/creationCenter" title="Centro de creación">
-                      Crea nuevas ligas equipos y todo lo necesario para tu
+                    <ListItem href="/creationCenter" title="Dashboard">
+                      Crea nuevas ligas, equipos y todo lo necesario para tu
                       torneo
                     </ListItem>
                     <ListItem href="/docs/primitives/typography" title="Salir">
@@ -105,7 +104,7 @@ const NavbarMenu = ({ session }: { session: Session | null }) => {
                 </NavigationMenuContent>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <NavigationMenuTrigger>Components</NavigationMenuTrigger>
+                <NavigationMenuTrigger>Mas opciones</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                     {components.map((component) => (
