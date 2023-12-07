@@ -15,8 +15,8 @@ const CardCreation = ({
   title,
   urlImage,
   path = '/',
-  height = 430,
-  width = 430,
+  height = 230,
+  width = 230,
   isThereButton
 }: Props) => {
   const route = useRouter()

@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Nunito } from 'next/font/google'
 import Script from 'next/script'
 import { ThemeProvider } from '@/components/theme-provider'
-import NavBar from './components/navbar'
+import NavBar from './components/server/navbar'
 
 const inter = Nunito({ subsets: ['latin'] })
 

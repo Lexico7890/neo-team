@@ -9,13 +9,24 @@ import { type LeagueSlice, createLeagueSlice } from './league'
 import { type TournamentSlice, createTournamentSlice } from './tournament'
 import { type AwardSlice, createAwardSlice } from './award'
 import { type UserSlice, createUserSlice } from './user'
+import { devtools, persist } from 'zustand/middleware'
 
 export const useSupabaseStore = create<
-CategorySlice & GenderSlice & SubCategorySlice & LeagueSlice & TournamentSlice & AwardSlice & UserSlice
->()((...a) => ({
-  ...createFilter(...a),
-  ...createLeagueSlice(...a),
-  ...createTournamentSlice(...a),
-  ...createAwardSlice(...a),
-  ...createUserSlice(...a)
-}))
+CategorySlice &
+GenderSlice &
+SubCategorySlice &
+LeagueSlice &
+TournamentSlice &
+AwardSlice &
+UserSlice
+>()(
+  devtools(
+    persist((...a) => ({
+      ...createFilter(...a),
+      ...createLeagueSlice(...a),
+      ...createTournamentSlice(...a),
+      ...createAwardSlice(...a),
+      ...createUserSlice(...a)
+    }), { name: 'supabaseStore' })
+  )
+)

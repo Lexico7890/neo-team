@@ -1,8 +1,10 @@
-'use client'
+import useSession from '@/app/hooks/useSession'
 
-import CardCreation from './components/card-creation'
+import { redirect } from 'next/navigation'
+import Dashboard from './components/dashboard'
+import ListLeagueUser from './components/list-league-user'
 
-const DATA_MENU = [
+/* const DATA_MENU = [
   {
     title: 'Crear Liga',
     image: '/image/imageLeague.jpg',
@@ -18,11 +20,29 @@ const DATA_MENU = [
     image: '/image/imageTeam.png',
     path: '/creationCenter/createLeague'
   }
-] as const
+] as const */
 
-const PageCreationCenter = () => {
+const PageCreationCenter = async () => {
+  const { session } = await useSession()
+  if (session === null) return redirect('/')
   return (
-    <div className="flex flex-col justify-center items-center gap-6">
+<>
+<ListLeagueUser />
+<main className='border border-gray-400 flex flex-col gap-4 p-4'>
+      <h2 className='text-4xl font-bold'>Dashboard</h2>
+      <section className='relative'>
+      <Dashboard />
+      </section>
+    </main>
+</>
+
+  )
+}
+
+export default PageCreationCenter
+
+/**
+ * <div className="flex flex-col justify-center items-center gap-6 ">
       <span className="sm:text-4xl text-2xl font-bold">Centro de creación</span>
       <section className="sectionCreation">
         {
@@ -32,7 +52,4 @@ const PageCreationCenter = () => {
         }
       </section>
     </div>
-  )
-}
-
-export default PageCreationCenter
+ */

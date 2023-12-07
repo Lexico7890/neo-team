@@ -10,6 +10,7 @@ export interface TournamentSlice {
 const { supabase } = useInstanceSupabaseServer()
 
 export const createTournamentSlice: StateCreator<TournamentSlice> = (set) => ({
+
   tournament: [],
   getTournament: async (leagueid) => {
     const { data: listTournaments, error: errorListTournament } =
