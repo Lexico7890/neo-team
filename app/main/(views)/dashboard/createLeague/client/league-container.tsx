@@ -1,7 +1,7 @@
 'use client'
 
 import ChargerImageComponent from '@/app/components/client/charger-image-component'
-import { Input } from '@nextui-org/react'
+import { Input } from '@/components/ui/input'
 import React from 'react'
 
 interface Props {
@@ -16,12 +16,10 @@ const LeagueContainer = ({
   handleChargeImage
 }: Props) => {
   return (
-    <div className="gridFormat">
+    <div className="flex flex-col gap-4">
       <Input
-        isRequired
         type="text"
-        variant="bordered"
-        label="Nombre de la liga"
+        placeholder="Nombre de la liga"
         value={formData.nameLeague}
         onChange={(event) => {
           setFormData({

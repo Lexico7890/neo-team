@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react'
 import CardCreation from '../components/card-creation'
 import { Button, useDisclosure } from '@nextui-org/react'
-import ListTournament from './components/server/list-tournament'
-import ModalCreateLeague from './components/server/modal-create-league'
+import ListTournament from './server/list-tournament'
+import ModalCreateLeague from './server/modal-create-league'
 import Image from 'next/image'
 import { useSupabaseStore } from '@/app/zustand/store'
-import ModalCreateTournament from './components/client/modal-create-tournament'
+import ModalCreateTournament from './client/modal-create-tournament'
 
 const PageCreateLeague = () => {
   const [

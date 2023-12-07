@@ -1,7 +1,7 @@
 import useSession from '@/app/hooks/useSession'
-import UserInformation from './client/user-information'
 
 import { redirect } from 'next/navigation'
+import UserInformation from './client/user-information'
 
 const PerfilPage = async () => {
   const { session, supabase } = await useSession()

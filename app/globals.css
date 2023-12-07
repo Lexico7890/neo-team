@@ -61,3 +61,47 @@
     @apply bg-background text-foreground;
   }
 }
+
+.image-uploader {
+  position: relative;
+  text-align: center;
+  margin: 0px 20px 10px 20px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  border: 2px dashed #aaa;
+  align-items: center;
+}
+
+.file-input {
+  display: flex;
+  position: absolute;
+  top: 50%;
+}
+
+.drop-zone {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /*cursor: pointer;*/
+  background-color: transparent;
+  position: absolute;
+  z-index: 10;
+}
+
+.uploaded-image {
+  max-width: 200px;
+  max-height: 100%;
+  transition: opacity 0.5s;
+}
+
+.uploaded-image.loading {
+  opacity: 0.5;
+}
+
+input[type='file']{
+  display: none;
+}

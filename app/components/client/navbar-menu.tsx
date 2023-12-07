@@ -56,7 +56,7 @@ const NavbarMenu = ({ user }: { user: User | null }) => {
         ? (
         <nav className="flex justify-between items-center w-full h-16 px-10 py-2">
           <div>
-            <Link href='/'>
+            <Link href='/main'>
             <FootyBallLogo height={120} width={120} />
             </Link>
           </div>
@@ -78,7 +78,7 @@ const NavbarMenu = ({ user }: { user: User | null }) => {
                       <NavigationMenuLink asChild>
                         <a
                           className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                          href="/"
+                          href="/main"
                         >
                           <FootyBallLogo height={120} width={120} />
                           <div className="mb-2 mt-4 text-lg font-medium">
@@ -93,7 +93,7 @@ const NavbarMenu = ({ user }: { user: User | null }) => {
                     <ListItem href="/perfil" title="Mi perfil">
                       Gestiona y actualiza tus datos personales
                     </ListItem>
-                    <ListItem href="/creationCenter" title="Dashboard">
+                    <ListItem href="/main/dashboard" title="Dashboard">
                       Crea nuevas ligas, equipos y todo lo necesario para tu
                       torneo
                     </ListItem>

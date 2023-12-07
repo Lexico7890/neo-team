@@ -1,5 +1,5 @@
 import { Input, Select, SelectItem, Textarea } from '@nextui-org/react'
-import AwardTournament from '../../../components/award-tournament'
+import AwardTournament from '../../components/award-tournament'
 import { type Category } from '@/app/types/category'
 import { type Gender } from '@/app/types/gender'
 import { type SubCategory } from '@/app/types/sub-category'

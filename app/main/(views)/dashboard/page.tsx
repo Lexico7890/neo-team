@@ -1,8 +1,9 @@
-import useSession from '@/app/hooks/useSession'
-
 import { redirect } from 'next/navigation'
 import Dashboard from './components/dashboard'
 import ListLeagueUser from './components/list-league-user'
+import useSupabaseData from '@/app/hooks/useSupabaseData'
+import ModalCreateLeague from './createLeague/server/modal-create-league'
+import { type League } from '@/app/types/league'
 
 /* const DATA_MENU = [
   {
@@ -22,20 +23,29 @@ import ListLeagueUser from './components/list-league-user'
   }
 ] as const */
 
-const PageCreationCenter = async () => {
-  const { session } = await useSession()
+async function getData () {
+  const { handleSession, handleLeague, handleTournament } = useSupabaseData()
+  const session = await handleSession()
   if (session === null) return redirect('/')
-  return (
-<>
-<ListLeagueUser />
-<main className='border border-gray-400 flex flex-col gap-4 p-4'>
-      <h2 className='text-4xl font-bold'>Dashboard</h2>
-      <section className='relative'>
-      <Dashboard />
-      </section>
-    </main>
-</>
+  const league: League = await handleLeague(session?.user.id)
+  const tournaments = await handleTournament(league.id)
+  return { league, session, tournaments }
+}
 
+const PageCreationCenter = async () => {
+  const { league, session, tournaments } = await getData()
+  return (
+    <main className='flex flex-col gap-4'>
+      <div className='flex gap-4'>
+      <ListLeagueUser tournaments={tournaments} />
+      <ModalCreateLeague isEdit={league !== undefined} league={league} isOpen={league === undefined ? true : undefined} idUser={session.user.id}/>
+      </div>
+      <div className="border border-gray-800 flex flex-col gap-4 p-4">
+      <section className="relative">
+        <Dashboard />
+      </section>
+      </div>
+    </main>
   )
 }
 
