@@ -85,7 +85,7 @@ const ChargerImageComponent = ({ handleChargeImage, imageProp }: Props) => {
             />
             <label
               htmlFor="file"
-              className="z-20 mx-auto bottom-8 b left-0 right-0 h-8 w-48 flex justify-center items-center border-1 border-black"
+              className="z-20 mx-auto bottom-8 b left-0 right-0 h-8 w-48 flex justify-center items-center border-1 border cursor-pointer hover:bg-slate-200"
             >
               Cargar imagen de liga
             </label>

@@ -1,20 +1,28 @@
 'use client'
 
-import {
-  Button,
-  Modal,
-  ModalContent,
-  ModalFooter,
-  ModalBody,
-  ModalHeader
-} from '@nextui-org/react'
 import React, { memo, useEffect, useState } from 'react'
 import LeagueContainer from '../client/league-container'
-import { object, string, type Output, minLength, maxLength, parse } from 'valibot'
+import {
+  object,
+  string,
+  type Output,
+  minLength,
+  maxLength,
+  parse
+} from 'valibot'
 import { Toaster, toast } from 'sonner'
-import useGetSupabase from '@/app/hooks/useGetSupabase'
 import { type League } from '@/app/types/league'
 import { useSupabaseStore } from '@/app/zustand/store'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTrigger
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog'
 
 const LeagueSchema = object({
   nameLeague: string('Debe agregar un nombre a la liga', [
@@ -25,17 +33,20 @@ const LeagueSchema = object({
 })
 
 interface Props {
-  isOpen: boolean
-  setIsOpen: (value: boolean) => void
-  handleCreateLeague: () => void
   league: League
   isEdit: boolean
-  setEdit: (value: boolean) => void
+  isOpen: boolean | undefined
+  idUser: string
 }
 
 type LeagueData = Output<typeof LeagueSchema>
 
-async function Fetch (formData: any, isEdit: boolean, idUser?: string, informationLeague?: any) {
+async function Fetch (
+  formData: any,
+  isEdit: boolean,
+  idUser?: string,
+  informationLeague?: any
+) {
   const result = await fetch('/api/league', {
     method: 'POST',
     body: JSON.stringify({ formData, idUser, isEdit, informationLeague })
@@ -46,21 +57,16 @@ async function Fetch (formData: any, isEdit: boolean, idUser?: string, informati
   return await result.json()
 }
 
-const ModalCreateLeague = ({ isOpen, setIsOpen, handleCreateLeague, league, isEdit, setEdit }: Props) => {
+const ModalCreateLeague = ({ league, isEdit, isOpen, idUser }: Props) => {
+  const supabase = createClientComponentClient()
   const [formData, setFormData] = useState<LeagueData>({
     nameLeague: '',
     imageLeague: ''
   })
-  const [
-    getLeague
-  ] = useSupabaseStore((state) => [
-    state.getLeague
-  ])
+  const [getLeague] = useSupabaseStore((state) => [state.getLeague])
   const [imageLeague, setImage] = useState<File | undefined>()
   const [extensionImage, setExtensionImage] = useState<string | undefined>('')
   const [isBlock, setBlock] = useState<boolean>(false)
-
-  const { session, supabase } = useGetSupabase()
 
   const handleChargeImage = (image?: File, extension?: string) => {
     setImage(image)
@@ -68,7 +74,7 @@ const ModalCreateLeague = ({ isOpen, setIsOpen, handleCreateLeague, league, isEd
   }
 
   useEffect(() => {
-    if (league.id !== '') {
+    if (league !== undefined) {
       setFormData({
         nameLeague: league.name,
         imageLeague: league.url_image ?? ''
@@ -100,14 +106,14 @@ const ModalCreateLeague = ({ isOpen, setIsOpen, handleCreateLeague, league, isEd
           formData.imageLeague = process.env.IMAGE_APP
         }
       }
-      const id = session?.user.id
-      toast.promise(Fetch(formData, isEdit, id, league), {
+      // const id = session?.user.id
+      toast.promise(Fetch(formData, isEdit, idUser, league), {
         loading: 'Creando la liga, un momento por favor...',
         success: () => {
           getLeague()
           setTimeout(() => {
             setBlock(false)
-            handleCreateLeague()
+            // handleCreateLeague()
           }, 2000)
           return 'Liga creada con éxito'
         },
@@ -120,7 +126,44 @@ const ModalCreateLeague = ({ isOpen, setIsOpen, handleCreateLeague, league, isEd
   }
 
   return (
-    <Modal backdrop="blur" isOpen={isOpen} hideCloseButton={league.id === '' ?? true}>
+    <Dialog open={isOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline">Mi Liga</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-bold">
+            {isEdit ? 'Editar ' : 'Crear '}Liga
+          </DialogTitle>
+          <DialogDescription>
+            Aquí podrás crear y actualiza los datos de tu liga como la imagen y
+            el nombre
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSubmit}>
+        <div>
+          <LeagueContainer
+            formData={formData}
+            handleChargeImage={handleChargeImage}
+            setFormData={setFormData}
+          />
+        </div>
+        <DialogFooter>
+          <Button disabled={isBlock}>
+            Enviar
+          </Button>
+        </DialogFooter>
+        </form>
+      </DialogContent>
+      <Toaster richColors position="top-left"/>
+    </Dialog>
+  )
+}
+
+export default memo(ModalCreateLeague)
+
+/**
+ * <Modal backdrop="blur" isOpen={true} hideCloseButton={league.id === '' ?? true}>
       <ModalContent>
         {(onClose) => (
           <>
@@ -141,8 +184,6 @@ const ModalCreateLeague = ({ isOpen, setIsOpen, handleCreateLeague, league, isEd
             </ModalBody>
             <ModalFooter>
               <Button color="danger" variant="light" onPress={() => {
-                setEdit(false)
-                setIsOpen(false)
               }} isDisabled={league.id === '' ?? true}>
                 Close
               </Button>
@@ -157,12 +198,8 @@ const ModalCreateLeague = ({ isOpen, setIsOpen, handleCreateLeague, league, isEd
               </Button>
             </ModalFooter>
           </form>
-          <Toaster richColors position="top-left"/>
           </>
         )}
       </ModalContent>
     </Modal>
-  )
-}
-
-export default memo(ModalCreateLeague)
+ */
