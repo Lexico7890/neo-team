@@ -2,6 +2,9 @@
 
 import { useSupabaseStore } from '@/app/zustand/store'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import TabInformation from './server/tab-information'
+import TabTeams from './server/tab-teams'
+import TabMatch from './server/tab-match'
 
 const Dashboard = () => {
   const [tournament] = useSupabaseStore(state => [state.tournament])
@@ -10,13 +13,15 @@ const Dashboard = () => {
       <h2 className="text-4xl font-bold">Dashboard {tournament.name}</h2>
       <Tabs defaultValue="account" className="w-full">
       <TabsList>
-        <TabsTrigger value="account">Account</TabsTrigger>
-        <TabsTrigger value="password">Password</TabsTrigger>
+      <TabsTrigger value="information">Información</TabsTrigger>
+        <TabsTrigger value="account">Equipos</TabsTrigger>
+        <TabsTrigger value="password">Partidos</TabsTrigger>
       </TabsList>
+      <TabsContent value="information"><TabInformation /></TabsContent>
       <TabsContent value="account" className="w-full bg-red-400">
-        Make changes to your account here.
+        <TabTeams />
       </TabsContent>
-      <TabsContent value="password">Change your password here.</TabsContent>
+      <TabsContent value="password"><TabMatch /></TabsContent>
     </Tabs>
     </section>
   )
