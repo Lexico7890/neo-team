@@ -23,7 +23,7 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { parse } from 'valibot'
-import userDefaultImage from '../../../../public/image/userDefaultImage.jpg'
+import userDefaultImage from '../../../../../public/image/userDefaultImage.jpg'
 import { Toaster, toast } from 'sonner'
 
 async function Fetch (userData: any, userId: string) {

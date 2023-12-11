@@ -90,7 +90,7 @@ const NavbarMenu = ({ user }: { user: User | null }) => {
                         </a>
                       </NavigationMenuLink>
                     </li>
-                    <ListItem href="/perfil" title="Mi perfil">
+                    <ListItem href="/main/perfil" title="Mi perfil">
                       Gestiona y actualiza tus datos personales
                     </ListItem>
                     <ListItem href="/main/dashboard" title="Dashboard">
