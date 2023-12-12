@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["eprmauzzggwoeydncjpq.supabase.co", "lh3.googleusercontent.com"]
+    domains: ["eprmauzzggwoeydncjpq.supabase.co", "lh3.googleusercontent.com", "upload.wikimedia.org"]
   },
   env: {
     IMAGE_APP: process.env.IMAGE_APP
