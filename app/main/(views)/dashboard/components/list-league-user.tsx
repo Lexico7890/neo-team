@@ -6,11 +6,13 @@ import { Button } from '@/components/ui/button'
 import {
   Command,
   CommandEmpty,
+  CommandGroup,
   CommandInput,
   CommandItem,
-  CommandList
+  CommandList,
+  CommandSeparator
 } from '@/components/ui/command'
-import { Dialog } from '@/components/ui/dialog'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import {
   Popover,
   PopoverContent,
@@ -18,6 +20,7 @@ import {
 } from '@/components/ui/popover'
 import { useState } from 'react'
 import { CgArrowsExchangeAltV } from 'react-icons/cg'
+import { GoPlusCircle } from 'react-icons/go'
 
 interface Props {
   tournaments: Tournament[]
@@ -59,6 +62,19 @@ const ListLeagueUser = ({ tournaments }: Props) => {
                   {tournament.name}
                 </CommandItem>
               ))}
+            </CommandList>
+            <CommandSeparator />
+            <CommandList>
+              <CommandGroup >
+                <DialogTrigger asChild>
+                  <CommandItem
+                    onSelect={() => {}}
+                  >
+                  <GoPlusCircle />
+                  Crear Torneo
+                  </CommandItem>
+                </DialogTrigger>
+              </CommandGroup>
             </CommandList>
           </Command>
         </PopoverContent>
