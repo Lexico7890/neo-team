@@ -18,7 +18,7 @@ const Dashboard = () => {
         <TabsTrigger value="password">Partidos</TabsTrigger>
       </TabsList>
       <TabsContent value="information"><TabInformation /></TabsContent>
-      <TabsContent value="account" className="w-full bg-red-400">
+      <TabsContent value="account" className="w-full">
         <TabTeams />
       </TabsContent>
       <TabsContent value="password"><TabMatch /></TabsContent>
