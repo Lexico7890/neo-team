@@ -1,11 +1,14 @@
 import { type StateCreator } from 'zustand'
 import { type User } from '../types/user'
 import useInstanceSupabaseServer from '../hooks/useInstanceSupabaseServer'
+import { type Rol } from '../types/rol'
 
 export interface UserSlice {
   user: User
   getUser: (userId: string) => void
   setUser: (user: User) => void
+  userRol: string
+  setUserRol: (userId: string, roles: Rol[]) => void
 }
 
 const { supabase } = useInstanceSupabaseServer()
@@ -26,6 +29,7 @@ export const createUserSlice: StateCreator<UserSlice> = (set) => ({
     number_identity: '',
     gender: ''
   },
+  userRol: '',
   getUser: async (userId) => {
     const { data, error } = await supabase.from('users').select('*').eq('id', userId)
     if (error !== null) {
@@ -33,5 +37,9 @@ export const createUserSlice: StateCreator<UserSlice> = (set) => ({
     }
     set({ user: data[0] })
   },
-  setUser: (user) => { set({ user }) }
+  setUser: (user) => { set({ user }) },
+  setUserRol: (id, roles) => {
+    const rolName = roles.filter(rol => rol.id === id)
+    set({ userRol: rolName[0].name })
+  }
 })

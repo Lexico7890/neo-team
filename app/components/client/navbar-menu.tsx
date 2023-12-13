@@ -15,7 +15,8 @@ import { ButtonDarkMode } from './button-dark-mode'
 import ButtonLogin from './button-login'
 import { useSupabaseStore } from '@/app/zustand/store'
 import Link from 'next/link'
-import { type User } from '@sentry/nextjs'
+import { type User } from '@/app/types/user'
+import { type Rol } from '@/app/types/rol'
 
 const components: Array<{ title: string, href: string, description: string }> =
   [
@@ -41,13 +42,18 @@ const components: Array<{ title: string, href: string, description: string }> =
     }
   ]
 
-const NavbarMenu = ({ user }: { user: User | null }) => {
-  const [setUser] = useSupabaseStore((state) => [
-    state.setUser
+const NavbarMenu = ({ user, rol }: { user: User[] | null, rol: Rol[] | null }) => {
+  const [setUser, setUserRol, userRol] = useSupabaseStore((state) => [
+    state.setUser,
+    state.setUserRol,
+    state.userRol
   ])
   useEffect(() => {
     if (user !== null) {
       setUser(user[0])
+      if (rol !== null && user[0].rol_id !== null) {
+        setUserRol(user[0].rol_id, rol)
+      }
     }
   }, [user])
   return (
@@ -93,9 +99,16 @@ const NavbarMenu = ({ user }: { user: User | null }) => {
                     <ListItem href="/main/perfil" title="Mi perfil">
                       Gestiona y actualiza tus datos personales
                     </ListItem>
-                    <ListItem href="/main/dashboard" title="Dashboard">
+                    {
+                      (userRol === 'superadmin' || userRol === 'Administrador de liga') && (
+                        <ListItem href="/main/dashboard" title="Dashboard">
                       Crea nuevas ligas, equipos y todo lo necesario para tu
                       torneo
+                    </ListItem>
+                      )
+                    }
+                    <ListItem href="/main/myTeam" title="Mi equipo">
+                      Crea un equipo o busca y participa con algún otro equipo creado
                     </ListItem>
                     <ListItem href="/docs/primitives/typography" title="Salir">
                       Vuelve pronto, te esperamos
