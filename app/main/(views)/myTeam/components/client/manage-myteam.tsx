@@ -1,5 +1,7 @@
 'use client'
 
+import CardsSelectOption from '../server/cards-select-option'
+
 interface Props {
   teamData: any[]
 }
@@ -7,7 +9,9 @@ interface Props {
 const ManageMyteam = ({ teamData }: Props) => {
   console.log(teamData)
   return (
-    <div>manage-myteam</div>
+    <div className='min-h-screen w-full flex justify-center items-center'>
+      <CardsSelectOption />
+    </div>
   )
 }
 
