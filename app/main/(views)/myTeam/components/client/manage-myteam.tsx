@@ -1,17 +1,24 @@
-'use client'
-
+import { Suspense } from 'react'
 import CardsSelectOption from '../server/cards-select-option'
+import InformationMyteam from '../server/information-myteam'
+import { type Team } from '@/app/types/team'
 
 interface Props {
-  teamData: any[]
+  teamData: Team[]
 }
 
 const ManageMyteam = ({ teamData }: Props) => {
   console.log(teamData)
   return (
-    <div className='min-h-screen w-full flex justify-center items-center'>
-      <CardsSelectOption />
-    </div>
+    <Suspense fallback={<p>Cargando...</p>}>
+      {teamData === null
+        ? (
+        <CardsSelectOption />
+          )
+        : (
+        <InformationMyteam teamData={teamData} />
+          )}
+    </Suspense>
   )
 }
 
