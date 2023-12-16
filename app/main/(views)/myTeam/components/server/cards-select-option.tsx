@@ -1,11 +1,11 @@
 import Image from 'next/image'
-import React from 'react'
 import teamCard from '@/public/image/teamCard.png'
 import teamCardPlayer from '@/public/image/teamCardPlayer.png'
 import teamCardTwo from '@/public/image/teamCardTwo.png'
 import teamCardTwoPlayer from '@/public/image/teamCardTwoPlayer.png'
 import styles from '../styles.module.css'
-import { Button } from '@/components/ui/button'
+import BottomCreateTeam from '../client/bottom-create-team'
+import BottomSearchTeam from '../client/bottom-search-team'
 
 const CardsSelectOption = () => {
   return (
@@ -28,12 +28,7 @@ const CardsSelectOption = () => {
             alt="Image card team player"
             className={`${styles.c3d}`}
           />
-          <Button
-            variant={'outline'}
-            className="dark:bg-black bg-white font-semibold text-lg"
-          >
-            Crear equipo
-          </Button>
+          <BottomCreateTeam name='Crear equipo' />
         </div>
         <div className={styles.card}>
           <div className={`${styles.imgBx} bg-yellow-400`}>
@@ -52,12 +47,7 @@ const CardsSelectOption = () => {
             alt="Image card team player"
             className={`${styles.c3d}`}
           />
-          <Button
-            variant={'outline'}
-            className="dark:bg-black bg-white font-semibold text-lg"
-          >
-            Buscar equipo
-          </Button>
+          <BottomSearchTeam name='Buscar equipo'/>
         </div>
       </div>
     </div>

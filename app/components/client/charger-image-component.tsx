@@ -87,7 +87,7 @@ const ChargerImageComponent = ({ handleChargeImage, imageProp }: Props) => {
               htmlFor="file"
               className="z-20 mx-auto bottom-8 b left-0 right-0 h-8 w-48 flex justify-center items-center border-1 border cursor-pointer hover:bg-slate-200"
             >
-              Cargar imagen de liga
+              Cargar imagen
             </label>
             <span className="flex justify-center items-center">Ó</span>
             <p>Arrastra la imagen seleccionada aquí</p>

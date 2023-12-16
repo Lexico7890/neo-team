@@ -11,7 +11,7 @@ const ManageMyteam = ({ teamData }: Props) => {
   console.log(teamData)
   return (
     <Suspense fallback={<p>Cargando...</p>}>
-      {teamData === null
+      {teamData.length === 0
         ? (
         <CardsSelectOption />
           )
