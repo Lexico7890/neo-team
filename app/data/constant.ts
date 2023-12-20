@@ -24,7 +24,7 @@ export const INIT_TEAM_DATA = {
   name: '',
   firstColor: '',
   secondColor: '',
-  image: ''
+  imageTeam: ''
 }
 
 export const COLORS_TEAM = [

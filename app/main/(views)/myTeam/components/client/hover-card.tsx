@@ -12,18 +12,20 @@ interface Props {
 }
 
 const HoverCardColors = ({ setColor, name }: Props) => {
+  const handleColor = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, color: string) => {
+    event.preventDefault()
+    setColor(color)
+  }
   return (
     <HoverCard>
       <HoverCardTrigger>
-        <Button variant="link" className='w-full'>{name}</Button>
+        <Button variant="link" className='w-full' onClick={(event) => { event.preventDefault() }}>{name}</Button>
       </HoverCardTrigger>
       <HoverCardContent>
         <div className="flex flex-wrap">
           {COLORS_TEAM.map(({ color, name }) => (
             <Button
-              onClick={() => {
-                setColor(color)
-              }}
+              onClick={(event) => { handleColor(event, color) }}
               key={name}
               style={{
                 backgroundColor: `${color}`,

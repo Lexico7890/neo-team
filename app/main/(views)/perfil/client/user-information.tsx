@@ -124,8 +124,6 @@ const UserInformation = ({
     setLoading(false)
   }, [user])
 
-  console.log('entro')
-
   return (
     <div className="w-full max-w-[1300px] ">
       {loading
