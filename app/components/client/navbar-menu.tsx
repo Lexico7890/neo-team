@@ -73,7 +73,7 @@ const NavbarMenu = ({ user, rol }: { user: User[] | null, rol: Rol[] | null }) =
         </nav>
           )
         : (
-        <div className="p-2 flex justify-center">
+        <div className="p-2 flex justify-center absolute top-0 left-0 w-full">
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>

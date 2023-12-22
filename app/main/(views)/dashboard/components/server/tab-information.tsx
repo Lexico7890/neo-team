@@ -37,7 +37,7 @@ const TabInformation = () => {
         />
         <CardInformation title="Ultima fecha" icon={<RiTeamFill />} value="10" />
       </article>
-      <article className="app dark:text-black border flex justify-center items-center overflow-x-auto w-full h-[375px]">
+      <article className="app dark:text-black border flex justify-center items-center overflow-x-auto w-full max-h-[500px]">
         <div className="row ">
           <div className="mixed-chart">
             <Chart
@@ -49,7 +49,7 @@ const TabInformation = () => {
           </div>
         </div>
       </article>
-      <article className="flex flex-col gap-2 w-full h-[375px] overflow-auto border p-2">
+      <article className="flex flex-col gap-2 w-full overflow-auto border p-2 max-h-[400px]">
         {array.map((item, index) => (
           <CardMatch
             key={index}

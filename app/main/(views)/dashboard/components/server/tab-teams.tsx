@@ -14,7 +14,7 @@ import { CgInfo } from 'react-icons/cg'
 
 const TabTeams = () => {
   return (
-    <section className="border h-[500px] p-4">
+    <section className="border h-full p-4">
       <article className="h-full w-full row-span-6">
         <Table>
           <TableCaption>Equipos inscritos en este torneo</TableCaption>

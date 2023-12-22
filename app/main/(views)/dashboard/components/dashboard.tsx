@@ -9,7 +9,7 @@ import TabMatch from './server/tab-match'
 const Dashboard = () => {
   const [tournament] = useSupabaseStore(state => [state.tournament])
   return (
-    <section>
+    <section className='h-full'>
       <h2 className="text-4xl font-bold">Dashboard {tournament.name}</h2>
       <Tabs defaultValue="account" className="w-full">
       <TabsList>
@@ -18,7 +18,7 @@ const Dashboard = () => {
         <TabsTrigger value="password">Partidos</TabsTrigger>
       </TabsList>
       <TabsContent value="information"><TabInformation /></TabsContent>
-      <TabsContent value="account" className="w-full">
+      <TabsContent value="account">
         <TabTeams />
       </TabsContent>
       <TabsContent value="password"><TabMatch /></TabsContent>
