@@ -30,6 +30,7 @@ import { Button } from '@/components/ui/button'
 import { parse } from 'valibot'
 import userDefaultImage from '../../../../../public/image/userDefaultImage.jpg'
 import { Toaster, toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 async function Fetch (userData: any, userId: string) {
   const result = await fetch(`/api/user/${userId}`, {
@@ -44,7 +45,6 @@ async function Fetch (userData: any, userId: string) {
 
 function getDateFromUser () {
   const objectDate = new Date()
-
   return {
     day: objectDate.getDate(),
     month: objectDate.getMonth(),
@@ -67,6 +67,7 @@ const UserInformation = ({
     INIT_USER_DATA
   )
   const [loading, setLoading] = useState<boolean>(true)
+  const route = useRouter()
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -91,11 +92,14 @@ const UserInformation = ({
 
   const updateUserData = () => {
     const { day, month, year } = getDateFromUser()
+    console.log('fecha ', user.bird_date)
     userData.avatar_url = user.avatar_url
     userData.nameUser = user.name
     userData.emailUser = user.email ?? ''
     if (user.bird_date !== '') {
-      user.bird_date !== null && new Date(user.bird_date)
+      if (user.bird_date !== null) {
+        userData.dateBirth = new Date(user.bird_date)
+      }
     } else userData.dateBirth = new Date(`${month + 1}/${day}/${year}`)
     userData.phoneNumber = user.phone_number ?? ''
     userData.gender = user.gender ?? ''
@@ -161,7 +165,14 @@ const UserInformation = ({
                 <span className="text-center">
                   Aun no perteneces a ningún equipo
                 </span>
-                <Button>Buscar equipo</Button>
+                <Button
+                  onClick={(event) => {
+                    event.preventDefault()
+                    route.push('/main/myTeam')
+                  }}
+                >
+                  Buscar equipo
+                </Button>
               </div>
             </div>
             <div className="col-span-3 block lg:flex">

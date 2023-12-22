@@ -4,6 +4,8 @@ import ListLeagueUser from './components/list-league-user'
 import useSupabaseData from '@/app/hooks/useSupabaseData'
 import ModalCreateLeague from './createLeague/server/modal-create-league'
 import { type League } from '@/app/types/league'
+import { Suspense } from 'react'
+import BottomCreateTournament from './components/client/bottom-create-tournament'
 
 /* const DATA_MENU = [
   {
@@ -35,16 +37,24 @@ async function getData () {
 const PageCreationCenter = async () => {
   const { league, session, tournaments } = await getData()
   return (
-    <main className='flex flex-col gap-4'>
-      <div className='flex gap-4'>
-      <ListLeagueUser tournaments={tournaments} />
-      <ModalCreateLeague isEdit={league !== undefined} league={league} isOpen={league === undefined ? true : undefined} idUser={session.user.id}/>
-      </div>
-      <div className="border border-gray-800 flex flex-col gap-4 p-4">
-      <section className="relative">
-        <Dashboard />
-      </section>
-      </div>
+    <main className="flex flex-col gap-4 mt-6 h-full">
+      <Suspense fallback={<p>Cargando dashboard...</p>}>
+        <div className="flex gap-4">
+          <ListLeagueUser tournaments={tournaments} />
+          <ModalCreateLeague
+            isEdit={league !== undefined}
+            league={league}
+            isOpen={league === undefined ? true : undefined}
+            idUser={session.user.id}
+          />
+        </div>
+        <div className="border border-gray-800 flex flex-col gap-4 p-4 h-full">
+          <BottomCreateTournament />
+          <section className="relative h-full">
+            <Dashboard />
+          </section>
+        </div>
+      </Suspense>
     </main>
   )
 }

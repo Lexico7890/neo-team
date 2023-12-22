@@ -24,12 +24,13 @@ import { type Team } from '@/app/types/team'
 
 interface Props {
   name: string
+  userId: string | undefined
 }
 
-async function Fetch (teamData: any) {
+async function Fetch (teamData: any, userId: string) {
   const result = await fetch('/api/team', {
     method: 'POST',
-    body: JSON.stringify({ teamData })
+    body: JSON.stringify({ teamData, userId })
   })
   if (!result.ok) {
     throw new Error(result.statusText)
@@ -37,7 +38,7 @@ async function Fetch (teamData: any) {
   return await result.json()
 }
 
-const BottomCreateTeam = ({ name }: Props) => {
+const BottomCreateTeam = ({ name, userId }: Props) => {
   const [isBlock, setIsBlock] = useState<boolean>(false)
   const [openSuccess, setOpenSuccess] = useState<boolean>(false)
   const [teamCreated, setTeamCreated] = useState<Team>({
@@ -65,8 +66,12 @@ const BottomCreateTeam = ({ name }: Props) => {
     try {
       setIsBlock(true)
       parse(TeamSchema, formData)
-      formData.imageTeam = await chargeImageSupabase(image, extensionImage, 'imageTeam')
-      toast.promise(Fetch(formData), {
+      formData.imageTeam = await chargeImageSupabase(
+        image,
+        extensionImage,
+        'imageTeam'
+      )
+      toast.promise(Fetch(formData, userId ?? ''), {
         loading: 'Creando el equipo, un momento por favor...',
         success: (data) => {
           setTeamCreated(data)
@@ -114,7 +119,12 @@ const BottomCreateTeam = ({ name }: Props) => {
             equipo se encuentre en un torneo en curso
           </DialogDescription>
         </DialogHeader>
-        <form className="grid gap-4 py-4" onSubmit={(event) => { handleSubmit(event) }}>
+        <form
+          className="grid gap-4 py-4"
+          onSubmit={(event) => {
+            handleSubmit(event)
+          }}
+        >
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-center">
               Nombre
@@ -133,7 +143,11 @@ const BottomCreateTeam = ({ name }: Props) => {
           </div>
           <div className="grid grid-cols-2 gap-4 justify-center items-center">
             <div className="flex flex-col justify-center items-center">
-              <HoverCardColors handleChangeColor={handleChangeColor} name="Color primario" isFirst />
+              <HoverCardColors
+                handleChangeColor={handleChangeColor}
+                name="Color primario"
+                isFirst
+              />
               {formData.firstColor === ''
                 ? (
                 <p>Sin color seleccionado</p>
@@ -175,13 +189,19 @@ const BottomCreateTeam = ({ name }: Props) => {
               imageProp={formData.imageTeam}
             />
           </div>
-          <div className='flex justify-end'>
-            <Button type='submit' disabled={isBlock}>Crear</Button>
+          <div className="flex justify-end">
+            <Button type="submit" disabled={isBlock}>
+              Crear
+            </Button>
           </div>
         </form>
       </DialogContent>
-      <Toaster richColors position="bottom-right"/>
-      <ModalSuccessCreate isOpen={openSuccess} teamData={teamCreated}/>
+      <Toaster richColors position="bottom-right" />
+      <ModalSuccessCreate
+        isOpen={openSuccess}
+        teamData={teamCreated}
+        setOpenSuccess={setOpenSuccess}
+      />
     </Dialog>
   )
 }

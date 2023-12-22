@@ -15,5 +15,5 @@ export default async function PageMyTeam () {
     }
     teamData = teamUser
   }
-  return <ManageMyteam teamData={teamData}/>
+  return <ManageMyteam teamData={teamData} userId={session?.user.id}/>
 }

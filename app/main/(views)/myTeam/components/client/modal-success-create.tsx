@@ -4,14 +4,16 @@ import { type Team } from '@/app/types/team'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 interface Props {
   isOpen: boolean
   teamData: Team
+  setOpenSuccess: (value: boolean) => void
 }
 
-const ModalSuccessCreate = ({ isOpen, teamData }: Props) => {
-  console.log(teamData)
+const ModalSuccessCreate = ({ isOpen, teamData, setOpenSuccess }: Props) => {
+  const route = useRouter()
   return (
     <Dialog open={isOpen}>
       <DialogContent>
@@ -35,7 +37,13 @@ const ModalSuccessCreate = ({ isOpen, teamData }: Props) => {
           </div>
         </div>
         <div className="flex justify-center">
-          <Button className="bg-yellow-400 hover:bg-yellow-300">
+          <Button
+            className="bg-yellow-400 hover:bg-yellow-300"
+            onClick={() => {
+              route.refresh()
+              setOpenSuccess(false)
+            }}
+          >
             Ver equipo
           </Button>
         </div>

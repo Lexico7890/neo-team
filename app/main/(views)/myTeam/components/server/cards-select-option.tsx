@@ -7,7 +7,11 @@ import styles from '../styles.module.css'
 import BottomCreateTeam from '../client/bottom-create-team'
 import BottomSearchTeam from '../client/bottom-search-team'
 
-const CardsSelectOption = () => {
+interface Props {
+  userId: string | undefined
+}
+
+const CardsSelectOption = ({ userId }: Props) => {
   return (
     <div className="min-h-screen w-full flex justify-center items-center">
       <div className={`${styles.container} flex flex-row justify-center p-10`}>
@@ -28,7 +32,7 @@ const CardsSelectOption = () => {
             alt="Image card team player"
             className={`${styles.c3d}`}
           />
-          <BottomCreateTeam name='Crear equipo' />
+          <BottomCreateTeam name='Crear equipo' userId={userId}/>
         </div>
         <div className={styles.card}>
           <div className={`${styles.imgBx} bg-yellow-400`}>

@@ -2,10 +2,8 @@ import React from 'react'
 
 const LayoutCreationCenter = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div>
-      <div className='p-2 sm:p-10'>
+    <div className='p-2 sm:p-10 h-screen'>
       {children}
-      </div>
     </div>
   )
 }
