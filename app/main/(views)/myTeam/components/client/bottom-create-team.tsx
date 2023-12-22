@@ -19,6 +19,8 @@ import { INIT_TEAM_DATA } from '@/app/data/constant'
 import { parse } from 'valibot'
 import { Toaster, toast } from 'sonner'
 import useChargeImageSupabase from '@/app/hooks/useChargeImageSupabase'
+import ModalSuccessCreate from './modal-success-create'
+import { type Team } from '@/app/types/team'
 
 interface Props {
   name: string
@@ -32,10 +34,21 @@ async function Fetch (teamData: any) {
   if (!result.ok) {
     throw new Error(result.statusText)
   }
+  return await result.json()
 }
 
 const BottomCreateTeam = ({ name }: Props) => {
   const [isBlock, setIsBlock] = useState<boolean>(false)
+  const [openSuccess, setOpenSuccess] = useState<boolean>(false)
+  const [teamCreated, setTeamCreated] = useState<Team>({
+    id: '',
+    name: '',
+    image: '',
+    main_color: '',
+    second_color: '',
+    campus: '',
+    created_at: ''
+  })
   const [image, setImage] = useState<File | undefined>()
   const [extensionImage, setExtensionImage] = useState<string | undefined>('')
   const [formData, setFormData] = useState<TeamData>(INIT_TEAM_DATA)
@@ -55,7 +68,9 @@ const BottomCreateTeam = ({ name }: Props) => {
       formData.imageTeam = await chargeImageSupabase(image, extensionImage, 'imageTeam')
       toast.promise(Fetch(formData), {
         loading: 'Creando el equipo, un momento por favor...',
-        success: () => {
+        success: (data) => {
+          setTeamCreated(data)
+          setOpenSuccess(true)
           return 'Equipo creado con éxito'
         },
         error: 'No se pudo crear el equipo, comuníquese con el administrador'
@@ -83,7 +98,7 @@ const BottomCreateTeam = ({ name }: Props) => {
 
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button
           variant={'outline'}
           className="dark:bg-black bg-white font-semibold text-lg"
@@ -166,6 +181,7 @@ const BottomCreateTeam = ({ name }: Props) => {
         </form>
       </DialogContent>
       <Toaster richColors position="bottom-right"/>
+      <ModalSuccessCreate isOpen={openSuccess} teamData={teamCreated}/>
     </Dialog>
   )
 }
