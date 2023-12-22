@@ -13,7 +13,6 @@ import {
 import { Toaster, toast } from 'sonner'
 import { type League } from '@/app/types/league'
 import { useSupabaseStore } from '@/app/zustand/store'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import {
   Dialog,
   DialogContent,
@@ -23,6 +22,7 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog'
+import useChargeImageSupabase from '@/app/hooks/useChargeImageSupabase'
 
 const LeagueSchema = object({
   nameLeague: string('Debe agregar un nombre a la liga', [
@@ -58,7 +58,6 @@ async function Fetch (
 }
 
 const ModalCreateLeague = ({ league, isEdit, isOpen, idUser }: Props) => {
-  const supabase = createClientComponentClient()
   const [formData, setFormData] = useState<LeagueData>({
     nameLeague: '',
     imageLeague: ''
@@ -67,6 +66,8 @@ const ModalCreateLeague = ({ league, isEdit, isOpen, idUser }: Props) => {
   const [imageLeague, setImage] = useState<File | undefined>()
   const [extensionImage, setExtensionImage] = useState<string | undefined>('')
   const [isBlock, setBlock] = useState<boolean>(false)
+
+  const { chargeImageSupabase } = useChargeImageSupabase()
 
   const handleChargeImage = (image?: File, extension?: string) => {
     setImage(image)
@@ -87,25 +88,7 @@ const ModalCreateLeague = ({ league, isEdit, isOpen, idUser }: Props) => {
     try {
       parse(LeagueSchema, formData)
       setBlock(true)
-      if (imageLeague !== undefined) {
-        const { data, error } = await supabase.storage
-          .from('image_neo_team/imageLeague')
-          .upload(
-            `image_${Date.now().toString()}.${extensionImage}`,
-            imageLeague
-          )
-        if (error !== null) {
-          throw new Error('No se pudo cargar la imagen ', error)
-        }
-        const { data: url } = supabase.storage
-          .from('image_neo_team/imageLeague')
-          .getPublicUrl(data.path)
-        formData.imageLeague = url.publicUrl
-      } else {
-        if (process.env.IMAGE_APP !== undefined) {
-          formData.imageLeague = process.env.IMAGE_APP
-        }
-      }
+      chargeImageSupabase(imageLeague, extensionImage, 'imageLeague')
       // const id = session?.user.id
       toast.promise(Fetch(formData, isEdit, idUser, league), {
         loading: 'Creando la liga, un momento por favor...',

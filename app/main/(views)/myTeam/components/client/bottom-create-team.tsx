@@ -18,34 +18,66 @@ import { TeamSchema, type TeamData } from '@/app/types/schema/team-schema'
 import { INIT_TEAM_DATA } from '@/app/data/constant'
 import { parse } from 'valibot'
 import { Toaster, toast } from 'sonner'
+import useChargeImageSupabase from '@/app/hooks/useChargeImageSupabase'
 
 interface Props {
   name: string
 }
+
+async function Fetch (teamData: any) {
+  const result = await fetch('/api/team', {
+    method: 'POST',
+    body: JSON.stringify({ teamData })
+  })
+  if (!result.ok) {
+    throw new Error(result.statusText)
+  }
+}
+
 const BottomCreateTeam = ({ name }: Props) => {
-  const [first, setFirstColor] = useState<string>('')
-  const [second, setSecondColor] = useState<string>('')
   const [isBlock, setIsBlock] = useState<boolean>(false)
   const [image, setImage] = useState<File | undefined>()
   const [extensionImage, setExtensionImage] = useState<string | undefined>('')
   const [formData, setFormData] = useState<TeamData>(INIT_TEAM_DATA)
+
+  const { chargeImageSupabase } = useChargeImageSupabase()
 
   const handleChargeImage = (image?: File, extension?: string) => {
     setImage(image)
     setExtensionImage(extension)
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     try {
-      console.log('entro')
       setIsBlock(true)
-      setFormData({ ...formData, firstColor: first, secondColor: second })
       parse(TeamSchema, formData)
+      formData.imageTeam = await chargeImageSupabase(image, extensionImage, 'imageTeam')
+      toast.promise(Fetch(formData), {
+        loading: 'Creando el equipo, un momento por favor...',
+        success: () => {
+          return 'Equipo creado con éxito'
+        },
+        error: 'No se pudo crear el equipo, comuníquese con el administrador'
+      })
     } catch (error: any) {
       toast.error(error.message)
     } finally {
       setIsBlock(false)
+    }
+  }
+
+  const handleChangeColor = (color: string, isFirst: boolean) => {
+    if (isFirst) {
+      setFormData({
+        ...formData,
+        firstColor: color
+      })
+    } else {
+      setFormData({
+        ...formData,
+        secondColor: color
+      })
     }
   }
 
@@ -86,8 +118,8 @@ const BottomCreateTeam = ({ name }: Props) => {
           </div>
           <div className="grid grid-cols-2 gap-4 justify-center items-center">
             <div className="flex flex-col justify-center items-center">
-              <HoverCardColors setColor={setFirstColor} name="Color primario" />
-              {first === ''
+              <HoverCardColors handleChangeColor={handleChangeColor} name="Color primario" isFirst />
+              {formData.firstColor === ''
                 ? (
                 <p>Sin color seleccionado</p>
                   )
@@ -96,17 +128,18 @@ const BottomCreateTeam = ({ name }: Props) => {
                   style={{
                     height: '50px',
                     width: '50px',
-                    backgroundColor: first
+                    backgroundColor: formData.firstColor
                   }}
                 ></div>
                   )}
             </div>
             <div className="flex flex-col justify-center items-center">
               <HoverCardColors
-                setColor={setSecondColor}
+                handleChangeColor={handleChangeColor}
                 name="Color secundario"
+                isFirst={false}
               />
-              {second === ''
+              {formData.secondColor === ''
                 ? (
                 <p>Sin color seleccionado</p>
                   )
@@ -115,7 +148,7 @@ const BottomCreateTeam = ({ name }: Props) => {
                   style={{
                     height: '50px',
                     width: '50px',
-                    backgroundColor: second
+                    backgroundColor: formData.secondColor
                   }}
                 ></div>
                   )}

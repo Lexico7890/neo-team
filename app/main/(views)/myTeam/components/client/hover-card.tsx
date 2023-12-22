@@ -7,14 +7,15 @@ import {
 import { COLORS_TEAM } from '@/app/data/constant'
 
 interface Props {
-  setColor: (value: string) => void
+  handleChangeColor: (color: string, isFirst: boolean) => void
+  isFirst: boolean
   name: string
 }
 
-const HoverCardColors = ({ setColor, name }: Props) => {
+const HoverCardColors = ({ handleChangeColor, name, isFirst }: Props) => {
   const handleColor = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, color: string) => {
     event.preventDefault()
-    setColor(color)
+    handleChangeColor(color, isFirst)
   }
   return (
     <HoverCard>
