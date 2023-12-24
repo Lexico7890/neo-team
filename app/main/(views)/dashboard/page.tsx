@@ -5,15 +5,16 @@ import useSupabaseData from '@/app/hooks/useSupabaseData'
 import ModalCreateLeague from './createLeague/server/modal-create-league'
 import { type League } from '@/app/types/league'
 import { Suspense } from 'react'
+import { type TournamentSelect } from '@/app/types/select/tournamentSelect'
 
 async function getData () {
-  let tournaments: [] = []
-  const { handleSession, handleLeague, handleTournament } = useSupabaseData()
+  let tournaments: TournamentSelect[] = []
+  const { handleSession, handleLeague, handleTournamentSelect } = useSupabaseData()
   const session = await handleSession()
   if (session === null) return redirect('/')
   const league: League = await handleLeague(session?.user.id)
   if (league !== undefined) {
-    tournaments = await handleTournament(league.id)
+    tournaments = await handleTournamentSelect(league.id)
   }
   return { league, session, tournaments }
 }
@@ -32,7 +33,7 @@ const PageCreationCenter = async () => {
             idUser={session.user.id}
           />
         </div>
-        <div className="border border-gray-800 flex flex-col gap-4 p-4 h-full">
+        <div className="border border-gray-800 flex flex-col gap-4 p-4 h-auto">
           <section className="relative h-full">
             <Dashboard />
           </section>

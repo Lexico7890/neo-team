@@ -1,3 +1,4 @@
+import { type TournamentSelect } from '../types/select/tournamentSelect'
 import { type Tournament } from '../types/tournament'
 import { type StateCreator } from 'zustand'
 
@@ -17,12 +18,17 @@ const initialTournamentState = {
     nombre_genero: '',
     sub_categoria: '',
     value: 0
+  },
+  tournamentSelect: {
+    id: '',
+    name: ''
   }
 }
 
 export interface TournamentSlice {
   tournament: Tournament
-  setTournamentId: (tournament: Tournament) => void
+  tournamentSelect: TournamentSelect
+  setTournamentId: (tournament: TournamentSelect) => void
   resetTournament: () => void
 }
 
@@ -32,8 +38,8 @@ export const createTournamentSlice: StateCreator<TournamentSlice> = (set) => {
   })
   return {
     ...initialTournamentState,
-    setTournamentId: (tournament) => {
-      set({ tournament })
+    setTournamentId: (tournamentSelect) => {
+      set({ tournamentSelect })
     },
     resetTournament: () => {
       set(initialTournamentState)
