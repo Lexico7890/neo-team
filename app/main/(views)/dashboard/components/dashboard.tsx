@@ -7,7 +7,10 @@ import TabTeams from './server/tab-teams'
 import TabMatch from './server/tab-match'
 
 const Dashboard = () => {
-  const [tournament] = useSupabaseStore(state => [state.tournament])
+  const [tournament] = useSupabaseStore(state => [state.tournament, state.resetTournament])
+  /* useEffect(() => {
+    resetAllSlices()
+  }, []) */
   return (
     <section className='h-full'>
       <h2 className="text-4xl font-bold">Dashboard {tournament.name}</h2>

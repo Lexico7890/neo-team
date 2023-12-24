@@ -11,6 +11,14 @@ import { type AwardSlice, createAwardSlice } from './award'
 import { type UserSlice, createUserSlice } from './user'
 import { devtools, persist } from 'zustand/middleware'
 
+const sliceResetFns = new Set<() => void>()
+
+export const resetAllSlices = () => {
+  sliceResetFns.forEach((resetFn) => {
+    resetFn()
+  })
+}
+
 export const useSupabaseStore = create<
 CategorySlice &
 GenderSlice &

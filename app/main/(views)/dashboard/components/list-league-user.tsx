@@ -20,13 +20,14 @@ import {
 } from '@/components/ui/popover'
 import { useState } from 'react'
 import { CgArrowsExchangeAltV } from 'react-icons/cg'
-import { GoPlusCircle } from 'react-icons/go'
+import BottomCreateTournament from './client/bottom-create-tournament'
 
 interface Props {
   tournaments: Tournament[]
+  leagueId: string
 }
 
-const ListLeagueUser = ({ tournaments }: Props) => {
+const ListLeagueUser = ({ tournaments, leagueId }: Props) => {
   const [open, setOpen] = useState<boolean>(false)
   const [showNewTeamDialog, setShowNewTeamDialog] = useState<boolean>(false)
   const [setTournamentId, tournament] = useSupabaseStore((state) => [
@@ -51,7 +52,7 @@ const ListLeagueUser = ({ tournaments }: Props) => {
           <Command>
             <CommandList>
               <CommandInput placeholder="Search team..." />
-              <CommandEmpty>No team found.</CommandEmpty>
+              <CommandEmpty>No hay torneos</CommandEmpty>
               {tournaments.map((tournament) => (
                 <CommandItem
                   key={tournament.id}
@@ -65,13 +66,13 @@ const ListLeagueUser = ({ tournaments }: Props) => {
             </CommandList>
             <CommandSeparator />
             <CommandList>
-              <CommandGroup >
+              <CommandGroup>
                 <DialogTrigger asChild>
                   <CommandItem
                     onSelect={() => {}}
+                    className="flex justify-around p-0"
                   >
-                  <GoPlusCircle />
-                  Crear Torneo
+                    <BottomCreateTournament leagueId={leagueId}/>
                   </CommandItem>
                 </DialogTrigger>
               </CommandGroup>

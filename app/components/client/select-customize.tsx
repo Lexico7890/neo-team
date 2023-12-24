@@ -1,33 +1,36 @@
-import { type Rol } from '@/app/types/rol'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
   SelectGroup,
-  SelectItem,
   SelectLabel,
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
 
 interface Props {
-  items: Rol[]
+  children: React.ReactNode
+  label: string
+  placeholder: string
+  handleSelectOption: (value: string) => void
 }
 
-const SelectCustomize = ({ items }: Props) => {
+const SelectCustomize = ({ children, label, placeholder, handleSelectOption }: Props) => {
   return (
-    <Select>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Seleccione un rol" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Roles</SelectLabel>
-          {items.map(({ name, id }) => (
-            <SelectItem value={id} key={id}>{name}</SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <div className="grid w-full max-w-sm items-center gap-1.5">
+      <Label htmlFor={label}>{label}</Label>
+      <Select onValueChange={(event) => { handleSelectOption(event) }}>
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>{label}</SelectLabel>
+            {children}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </div>
   )
 }
 
