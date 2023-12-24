@@ -53,13 +53,13 @@ const FormCreateTournament = ({ leagueId, setOpen }: Props) => {
     try {
       parse(TournamentSchema, formData)
       toast.promise(Fetch(formData, leagueId), {
-        loading: 'Creando la liga, un momento por favor...',
+        loading: 'Creando torneo, un momento por favor...',
         success: (data) => {
           setTournamentId(data.result[0])
           setOpen(false)
-          return 'Liga creada con éxito'
+          return 'Torneo creado con éxito'
         },
-        error: 'No se pudo crear la liga, comuníquese con el administrador'
+        error: 'No se pudo crear el torneo, comuníquese con el administrador'
       })
     } catch (error: any) {
       toast.error(error.message)

@@ -15,7 +15,15 @@ const useSupabaseData = () => {
     const { data, error: errorListTournament } =
         await supabase.rpc('get_tournaments_id', { leagueid })
     if (errorListTournament !== null) {
-      console.log(errorListTournament.message)
+      throw new Error('No se pudo completar la consulta de torneos')
+    }
+    return data
+  }
+
+  const handleTournamentSelect = async (leagueid: string) => {
+    const { data, error: errorListTournament } =
+        await supabase.from('tournament').select('id, name').eq('league_id', leagueid)
+    if (errorListTournament !== null) {
       throw new Error('No se pudo completar la consulta de torneos')
     }
     return data
@@ -46,7 +54,8 @@ const useSupabaseData = () => {
     handleTournament,
     handleLeague,
     handleTournamentId,
-    handleSession
+    handleSession,
+    handleTournamentSelect
   }
 }
 

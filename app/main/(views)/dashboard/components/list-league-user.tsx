@@ -1,6 +1,5 @@
 'use client'
 
-import { type Tournament } from '@/app/types/tournament'
 import { useSupabaseStore } from '@/app/zustand/store'
 import { Button } from '@/components/ui/button'
 import {
@@ -21,18 +20,19 @@ import {
 import { useState } from 'react'
 import { CgArrowsExchangeAltV } from 'react-icons/cg'
 import BottomCreateTournament from './client/bottom-create-tournament'
+import { type TournamentSelect } from '@/app/types/select/tournamentSelect'
 
 interface Props {
-  tournaments: Tournament[]
+  tournaments: TournamentSelect[]
   leagueId: string
 }
 
 const ListLeagueUser = ({ tournaments, leagueId }: Props) => {
   const [open, setOpen] = useState<boolean>(false)
   const [showNewTeamDialog, setShowNewTeamDialog] = useState<boolean>(false)
-  const [setTournamentId, tournament] = useSupabaseStore((state) => [
+  const [setTournamentId, tournamentSelect] = useSupabaseStore((state) => [
     state.setTournamentId,
-    state.tournament
+    state.tournamentSelect
   ])
   return (
     <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
@@ -44,7 +44,7 @@ const ListLeagueUser = ({ tournaments, leagueId }: Props) => {
             aria-label="Select a team"
             className="w-[200px] justify-between"
           >
-            {tournament.name}
+            {tournamentSelect.name}
             <CgArrowsExchangeAltV />
           </Button>
         </PopoverTrigger>
