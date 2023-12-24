@@ -12,9 +12,15 @@ export const TournamentSchema = object({
     minLength(10, 'La descripción debe contener al menos 10 caracteres'),
     maxLength(500, 'El nombre debe contener menos de 50 caracteres')
   ]),
-  category: string('Debe seleccionar una categoría'),
-  gender: string('Debe seleccionar un genero'),
-  variant: string('Debe seleccionar una sub categoría'),
+  category: string('Debe seleccionar una categoría', [
+    minLength(3, 'Debe seleccionar una categoría')
+  ]),
+  gender: string('Debe seleccionar un genero', [
+    minLength(3, 'Debe seleccionar un genero')
+  ]),
+  subCategory: string('Debe seleccionar una sub categoría', [
+    minLength(3, 'Debe seleccionar una sub categoría')
+  ]),
   contactName: string('Debe agregar un nombre al contacto', [
     minLength(3, 'El nombre del contacto debe contener al menos 3 caracteres'),
     maxLength(

@@ -4,7 +4,7 @@ export const INIT_FORM_DATA = {
   description: '',
   category: '',
   gender: '',
-  variant: '',
+  subCategory: '',
   contactName: '',
   contactNumber: ''
 }

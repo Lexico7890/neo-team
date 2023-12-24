@@ -5,32 +5,16 @@ import useSupabaseData from '@/app/hooks/useSupabaseData'
 import ModalCreateLeague from './createLeague/server/modal-create-league'
 import { type League } from '@/app/types/league'
 import { Suspense } from 'react'
-import BottomCreateTournament from './components/client/bottom-create-tournament'
-
-/* const DATA_MENU = [
-  {
-    title: 'Crear Liga',
-    image: '/image/imageLeague.jpg',
-    path: '/creationCenter/createLeague'
-  },
-  {
-    title: 'Crear Participante',
-    image: '/image/imagePlayer.png',
-    path: '/creationCenter/createLeague'
-  },
-  {
-    title: 'Crear Equipo',
-    image: '/image/imageTeam.png',
-    path: '/creationCenter/createLeague'
-  }
-] as const */
 
 async function getData () {
+  let tournaments: [] = []
   const { handleSession, handleLeague, handleTournament } = useSupabaseData()
   const session = await handleSession()
   if (session === null) return redirect('/')
   const league: League = await handleLeague(session?.user.id)
-  const tournaments = await handleTournament(league.id)
+  if (league !== undefined) {
+    tournaments = await handleTournament(league.id)
+  }
   return { league, session, tournaments }
 }
 
@@ -40,7 +24,7 @@ const PageCreationCenter = async () => {
     <main className="flex flex-col gap-4 mt-6 h-full">
       <Suspense fallback={<p>Cargando dashboard...</p>}>
         <div className="flex gap-4">
-          <ListLeagueUser tournaments={tournaments} />
+          <ListLeagueUser tournaments={tournaments} leagueId={league.id} />
           <ModalCreateLeague
             isEdit={league !== undefined}
             league={league}
@@ -49,7 +33,6 @@ const PageCreationCenter = async () => {
           />
         </div>
         <div className="border border-gray-800 flex flex-col gap-4 p-4 h-full">
-          <BottomCreateTournament />
           <section className="relative h-full">
             <Dashboard />
           </section>

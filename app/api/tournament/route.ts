@@ -4,31 +4,8 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 const supabase = createServerComponentClient({ cookies })
 
-export async function POST (request: NextRequest, response: NextResponse) {
-  let isOk: boolean = false
-  const { formData, award, idLeague, isEdit, idTournamentEdit } =
-    await request.json()
-  if (isEdit === true) {
-    await EditTournament(idTournamentEdit, supabase, idLeague, formData)
-    isOk = await EditAwards(supabase, idTournamentEdit, award)
-  } else {
-    const idTournament = await CreateTournament(supabase, idLeague, formData)
-    isOk = await CreateAwards(supabase, idTournament, award)
-  }
-  return NextResponse.json({ result: isOk })
-}
-
-export async function PUT (request: NextRequest, response: NextResponse) {
-  const { idTournamentEdit, formData, idLeague } = await request.json()
-  const isOk = await EditTournament(idTournamentEdit, supabase, idLeague, formData)
-  return NextResponse.json({ result: isOk })
-}
-
-async function CreateTournament (
-  supabase: any,
-  idLeague: string,
-  formData: any
-) {
+export async function POST (request: NextRequest) {
+  const { formData, idLeague } = await request.json()
   const { data, error } = await supabase
     .from('tournament')
     .insert({
@@ -37,16 +14,23 @@ async function CreateTournament (
       description: formData.description,
       category: formData.category,
       gender: formData.gender,
-      variant: formData.variant,
+      sub_category: formData.subCategory,
       contact_name: formData.contactName,
       contact_number: formData.contactNumber,
-      league_id: idLeague
+      league_id: idLeague,
+      isFlag: false
     })
-    .select('id')
+    .select('*')
   if (error !== null) {
     throw new Error('Se produjo un error al intentar crear el torneo')
   }
-  return data[0].id
+  return NextResponse.json({ result: data })
+}
+
+export async function PUT (request: NextRequest, response: NextResponse) {
+  const { idTournamentEdit, formData, idLeague } = await request.json()
+  const isOk = await EditTournament(idTournamentEdit, supabase, idLeague, formData)
+  return NextResponse.json({ result: isOk })
 }
 
 async function EditTournament (
