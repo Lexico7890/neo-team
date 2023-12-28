@@ -1,3 +1,5 @@
+'use client'
+
 import TooltipCustom from '@/app/components/client/tooltip-custom'
 import { Button } from '@/components/ui/button'
 import {
@@ -11,8 +13,22 @@ import {
 } from '@/components/ui/table'
 import { RiTeamFill } from 'react-icons/ri'
 import { CgInfo } from 'react-icons/cg'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useEffect, useState } from 'react'
 
-const TabTeams = () => {
+const TabTeams = ({ tournamentid }: { tournamentid: string }) => {
+  const [] = useState
+  const supabase = createClientComponentClient()
+  useEffect(() => {
+    const getDataTeams = async () => {
+      const { data, error } = await supabase.rpc('get_team_by_tournament_id', { tournamentid })
+      if (error !== null) {
+        throw new Error(`La consulta no fue exitosa ${error.message}`)
+      }
+      console.log('data ', data)
+    }
+    getDataTeams()
+  }, [])
   return (
     <section className="border h-full p-4">
       <article className="h-full w-full row-span-6">

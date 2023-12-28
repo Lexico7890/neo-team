@@ -17,7 +17,8 @@ const initialTournamentState = {
     nombre_categoria: '',
     nombre_genero: '',
     sub_categoria: '',
-    value: 0
+    value: 0,
+    isFiniched: false
   },
   tournamentSelect: {
     id: '',
@@ -30,6 +31,7 @@ export interface TournamentSlice {
   tournamentSelect: TournamentSelect
   setTournamentId: (tournament: TournamentSelect) => void
   resetTournament: () => void
+  setTournament: (tournament: Tournament) => void
 }
 
 export const createTournamentSlice: StateCreator<TournamentSlice> = (set) => {
@@ -43,6 +45,7 @@ export const createTournamentSlice: StateCreator<TournamentSlice> = (set) => {
     },
     resetTournament: () => {
       set(initialTournamentState)
-    }
+    },
+    setTournament: (tournament) => { set({ tournament }) }
   }
 }

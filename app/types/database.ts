@@ -140,18 +140,21 @@ export interface Database {
         Row: {
           created_at: string
           id: number
+          isFinished: boolean
           match_id: string | null
           team_id: string | null
         }
         Insert: {
           created_at?: string
           id?: number
+          isFinished: boolean
           match_id?: string | null
           team_id?: string | null
         }
         Update: {
           created_at?: string
           id?: number
+          isFinished?: boolean
           match_id?: string | null
           team_id?: string | null
         }
@@ -168,6 +171,90 @@ export interface Database {
             columns: ["team_id"]
             isOneToOne: false
             referencedRelation: "team"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      request_join_team_tournament: {
+        Row: {
+          accepted: boolean
+          created_at: string
+          id: string
+          isWaiting: boolean
+          team_id: string | null
+          tournament_id: string | null
+        }
+        Insert: {
+          accepted: boolean
+          created_at?: string
+          id?: string
+          isWaiting: boolean
+          team_id?: string | null
+          tournament_id?: string | null
+        }
+        Update: {
+          accepted?: boolean
+          created_at?: string
+          id?: string
+          isWaiting?: boolean
+          team_id?: string | null
+          tournament_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_join_team_tournament_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "team"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "request_join_team_tournament_tournament_id_fkey"
+            columns: ["tournament_id"]
+            isOneToOne: false
+            referencedRelation: "tournament"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      request_join_user_team: {
+        Row: {
+          accepted: boolean
+          created_at: string
+          id: string
+          isWaiting: boolean
+          team_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          accepted: boolean
+          created_at?: string
+          id?: string
+          isWaiting: boolean
+          team_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          accepted?: boolean
+          created_at?: string
+          id?: string
+          isWaiting?: boolean
+          team_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_join_user_team_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "team"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "request_join_user_team_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           }
         ]
@@ -221,6 +308,45 @@ export interface Database {
         Relationships: [
           {
             foreignKeyName: "sanction_tournament_id_fkey"
+            columns: ["tournament_id"]
+            isOneToOne: false
+            referencedRelation: "tournament"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      state_tournament: {
+        Row: {
+          created_at: string
+          id: string
+          payment_subscription: number | null
+          team_id: string | null
+          tournament_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          payment_subscription?: number | null
+          team_id?: string | null
+          tournament_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          payment_subscription?: number | null
+          team_id?: string | null
+          tournament_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "state_tournament_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "team"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "state_tournament_tournament_id_fkey"
             columns: ["tournament_id"]
             isOneToOne: false
             referencedRelation: "tournament"
@@ -300,18 +426,21 @@ export interface Database {
       team_user: {
         Row: {
           created_at: string
+          current_team: boolean
           id: number
           team_id: string | null
           user_id: string | null
         }
         Insert: {
           created_at?: string
+          current_team: boolean
           id?: number
           team_id?: string | null
           user_id?: string | null
         }
         Update: {
           created_at?: string
+          current_team?: boolean
           id?: number
           team_id?: string | null
           user_id?: string | null
@@ -342,10 +471,11 @@ export interface Database {
           description: string
           gender: string
           id: string
-          isFlag: boolean | null
+          isFiniched: boolean | null
+          isFlag: boolean
           league_id: string
           name: string
-          sub_category: string | null
+          sub_category: string
           value: number
         }
         Insert: {
@@ -356,10 +486,11 @@ export interface Database {
           description: string
           gender: string
           id?: string
-          isFlag?: boolean | null
+          isFiniched?: boolean | null
+          isFlag: boolean
           league_id: string
           name: string
-          sub_category?: string | null
+          sub_category: string
           value: number
         }
         Update: {
@@ -370,10 +501,11 @@ export interface Database {
           description?: string
           gender?: string
           id?: string
-          isFlag?: boolean | null
+          isFiniched?: boolean | null
+          isFlag?: boolean
           league_id?: string
           name?: string
-          sub_category?: string | null
+          sub_category?: string
           value?: number
         }
         Relationships: [
@@ -403,77 +535,6 @@ export interface Database {
             columns: ["sub_category"]
             isOneToOne: false
             referencedRelation: "sub_category"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      tournament_history: {
-        Row: {
-          created_at: string
-          final: string | null
-          id: number
-          start: string | null
-          team_id: string | null
-          tournament_id: string | null
-        }
-        Insert: {
-          created_at?: string
-          final?: string | null
-          id?: number
-          start?: string | null
-          team_id?: string | null
-          tournament_id?: string | null
-        }
-        Update: {
-          created_at?: string
-          final?: string | null
-          id?: number
-          start?: string | null
-          team_id?: string | null
-          tournament_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "tournament_history_team_id_fkey"
-            columns: ["team_id"]
-            isOneToOne: false
-            referencedRelation: "team"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "tournament_history_tournament_id_fkey"
-            columns: ["tournament_id"]
-            isOneToOne: false
-            referencedRelation: "tournament"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      user_log: {
-        Row: {
-          created_at: string
-          id: string
-          team: string | null
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          team?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          team?: string | null
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_log_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
             referencedColumns: ["id"]
           }
         ]
@@ -608,6 +669,18 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      get_team_by_tournament_id: {
+        Args: {
+          tournamentid: string
+        }
+        Returns: {
+          id: string
+          name: string
+          payment_subscription: number
+          games_played: number
+          players: number
+        }[]
+      }
       get_team_user_id: {
         Args: {
           userid: string
