@@ -27,7 +27,7 @@ const Dashboard = () => {
           <TabInformation />
         </TabsContent>
         <TabsContent value="account">
-          <TabTeams />
+          <TabTeams tournamentid={tournamentSelect.id}/>
         </TabsContent>
         <TabsContent value="password">
           <TabMatch />
