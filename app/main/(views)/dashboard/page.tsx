@@ -20,9 +20,8 @@ async function getData () {
 
 const DashboardPage = async () => {
   const { league, session, tournaments } = await getData()
-  console.log('entro')
   return (
-    <main className="flex flex-col gap-4 mt-6 h-full">
+    <main className="flex flex-col mt-6 h-full">
       <Suspense fallback={<p>Cargando dashboard...</p>}>
         <div>
         <ModalCreateLeague
