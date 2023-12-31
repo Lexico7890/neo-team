@@ -2,7 +2,6 @@
 
 import { type Tournament } from '@/app/types/tournament'
 import { useSupabaseStore } from '@/app/zustand/store'
-import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
