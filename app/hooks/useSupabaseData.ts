@@ -1,19 +1,21 @@
-import {
-  createServerComponentClient
-} from '@supabase/auth-helpers-nextjs'
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 
 const useSupabaseData = () => {
   const supabase = createServerComponentClient({ cookies })
 
   const handleSession = async () => {
-    const { data: { session } } = await supabase.auth.getSession()
+    const {
+      data: { session }
+    } = await supabase.auth.getSession()
     return session
   }
 
   const handleTournament = async (leagueid: string) => {
-    const { data, error: errorListTournament } =
-        await supabase.rpc('get_tournaments_id', { leagueid })
+    const { data, error: errorListTournament } = await supabase.rpc(
+      'get_tournaments_id',
+      { leagueid }
+    )
     if (errorListTournament !== null) {
       throw new Error('No se pudo completar la consulta de torneos')
     }
@@ -21,8 +23,10 @@ const useSupabaseData = () => {
   }
 
   const handleTournamentSelect = async (leagueid: string) => {
-    const { data, error: errorListTournament } =
-        await supabase.from('tournament').select('id, name').eq('league_id', leagueid)
+    const { data, error: errorListTournament } = await supabase
+      .from('tournament')
+      .select('id, name')
+      .eq('league_id', leagueid)
     if (errorListTournament !== null) {
       throw new Error('No se pudo completar la consulta de torneos')
     }
@@ -41,7 +45,9 @@ const useSupabaseData = () => {
   }
 
   const handleTournamentId = async (idt: string) => {
-    const { data, error } = await supabase.rpc('get_tournaments' as never).eq('id', idt)
+    const { data, error } = await supabase
+      .rpc('get_tournaments' as never)
+      .eq('id', idt)
     if (error !== null) {
       console.error(error.message)
       throw new Error('No se pudo completar la consulta de torneos')
