@@ -4,6 +4,7 @@ import { RiTeamFill } from 'react-icons/ri'
 import BarChart from './components/client/bar-chart'
 import useDashboardServerSupabase from '@/app/hooks/useDashboardServerSupabase'
 import { type TournamentGeneral } from '@/app/types/function/tournamentGeneral'
+import { type MatchShowCardTournament } from '@/app/types/function/matchShowCardTournament'
 
 const DATA = {
   options: {
@@ -23,9 +24,10 @@ const DATA = {
 }
 
 const Page = async ({ params }: { params: { id: string } }) => {
-  const { tournamentGeneralInfo } = useDashboardServerSupabase()
+  const { tournamentGeneralInfo, getMatchTournament } = useDashboardServerSupabase()
   const data: TournamentGeneral = await tournamentGeneralInfo(params.id)
-  console.log('data ', data)
+  const dataMatch: MatchShowCardTournament = await getMatchTournament(params.id)
+  console.log('Data ', dataMatch)
   return (
     <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-full lg:grid-rows-5">
       <article className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:col-span-2 gap-4 max-h-[112px] lg:row-start-1 lg:row-end-2">
@@ -42,13 +44,18 @@ const Page = async ({ params }: { params: { id: string } }) => {
         <BarChart data={DATA} />
       </article>
       <article className="flex flex-col gap-2 w-full overflow-auto border p-2 max-h-[500px] min-h-[400px] lg:row-start-2 lg:row-end-6">
-          <CardMatch
-            dateMatch="Sábado 10 FEB"
+        {
+          dataMatch.map((team) => (
+            <CardMatch
+            key={team.match_history_id}
+            dateMatch={team.date_game}
             imageTeamOne="https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Manchester_United_FC_crest.svg/800px-Manchester_United_FC_crest.svg.png"
             imageTeamTwo="https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/800px-Manchester_City_FC_badge.svg.png"
             nameTeamOne="Manchester United"
             nameTeamTwo="Manchester City"
           />
+          ))
+        }
       </article>
     </section>
   )
