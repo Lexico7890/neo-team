@@ -33,11 +33,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'award_tournament_id_fkey'
-            columns: ['tournament_id']
+            foreignKeyName: "award_tournament_id_fkey"
+            columns: ["tournament_id"]
             isOneToOne: false
-            referencedRelation: 'tournament'
-            referencedColumns: ['id']
+            referencedRelation: "tournament"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -101,11 +101,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'league_createdBy_fkey'
-            columns: ['createdBy']
+            foreignKeyName: "league_createdBy_fkey"
+            columns: ["createdBy"]
             isOneToOne: true
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -160,18 +160,18 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'match_history_match_id_fkey'
-            columns: ['match_id']
+            foreignKeyName: "match_history_match_id_fkey"
+            columns: ["match_id"]
             isOneToOne: false
-            referencedRelation: 'match'
-            referencedColumns: ['id']
+            referencedRelation: "match"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'match_history_team_id_fkey'
-            columns: ['team_id']
+            foreignKeyName: "match_history_team_id_fkey"
+            columns: ["team_id"]
             isOneToOne: false
-            referencedRelation: 'team'
-            referencedColumns: ['id']
+            referencedRelation: "team"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -202,18 +202,18 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'request_join_team_tournament_team_id_fkey'
-            columns: ['team_id']
+            foreignKeyName: "request_join_team_tournament_team_id_fkey"
+            columns: ["team_id"]
             isOneToOne: false
-            referencedRelation: 'team'
-            referencedColumns: ['id']
+            referencedRelation: "team"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'request_join_team_tournament_tournament_id_fkey'
-            columns: ['tournament_id']
+            foreignKeyName: "request_join_team_tournament_tournament_id_fkey"
+            columns: ["tournament_id"]
             isOneToOne: false
-            referencedRelation: 'tournament'
-            referencedColumns: ['id']
+            referencedRelation: "tournament"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -244,18 +244,18 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'request_join_user_team_team_id_fkey'
-            columns: ['team_id']
+            foreignKeyName: "request_join_user_team_team_id_fkey"
+            columns: ["team_id"]
             isOneToOne: false
-            referencedRelation: 'team'
-            referencedColumns: ['id']
+            referencedRelation: "team"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'request_join_user_team_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "request_join_user_team_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -307,11 +307,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'sanction_tournament_id_fkey'
-            columns: ['tournament_id']
+            foreignKeyName: "sanction_tournament_id_fkey"
+            columns: ["tournament_id"]
             isOneToOne: false
-            referencedRelation: 'tournament'
-            referencedColumns: ['id']
+            referencedRelation: "tournament"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -339,18 +339,18 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'state_tournament_team_id_fkey'
-            columns: ['team_id']
+            foreignKeyName: "state_tournament_team_id_fkey"
+            columns: ["team_id"]
             isOneToOne: false
-            referencedRelation: 'team'
-            referencedColumns: ['id']
+            referencedRelation: "team"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'state_tournament_tournament_id_fkey'
-            columns: ['tournament_id']
+            foreignKeyName: "state_tournament_tournament_id_fkey"
+            columns: ["tournament_id"]
             isOneToOne: false
-            referencedRelation: 'tournament'
-            referencedColumns: ['id']
+            referencedRelation: "tournament"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -447,18 +447,18 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'team_user_team_id_fkey'
-            columns: ['team_id']
+            foreignKeyName: "team_user_team_id_fkey"
+            columns: ["team_id"]
             isOneToOne: false
-            referencedRelation: 'team'
-            referencedColumns: ['id']
+            referencedRelation: "team"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'team_user_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "team_user_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -510,32 +510,32 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'tournament_category_fkey'
-            columns: ['category']
+            foreignKeyName: "tournament_category_fkey"
+            columns: ["category"]
             isOneToOne: false
-            referencedRelation: 'category'
-            referencedColumns: ['id']
+            referencedRelation: "category"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'tournament_gender_fkey'
-            columns: ['gender']
+            foreignKeyName: "tournament_gender_fkey"
+            columns: ["gender"]
             isOneToOne: false
-            referencedRelation: 'gender'
-            referencedColumns: ['id']
+            referencedRelation: "gender"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'tournament_league_id_fkey'
-            columns: ['league_id']
+            foreignKeyName: "tournament_league_id_fkey"
+            columns: ["league_id"]
             isOneToOne: false
-            referencedRelation: 'league'
-            referencedColumns: ['id']
+            referencedRelation: "league"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'tournament_sub_category_fkey'
-            columns: ['sub_category']
+            foreignKeyName: "tournament_sub_category_fkey"
+            columns: ["sub_category"]
             isOneToOne: false
-            referencedRelation: 'sub_category'
-            referencedColumns: ['id']
+            referencedRelation: "sub_category"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -572,18 +572,18 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'user_match_match_id_fkey'
-            columns: ['match_id']
+            foreignKeyName: "user_match_match_id_fkey"
+            columns: ["match_id"]
             isOneToOne: false
-            referencedRelation: 'match'
-            referencedColumns: ['id']
+            referencedRelation: "match"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'user_match_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "user_match_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -635,32 +635,32 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_gender_fkey'
-            columns: ['gender']
+            foreignKeyName: "users_gender_fkey"
+            columns: ["gender"]
             isOneToOne: false
-            referencedRelation: 'gender'
-            referencedColumns: ['id']
+            referencedRelation: "gender"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_id_fkey'
-            columns: ['id']
+            foreignKeyName: "users_id_fkey"
+            columns: ["id"]
             isOneToOne: true
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_position_id_fkey'
-            columns: ['position_id']
+            foreignKeyName: "users_position_id_fkey"
+            columns: ["position_id"]
             isOneToOne: false
-            referencedRelation: 'team_position'
-            referencedColumns: ['id']
+            referencedRelation: "team_position"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_rol_id_fkey'
-            columns: ['rol_id']
+            foreignKeyName: "users_rol_id_fkey"
+            columns: ["rol_id"]
             isOneToOne: false
-            referencedRelation: 'rol'
-            referencedColumns: ['id']
+            referencedRelation: "rol"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -669,23 +669,37 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      get_match_show_view_tournament: {
+        Args: {
+          tournamentid: string
+        }
+        Returns: {
+          team_id: string
+          tournament_id: string
+          name: string
+          match_history_id: number
+          image_team: string
+          match_id: string
+          date_game: string
+        }[]
+      }
       get_team_by_tournament_id: {
         Args: {
           tournamentid: string
         }
-        Returns: Array<{
+        Returns: {
           id: string
           name: string
           payment_subscription: number
           games_played: number
           players: number
-        }>
+        }[]
       }
       get_team_user_id: {
         Args: {
           userid: string
         }
-        Returns: Array<{
+        Returns: {
           id: string
           user_id: string
           created_at: string
@@ -694,59 +708,59 @@ export interface Database {
           main_color: string
           second_color: string
           campus: string
-        }>
+        }[]
       }
       get_tournament_count_info: {
         Args: {
           tournamentid: string
         }
-        Returns: Array<{
+        Returns: {
           total_teams: number
           total_payment_subscription: number
           total_players: number
           total_matches_played: number
-        }>
+        }[]
       }
       get_tournaments:
-      | {
-        Args: Record<PropertyKey, never>
-        Returns: Array<{
-          id: string
-          created_at: string
-          name: string
-          value: number
-          description: string
-          nombre_categoria: string
-          nombre_genero: string
-          sub_categoria: string
-          contact_name: string
-          contact_number: string
-          league_id: string
-        }>
-      }
-      | {
-        Args: {
-          tournamentid: string
-        }
-        Returns: Array<{
-          id: string
-          created_at: string
-          name: string
-          value: number
-          description: string
-          nombre_categoria: string
-          nombre_genero: string
-          sub_categoria: string
-          contact_name: string
-          contact_number: string
-          league_id: string
-        }>
-      }
+        | {
+            Args: Record<PropertyKey, never>
+            Returns: {
+              id: string
+              created_at: string
+              name: string
+              value: number
+              description: string
+              nombre_categoria: string
+              nombre_genero: string
+              sub_categoria: string
+              contact_name: string
+              contact_number: string
+              league_id: string
+            }[]
+          }
+        | {
+            Args: {
+              tournamentid: string
+            }
+            Returns: {
+              id: string
+              created_at: string
+              name: string
+              value: number
+              description: string
+              nombre_categoria: string
+              nombre_genero: string
+              sub_categoria: string
+              contact_name: string
+              contact_number: string
+              league_id: string
+            }[]
+          }
       get_tournaments_id: {
         Args: {
           leagueid: string
         }
-        Returns: Array<{
+        Returns: {
           id: string
           created_at: string
           name: string
@@ -758,7 +772,7 @@ export interface Database {
           contact_name: string
           contact_number: string
           league_id: string
-        }>
+        }[]
       }
     }
     Enums: {
@@ -772,80 +786,80 @@ export interface Database {
 
 export type Tables<
   PublicTableNameOrOptions extends
-  | keyof (Database['public']['Tables'] & Database['public']['Views'])
-  | { schema: keyof Database },
+    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions['schema']]['Tables'] &
-    Database[PublicTableNameOrOptions['schema']]['Views'])
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
     : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions['schema']]['Tables'] &
-    Database[PublicTableNameOrOptions['schema']]['Views'])[TableName] extends {
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
-      ? R
-      : never
-  : PublicTableNameOrOptions extends keyof (Database['public']['Tables'] &
-  Database['public']['Views'])
-    ? (Database['public']['Tables'] &
-      Database['public']['Views'])[PublicTableNameOrOptions] extends {
-        Row: infer R
-      }
-        ? R
-        : never
+    ? R
     : never
+  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
+      Database["public"]["Views"])
+  ? (Database["public"]["Tables"] &
+      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
-  | keyof Database['public']['Tables']
-  | { schema: keyof Database },
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
     : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
-    Insert: infer I
-  }
-    ? I
-    : never
-  : PublicTableNameOrOptions extends keyof Database['public']['Tables']
-    ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
-      ? I
-      : never
+    ? I
     : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : never
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
-  | keyof Database['public']['Tables']
-  | { schema: keyof Database },
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
     : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
-    Update: infer U
-  }
-    ? U
-    : never
-  : PublicTableNameOrOptions extends keyof Database['public']['Tables']
-    ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
-      ? U
-      : never
+    ? U
     : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : never
 
 export type Enums<
   PublicEnumNameOrOptions extends
-  | keyof Database['public']['Enums']
-  | { schema: keyof Database },
+    | keyof Database["public"]["Enums"]
+    | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions['schema']]['Enums']
+    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
     : never = never
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : PublicEnumNameOrOptions extends keyof Database['public']['Enums']
-    ? Database['public']['Enums'][PublicEnumNameOrOptions]
-    : never
+  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
+  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
+  : never
