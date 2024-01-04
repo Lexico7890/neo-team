@@ -9,11 +9,18 @@ const useDashboardServerSupabase = () => {
     if (error !== null) {
       throw new Error('No se pudo completar la consulta de torneos general')
     }
-    console.log('data2 ', data)
     return data
   }
 
-  return { tournamentGeneralInfo }
+  const getMatchTournament = async (tournamentid: string) => {
+    const { data, error } = await supabase.rpc('get_match_show_view_tournament', { tournamentid })
+    if (error !== null) {
+      throw new Error('No se pudo completar la consulta de torneos general')
+    }
+    return data
+  }
+
+  return { tournamentGeneralInfo, getMatchTournament }
 }
 
 export default useDashboardServerSupabase

@@ -23,9 +23,10 @@ const DATA = {
 }
 
 const Page = async ({ params }: { params: { id: string } }) => {
-  const { tournamentGeneralInfo } = useDashboardServerSupabase()
+  const { tournamentGeneralInfo, getMatchTournament } = useDashboardServerSupabase()
   const data: TournamentGeneral = await tournamentGeneralInfo(params.id)
-  console.log('data ', data)
+  const dataMatch: any = await getMatchTournament(params.id)
+  console.log('Data ', dataMatch)
   return (
     <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-full lg:grid-rows-5">
       <article className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:col-span-2 gap-4 max-h-[112px] lg:row-start-1 lg:row-end-2">
