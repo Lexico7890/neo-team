@@ -5,6 +5,9 @@ import BarChart from './components/client/bar-chart'
 import useDashboardServerSupabase from '@/app/hooks/useDashboardServerSupabase'
 import { type TournamentGeneral } from '@/app/types/function/tournamentGeneral'
 import { type MatchShowCardTournament } from '@/app/types/function/matchShowCardTournament'
+import { Suspense } from 'react'
+import BottomBack from './components/client/bottom-back'
+import HeaderShowTournament from './components/client/header-show-tournament'
 
 const DATA = {
   options: {
@@ -24,40 +27,94 @@ const DATA = {
 }
 
 const Page = async ({ params }: { params: { id: string } }) => {
-  const { tournamentGeneralInfo, getMatchTournament } = useDashboardServerSupabase()
+  const { tournamentGeneralInfo, getMatchTournament } =
+    useDashboardServerSupabase()
   const data: TournamentGeneral = await tournamentGeneralInfo(params.id)
-  const dataMatch: MatchShowCardTournament = await getMatchTournament(params.id)
-  console.log('Data ', dataMatch)
+  const dataMatch: MatchShowCardTournament = await getMatchTournament(
+    params.id
+  )
+  const array: Array<{
+    dateGame: string
+    oneTeamId: string
+    twoTeamId: string
+    nameTeamOne: string
+    nameTeamTwo: string
+    imageTeamOne: string
+    imageTeamTwo: string
+    matchId: string
+  }> = []
+  for (let i = 0; i < dataMatch.length; i++) {
+    // console.log(dataMatch[0].match_id, dataMatch[1].match_id)
+    if (i < dataMatch.length - 1 && i % 2 === 0) {
+      array.push({
+        oneTeamId: dataMatch[i].team_id,
+        twoTeamId: dataMatch[i + 1].team_id,
+        dateGame: dataMatch[i].date_game,
+        nameTeamOne: dataMatch[i].name,
+        nameTeamTwo: dataMatch[i + 1].name,
+        imageTeamOne: dataMatch[i].image_team,
+        imageTeamTwo: dataMatch[i + 1].image_team,
+        matchId: dataMatch[i].match_id
+      })
+    }
+  }
   return (
-    <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-full lg:grid-rows-5">
-      <article className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:col-span-2 gap-4 max-h-[112px] lg:row-start-1 lg:row-end-2">
-        <CardInformation title="equipos" icon={<RiTeamFill />} value={data[0].total_teams.toString()} />
-        <CardInformation title="partidos" icon={<RiTeamFill />} value={data[0].total_matches_played.toString()} />
-        <CardInformation
-          title="inscripción"
-          icon={<RiTeamFill />}
-          value={`$${data[0].total_payment_subscription.toString()}`}
-        />
-        <CardInformation title="Total jugadores" icon={<RiTeamFill />} value={data[0].total_players.toString()} />
-      </article>
-      <article className="app dark:text-black border flex justify-center items-center overflow-x-auto w-full max-h-[500px] min-h-[400px] lg:row-start-2 lg:row-end-6">
-        <BarChart data={DATA} />
-      </article>
-      <article className="flex flex-col gap-2 w-full overflow-auto border p-2 max-h-[500px] min-h-[400px] lg:row-start-2 lg:row-end-6">
-        {
-          dataMatch.map((team) => (
-            <CardMatch
-            key={team.match_history_id}
-            dateMatch={team.date_game}
-            imageTeamOne="https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Manchester_United_FC_crest.svg/800px-Manchester_United_FC_crest.svg.png"
-            imageTeamTwo="https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/800px-Manchester_City_FC_badge.svg.png"
-            nameTeamOne="Manchester United"
-            nameTeamTwo="Manchester City"
-          />
-          ))
-        }
-      </article>
-    </section>
+    <div className="flex flex-col gap-2">
+      <header className="p-2 flex justify-between">
+        <BottomBack />{' '}
+        <HeaderShowTournament />
+      </header>
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-full lg:grid-rows-5">
+        <Suspense fallback={<p>Cargando...</p>}>
+          <article className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:col-span-2 gap-4 max-h-[112px] lg:row-start-1 lg:row-end-2">
+            <CardInformation
+              title="equipos"
+              icon={<RiTeamFill />}
+              value={data[0].total_teams.toString()}
+            />
+            <CardInformation
+              title="partidos"
+              icon={<RiTeamFill />}
+              value={data[0].total_matches_played.toString()}
+            />
+            <CardInformation
+              title="inscripción"
+              icon={<RiTeamFill />}
+              value={`$${data[0].total_payment_subscription.toString()}`}
+            />
+            <CardInformation
+              title="Jugadores"
+              icon={<RiTeamFill />}
+              value={data[0].total_players.toString()}
+            />
+          </article>
+          <article className="app dark:text-black border flex justify-center items-center overflow-x-auto w-full max-h-[500px] min-h-[400px] lg:row-start-2 lg:row-end-6">
+            <BarChart data={DATA} />
+          </article>
+          <article className="flex flex-col gap-2 w-full overflow-auto border p-2 max-h-[500px] min-h-[400px] lg:row-start-2 lg:row-end-6">
+            {array.map(
+              ({
+                dateGame,
+                imageTeamOne,
+                imageTeamTwo,
+                matchId,
+                nameTeamOne,
+                nameTeamTwo
+              }) => (
+                <CardMatch
+                  key={matchId}
+                  dateMatch={dateGame}
+                  imageTeamOne={imageTeamOne}
+                  imageTeamTwo={imageTeamTwo}
+                  nameTeamOne={nameTeamOne}
+                  nameTeamTwo={nameTeamTwo}
+                />
+              )
+            )}
+          </article>
+        </Suspense>
+      </section>
+    </div>
   )
 }
 
