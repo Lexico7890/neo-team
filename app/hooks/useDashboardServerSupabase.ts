@@ -5,7 +5,9 @@ const useDashboardServerSupabase = () => {
   const supabase = createServerComponentClient({ cookies })
 
   const tournamentGeneralInfo = async (tournamentid: string): Promise<[]> => {
-    const { data, error } = await supabase.rpc('get_tournament_count_info', { tournamentid })
+    const { data, error } = await supabase.rpc('get_tournament_count_info', {
+      tournamentid
+    })
     if (error !== null) {
       throw new Error('No se pudo completar la consulta de torneos general')
     }
@@ -13,7 +15,10 @@ const useDashboardServerSupabase = () => {
   }
 
   const getMatchTournament = async (tournamentid: string) => {
-    const { data, error } = await supabase.rpc('get_match_show_view_tournament', { tournamentid })
+    const { data, error } = await supabase.rpc(
+      'get_match_show_view_tournament',
+      { tournamentid }
+    )
     if (error !== null) {
       throw new Error('No se pudo completar la consulta de torneos general')
     }
@@ -21,7 +26,10 @@ const useDashboardServerSupabase = () => {
   }
 
   const getTournament = async (tournamentid: string) => {
-    const { data, error } = await supabase.from('tournament').select('*').eq('id', tournamentid)
+    const { data, error } = await supabase
+      .from('tournament')
+      .select('*')
+      .eq('id', tournamentid)
     if (error !== null) {
       throw new Error('No se pudo completar la consulta de torneo')
     }
@@ -36,7 +44,36 @@ const useDashboardServerSupabase = () => {
     return data
   }
 
-  return { tournamentGeneralInfo, getMatchTournament, getTournamentState, getTournament }
+  const getAwardsOfTournament = async (tournamentid: string) => {
+    const { data, error } = await supabase
+      .from('award')
+      .select('*')
+      .eq('tournament_id', tournamentid)
+    if (error !== null) {
+      throw new Error('No se pudo completar la consulta de premios del torneo')
+    }
+    return data
+  }
+
+  const getSanctionOfTournament = async (tournamentid: string) => {
+    const { data, error } = await supabase
+      .from('sanction')
+      .select('*')
+      .eq('tournament_id', tournamentid)
+    if (error !== null) {
+      throw new Error('No se pudo completar la consulta de sanciones del torneo')
+    }
+    return data
+  }
+
+  return {
+    tournamentGeneralInfo,
+    getMatchTournament,
+    getTournamentState,
+    getTournament,
+    getAwardsOfTournament,
+    getSanctionOfTournament
+  }
 }
 
 export default useDashboardServerSupabase

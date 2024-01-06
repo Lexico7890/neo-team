@@ -18,7 +18,7 @@ const initialTournamentState = {
     nombre_genero: '',
     sub_categoria: '',
     value: 0,
-    isFiniched: false
+    state_id: ''
   },
   tournamentSelect: {
     id: '',
