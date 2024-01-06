@@ -20,7 +20,23 @@ const useDashboardServerSupabase = () => {
     return data
   }
 
-  return { tournamentGeneralInfo, getMatchTournament }
+  const getTournament = async (tournamentid: string) => {
+    const { data, error } = await supabase.from('tournament').select('*').eq('id', tournamentid)
+    if (error !== null) {
+      throw new Error('No se pudo completar la consulta de torneo')
+    }
+    return data[0]
+  }
+
+  const getTournamentState = async () => {
+    const { data, error } = await supabase.from('tournament_state').select('*')
+    if (error !== null) {
+      throw new Error('No se pudo completar la consulta de estado de torneos')
+    }
+    return data
+  }
+
+  return { tournamentGeneralInfo, getMatchTournament, getTournamentState, getTournament }
 }
 
 export default useDashboardServerSupabase

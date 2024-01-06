@@ -5,6 +5,7 @@ import { Suspense } from 'react'
 import { type Tournament } from '@/app/types/tournament'
 import TableListTournament from './components/server/table-list-tournament'
 import ModalCreateLeague from './createLeague/server/modal-create-league'
+import BottomCreateTournament from './components/client/bottom-create-tournament'
 
 async function getData () {
   let tournaments: Tournament[] = []
@@ -35,6 +36,9 @@ const DashboardPage = async () => {
         </div>
         </div>
       </Suspense>
+      <div className='absolute bottom-6 right-6'>
+      <BottomCreateTournament leagueId={league.id} />
+      </div>
     </main>
   )
 }
