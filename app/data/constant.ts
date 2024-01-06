@@ -27,6 +27,12 @@ export const INIT_TEAM_DATA = {
   imageTeam: ''
 }
 
+export const INIT_SANCTION_DATA = {
+  name: '',
+  description: '',
+  value: 0
+}
+
 export const COLORS_TEAM = [
   { name: 'rojo', color: '#FF0000' },
   { name: 'azul', color: '#0000FF' },

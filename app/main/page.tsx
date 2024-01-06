@@ -4,7 +4,7 @@ import LeagueList from '../components/server/league-list'
 const MainPage = () => {
   return (
     <main>
-      <div className="flex max-lg:flex-col w-full gap-3 p-3 mt-12 ">
+      <div className="flex max-lg:flex-col w-full gap-3 p-3">
         <Suspense fallback={<p>Cargando...</p>}>
           <LeagueList />
         </Suspense>

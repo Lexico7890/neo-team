@@ -17,7 +17,7 @@ interface Props {
 
 const LeagueCard = ({ name, image }: Props) => {
   return (
-    <Card>
+    <Card className='w-full'>
       <CardHeader className="text-3xl font-bold"><CardTitle>{name}</CardTitle></CardHeader>
       <CardContent className="flex flex-col sm:flex-row items-center gap-10 min-h-[124px]">
         <Image

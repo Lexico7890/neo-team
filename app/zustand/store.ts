@@ -10,6 +10,7 @@ import { type TournamentSlice, createTournamentSlice } from './tournament'
 import { type AwardSlice, createAwardSlice } from './award'
 import { type UserSlice, createUserSlice } from './user'
 import { devtools, persist } from 'zustand/middleware'
+import { type SanctionSlice, createSanctionSlice } from './sanction'
 
 const sliceResetFns = new Set<() => void>()
 
@@ -26,7 +27,8 @@ SubCategorySlice &
 LeagueSlice &
 TournamentSlice &
 AwardSlice &
-UserSlice
+UserSlice &
+SanctionSlice
 >()(
   devtools(
     persist((...a) => ({
@@ -34,7 +36,8 @@ UserSlice
       ...createLeagueSlice(...a),
       ...createTournamentSlice(...a),
       ...createAwardSlice(...a),
-      ...createUserSlice(...a)
+      ...createUserSlice(...a),
+      ...createSanctionSlice(...a)
     }), { name: 'supabaseStore' })
   )
 )

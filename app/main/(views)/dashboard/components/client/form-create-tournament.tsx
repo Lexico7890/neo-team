@@ -109,7 +109,6 @@ const FormCreateTournament = ({ leagueId, setOpen }: Props) => {
       if (errorSubCategory != null) {
         throw new Error(errorSubCategory.message)
       }
-      console.log('dataSubCategory ', dataSubCategory)
       dataSubCategory !== null && setSubCategory(dataSubCategory)
     }
     fetchSelects()

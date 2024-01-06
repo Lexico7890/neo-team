@@ -17,10 +17,10 @@ const HeaderShowTournament = async ({ id }: Props) => {
   return (
     <Menubar className="flex gap-2 text-sm px-4">
       <MenubarMenu>
-        <SheetAward />
+        <SheetAward id={id}/>
       </MenubarMenu>
       <MenubarMenu>
-        <SheetSanction />
+        <SheetSanction id={id}/>
       </MenubarMenu>
       <MenubarMenu>
         <InitTournament dataState={dataState} dataTournament={dataTournament}/>
