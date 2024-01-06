@@ -317,21 +317,21 @@ export interface Database {
       }
       state_tournament: {
         Row: {
-          created_at: string
+          created_at: string | null
           id: string
           payment_subscription: number | null
           team_id: string | null
           tournament_id: string
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           id?: string
           payment_subscription?: number | null
           team_id?: string | null
           tournament_id: string
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           id?: string
           payment_subscription?: number | null
           team_id?: string | null
@@ -423,6 +423,48 @@ export interface Database {
         }
         Relationships: []
       }
+      team_tournament: {
+        Row: {
+          created_at: string
+          id: string
+          isFlag: boolean | null
+          team_id: string | null
+          total_inscription: number | null
+          tournament_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          isFlag?: boolean | null
+          team_id?: string | null
+          total_inscription?: number | null
+          tournament_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          isFlag?: boolean | null
+          team_id?: string | null
+          total_inscription?: number | null
+          tournament_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_tournament_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "team"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_tournament_tournament_id_fkey"
+            columns: ["tournament_id"]
+            isOneToOne: false
+            referencedRelation: "tournament"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       team_user: {
         Row: {
           created_at: string
@@ -471,10 +513,10 @@ export interface Database {
           description: string
           gender: string
           id: string
-          isFiniched: boolean | null
           isFlag: boolean
           league_id: string
           name: string
+          state_id: string
           sub_category: string
           value: number
         }
@@ -486,10 +528,10 @@ export interface Database {
           description: string
           gender: string
           id?: string
-          isFiniched?: boolean | null
           isFlag: boolean
           league_id: string
           name: string
+          state_id: string
           sub_category: string
           value: number
         }
@@ -501,10 +543,10 @@ export interface Database {
           description?: string
           gender?: string
           id?: string
-          isFiniched?: boolean | null
           isFlag?: boolean
           league_id?: string
           name?: string
+          state_id?: string
           sub_category?: string
           value?: number
         }
@@ -531,6 +573,13 @@ export interface Database {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "tournament_state_id_fkey"
+            columns: ["state_id"]
+            isOneToOne: false
+            referencedRelation: "tournament_state"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "tournament_sub_category_fkey"
             columns: ["sub_category"]
             isOneToOne: false
@@ -538,6 +587,24 @@ export interface Database {
             referencedColumns: ["id"]
           }
         ]
+      }
+      tournament_state: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
       }
       user_match: {
         Row: {

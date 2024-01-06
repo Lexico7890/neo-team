@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog'
 import FormCreateTournament from './form-create-tournament'
 import { useState } from 'react'
-import { GoPlusCircle } from 'react-icons/go'
+import { FaPlus } from 'react-icons/fa'
 
 interface Props {
   leagueId: string
@@ -22,7 +22,7 @@ const BottomCreateTournament = ({ leagueId }: Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant='ghost' className='w-full flex gap-2 justify-start'><GoPlusCircle /><span>Nuevo torneo</span></Button>
+        <Button variant='outline' size='lg'><FaPlus /></Button>
       </DialogTrigger>
       <DialogContent className="sm:h-3/4 sm:w-3/4 max-w-none h-full overflow-auto">
         <DialogHeader>

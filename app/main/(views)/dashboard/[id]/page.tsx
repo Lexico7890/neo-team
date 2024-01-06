@@ -62,7 +62,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
     <div className="flex flex-col gap-2">
       <header className="p-2 flex justify-between">
         <BottomBack />{' '}
-        <HeaderShowTournament />
+        <HeaderShowTournament id={params.id} />
       </header>
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-full lg:grid-rows-5">
         <Suspense fallback={<p>Cargando...</p>}>
@@ -80,7 +80,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
             <CardInformation
               title="inscripción"
               icon={<RiTeamFill />}
-              value={`$${data[0].total_payment_subscription.toString()}`}
+              value={data[0].total_payment_subscription === null ? '0' : `$${data[0].total_payment_subscription.toString()}`}
             />
             <CardInformation
               title="Jugadores"
@@ -92,15 +92,16 @@ const Page = async ({ params }: { params: { id: string } }) => {
             <BarChart data={DATA} />
           </article>
           <article className="flex flex-col gap-2 w-full overflow-auto border p-2 max-h-[500px] min-h-[400px] lg:row-start-2 lg:row-end-6">
-            {array.map(
-              ({
-                dateGame,
-                imageTeamOne,
-                imageTeamTwo,
-                matchId,
-                nameTeamOne,
-                nameTeamTwo
-              }) => (
+            {array.length > 0
+              ? (array.map(
+                  ({
+                    dateGame,
+                    imageTeamOne,
+                    imageTeamTwo,
+                    matchId,
+                    nameTeamOne,
+                    nameTeamTwo
+                  }) => (
                 <CardMatch
                   key={matchId}
                   dateMatch={dateGame}
@@ -109,8 +110,9 @@ const Page = async ({ params }: { params: { id: string } }) => {
                   nameTeamOne={nameTeamOne}
                   nameTeamTwo={nameTeamTwo}
                 />
-              )
-            )}
+                  )
+                ))
+              : <div className='h-full flex justify-center items-center text-lg font-bold'>No hay partidos creados hasta el momento</div>}
           </article>
         </Suspense>
       </section>
