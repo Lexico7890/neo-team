@@ -35,7 +35,6 @@ const LeagueSchema = object({
 interface Props {
   league: League
   isEdit: boolean
-  isOpen: boolean | undefined
   idUser: string
 }
 
@@ -43,13 +42,12 @@ type LeagueData = Output<typeof LeagueSchema>
 
 async function Fetch (
   formData: any,
-  isEdit: boolean,
-  idUser?: string,
-  informationLeague?: any
+  idUser: string,
+  imageUrl?: any
 ) {
   const result = await fetch('/api/league', {
     method: 'POST',
-    body: JSON.stringify({ formData, idUser, isEdit, informationLeague })
+    body: JSON.stringify({ formData, idUser, imageUrl })
   })
   if (!result.ok) {
     throw new Error(result.statusText)
@@ -57,12 +55,29 @@ async function Fetch (
   return await result.json()
 }
 
-const ModalCreateLeague = ({ league, isEdit, isOpen, idUser }: Props) => {
+async function FetchEdit (
+  formData: any,
+  idUser: string,
+  imageUrl?: any
+) {
+  console.log(formData, imageUrl)
+  /* const result = await fetch('/api/league', {
+    method: 'POST',
+    body: JSON.stringify({ formData, idUser, isEdit, informationLeague })
+  })
+  if (!result.ok) {
+    throw new Error(result.statusText)
+  }
+  return await result.json() */
+}
+
+const ModalCreateLeague = ({ league, isEdit, idUser }: Props) => {
+  const [open, setOpen] = useState<boolean>(false)
   const [formData, setFormData] = useState<LeagueData>({
     nameLeague: '',
     imageLeague: ''
   })
-  const [getLeague] = useSupabaseStore((state) => [state.getLeague])
+  const [setLeague, resetLeague] = useSupabaseStore((state) => [state.setLeague, state.resetLeague])
   const [imageLeague, setImage] = useState<File | undefined>()
   const [extensionImage, setExtensionImage] = useState<string | undefined>('')
   const [isBlock, setBlock] = useState<boolean>(false)
@@ -80,6 +95,10 @@ const ModalCreateLeague = ({ league, isEdit, isOpen, idUser }: Props) => {
         nameLeague: league.name,
         imageLeague: league.url_image ?? ''
       })
+      setLeague(league)
+    } else {
+      resetLeague()
+      setOpen(true)
     }
   }, [league])
 
@@ -88,19 +107,19 @@ const ModalCreateLeague = ({ league, isEdit, isOpen, idUser }: Props) => {
     try {
       parse(LeagueSchema, formData)
       setBlock(true)
-      chargeImageSupabase(imageLeague, extensionImage, 'imageLeague')
-      // const id = session?.user.id
-      toast.promise(Fetch(formData, isEdit, idUser, league), {
+      const url = await chargeImageSupabase(imageLeague, extensionImage, 'imageLeague')
+      toast.promise(isEdit ? FetchEdit(formData, idUser, url) : Fetch(formData, idUser, url), {
         loading: 'Creando la liga, un momento por favor...',
-        success: () => {
-          getLeague()
-          setTimeout(() => {
-            setBlock(false)
-            // handleCreateLeague()
-          }, 2000)
+        success: (data) => {
+          setLeague(data.result[0])
+          setOpen(false)
+          setBlock(false)
           return 'Liga creada con éxito'
         },
-        error: 'No se pudo crear la liga, comuníquese con el administrador'
+        error: (err) => {
+          setBlock(false)
+          throw new Error(err)
+        }
       })
     } catch (error: any) {
       toast.error(error.message)
@@ -109,7 +128,7 @@ const ModalCreateLeague = ({ league, isEdit, isOpen, idUser }: Props) => {
   }
 
   return (
-    <Dialog open={isOpen}>
+    <Dialog open={open} onOpenChange={setOpen} >
       <DialogTrigger asChild>
         <Button variant="outline">Mi Liga</Button>
       </DialogTrigger>
@@ -144,45 +163,3 @@ const ModalCreateLeague = ({ league, isEdit, isOpen, idUser }: Props) => {
 }
 
 export default memo(ModalCreateLeague)
-
-/**
- * <Modal backdrop="blur" isOpen={true} hideCloseButton={league.id === '' ?? true}>
-      <ModalContent>
-        {(onClose) => (
-          <>
-          <form onSubmit={(e) => { handleSubmit(e) }}>
-          <ModalHeader className="flex flex-col gap-1">
-              Acción Requerida
-            </ModalHeader>
-            <ModalBody>
-              <p>
-                El sistema no detecta una liga registrada por usted, por favor
-                antes de continuar se debe agregar una liga,
-              </p>
-              <LeagueContainer
-                formData={formData}
-                handleChargeImage={handleChargeImage}
-                setFormData={setFormData}
-              />
-            </ModalBody>
-            <ModalFooter>
-              <Button color="danger" variant="light" onPress={() => {
-              }} isDisabled={league.id === '' ?? true}>
-                Close
-              </Button>
-              <Button
-                color="primary"
-                variant="ghost"
-                className="hover:text-white"
-                type="submit"
-                isDisabled={isBlock}
-              >
-                Enviar
-              </Button>
-            </ModalFooter>
-          </form>
-          </>
-        )}
-      </ModalContent>
-    </Modal>
- */

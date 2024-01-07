@@ -22,8 +22,8 @@ const LeagueCard = ({ name, image }: Props) => {
       <CardContent className="flex flex-col sm:flex-row items-center gap-10 min-h-[124px]">
         <Image
           src={image ?? ''}
-          height={100}
-          width={100}
+          height={170}
+          width={170}
           alt="Logo de la liga"
           className='sm:ml-6'
         />

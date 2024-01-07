@@ -3,7 +3,7 @@ import { type StateCreator } from 'zustand'
 import { type Category } from '../types/category'
 import { type Gender } from '../types/gender'
 import { type SubCategory } from '../types/sub-category'
-import useInstanceSupabaseServer from '../hooks/useInstanceSupabaseServer'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 export interface CategorySlice {
   category: Category[]
@@ -20,7 +20,7 @@ export interface SubCategorySlice {
   getSubCategory: () => void
 }
 
-const { supabase } = useInstanceSupabaseServer()
+const supabase = createClientComponentClient()
 
 export const createFilter: StateCreator<CategorySlice & GenderSlice & SubCategorySlice> = (set) => ({
   category: [{ id: '', created_at: '', name: '' }],
