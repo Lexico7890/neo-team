@@ -1,4 +1,4 @@
-import { type Output, maxLength, minLength, minValue, number, object, string } from 'valibot'
+import { type Output, maxLength, minLength, minValue, number, object, string, nullable } from 'valibot'
 
 export const TournamentSchema = object({
   nameTournament: string('Debe agregar un nombre al torneo', [
@@ -31,7 +31,8 @@ export const TournamentSchema = object({
   contactNumber: string('Debe agregar un numero de contacto', [
     minLength(7, 'Numero de contacto invalido'),
     maxLength(10, 'Numero de contacto invalido')
-  ])
+  ]),
+  state_id: nullable(string())
 })
 
 export type TournamentData = Output<typeof TournamentSchema>

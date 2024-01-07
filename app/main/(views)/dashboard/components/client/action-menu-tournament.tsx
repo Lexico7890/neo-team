@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import Link from 'next/link'
-import { SlOptions } from 'react-icons/sl'
+import { CiMenuKebab } from 'react-icons/ci'
 
 interface Props {
   tournament: Tournament
@@ -25,7 +25,7 @@ const ActionMenuTournament = ({ tournament }: Props) => {
   }
   return (
     <DropdownMenu onOpenChange={() => { handleSetTournament(tournament) }}>
-      <DropdownMenuTrigger ><SlOptions /></DropdownMenuTrigger>
+      <DropdownMenuTrigger ><CiMenuKebab size={35} /></DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>Acciones</DropdownMenuLabel>
         <DropdownMenuSeparator />

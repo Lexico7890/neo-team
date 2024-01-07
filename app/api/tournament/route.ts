@@ -28,8 +28,19 @@ export async function POST (request: NextRequest) {
 }
 
 export async function PUT (request: NextRequest, response: NextResponse) {
-  const { tournamentId, newState, field } = await request.json()
-  const { data, error } = await supabase.from('tournament').update({ state_id: newState }).eq('id', tournamentId).select('*')
+  const { formData, tournamentId } = await request.json()
+  const { data, error } = await supabase.from('tournament').update({
+    name: formData.nameTournament,
+    value: formData.valueTournament,
+    description: formData.description,
+    category: formData.category,
+    gender: formData.gender,
+    sub_category: formData.subCategory,
+    contact_name: formData.contactName,
+    contact_number: formData.contactNumber,
+    isFlag: false,
+    state_id: formData.stateId
+  }).eq('id', tournamentId).select('*')
   if (error !== null) {
     throw new Error('Se produjo un error al intentar crear el torneo')
   }

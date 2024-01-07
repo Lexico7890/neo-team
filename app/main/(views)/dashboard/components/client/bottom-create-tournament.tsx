@@ -10,18 +10,23 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog'
 import FormCreateTournament from './form-create-tournament'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
+import { useSupabaseStore } from '@/app/zustand/store'
 
-interface Props {
-  leagueId: string
-}
-
-const BottomCreateTournament = ({ leagueId }: Props) => {
+const BottomCreateTournament = () => {
   const [open, setOpen] = useState(false)
+  const [disabledBottom, setDisabledBottom] = useState<boolean>(true)
+  const [league] = useSupabaseStore((state) => [state.league])
+
+  useEffect(() => {
+    if (league.id !== '') {
+      setDisabledBottom(false)
+    }
+  }, [league])
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+      <DialogTrigger asChild disabled={disabledBottom}>
         <Button variant='outline' size='lg'><FaPlus /></Button>
       </DialogTrigger>
       <DialogContent className="sm:h-3/4 sm:w-3/4 max-w-none h-full overflow-auto">
@@ -31,7 +36,7 @@ const BottomCreateTournament = ({ leagueId }: Props) => {
             Ingresa la información necesaria para iniciar un nuevo torneo
           </DialogDescription>
         </DialogHeader>
-        <FormCreateTournament leagueId={leagueId} setOpen={setOpen}/>
+        <FormCreateTournament leagueId={league.id} setOpen={setOpen} isEdit={false}/>
       </DialogContent>
     </Dialog>
   )

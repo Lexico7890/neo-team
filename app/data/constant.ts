@@ -6,7 +6,8 @@ export const INIT_FORM_DATA = {
   gender: '',
   subCategory: '',
   contactName: '',
-  contactNumber: ''
+  contactNumber: '',
+  state_id: null
 }
 
 export const INIT_USER_DATA = {
