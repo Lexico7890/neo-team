@@ -49,8 +49,7 @@ const useInstanceSupabaseServer = () => {
       .rpc('get_tournaments' as never)
       .eq('id', idt)
     if (error !== null) {
-      console.error(error.message)
-      throw new Error('No se pudo completar la consulta de torneos')
+      throw new Error(error.message)
     }
     return data
   }

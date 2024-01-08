@@ -62,8 +62,8 @@ const FormCreateTournament = ({
   tournamentId
 }: Props) => {
   const [formData, setFormData] = useState<TournamentData>(INIT_FORM_DATA)
-  const [setTournamentId] = useSupabaseStore((state) => [
-    state.setTournamentId
+  const [setTournamentList] = useSupabaseStore((state) => [
+    state.setTournamentList
   ])
 
   const { dataTournament } = useInstanceSupabaseClient(tournamentId)
@@ -75,7 +75,7 @@ const FormCreateTournament = ({
       toast.promise(isEdit ? FetchEdit(formData, leagueId) : Fetch(formData, leagueId), {
         loading: 'Creando torneo, un momento por favor...',
         success: (data) => {
-          setTournamentId(data.result[0])
+          setTournamentList(data.result)
           setOpen(false)
           return 'Torneo creado con éxito'
         },

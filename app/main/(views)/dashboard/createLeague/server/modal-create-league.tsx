@@ -57,18 +57,18 @@ async function Fetch (
 
 async function FetchEdit (
   formData: any,
-  idUser: string,
-  imageUrl?: any
+  leagueId: string,
+  imageUrl?: string
 ) {
   console.log(formData, imageUrl)
-  /* const result = await fetch('/api/league', {
-    method: 'POST',
-    body: JSON.stringify({ formData, idUser, isEdit, informationLeague })
+  const result = await fetch('/api/league', {
+    method: 'PUT',
+    body: JSON.stringify({ formData, imageUrl, leagueId })
   })
   if (!result.ok) {
     throw new Error(result.statusText)
   }
-  return await result.json() */
+  return await result.json()
 }
 
 const ModalCreateLeague = ({ league, isEdit, idUser }: Props) => {
@@ -108,13 +108,13 @@ const ModalCreateLeague = ({ league, isEdit, idUser }: Props) => {
       parse(LeagueSchema, formData)
       setBlock(true)
       const url = await chargeImageSupabase(imageLeague, extensionImage, 'imageLeague')
-      toast.promise(isEdit ? FetchEdit(formData, idUser, url) : Fetch(formData, idUser, url), {
+      toast.promise(isEdit ? FetchEdit(formData, league.id, url) : Fetch(formData, idUser, url), {
         loading: 'Creando la liga, un momento por favor...',
         success: (data) => {
           setLeague(data.result[0])
           setOpen(false)
           setBlock(false)
-          return 'Liga creada con éxito'
+          return isEdit ? 'Liga modificada con éxito' : 'Liga creada con éxito'
         },
         error: (err) => {
           setBlock(false)

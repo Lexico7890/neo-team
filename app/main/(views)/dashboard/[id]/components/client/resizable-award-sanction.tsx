@@ -47,8 +47,6 @@ const ResizableAwardSanction = ({ dataAwards, dataSanction }: Props) => {
     setSanctionArray(dataSanction)
   }, [dataAwards, dataSanction])
 
-  console.log(dataSanction)
-
   return (
     <ResizablePanelGroup
       direction="horizontal"
