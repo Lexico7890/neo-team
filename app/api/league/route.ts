@@ -2,9 +2,8 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { type NextRequest, NextResponse } from 'next/server'
 
-const supabase = createServerComponentClient({ cookies })
-
 export async function POST (request: NextRequest, response: NextResponse) {
+  const supabase = createServerComponentClient({ cookies })
   const { formData, idUser, imageUrl } = await request.json()
   const { data, error } = await supabase
     .from('league')
@@ -29,25 +28,20 @@ export async function POST (request: NextRequest, response: NextResponse) {
   return NextResponse.json({ result: data })
 }
 
-async function UpdateLeague (
-  supabase: any,
-  informationLeague: any,
-  nameLeague: string,
-  image: File
-) {
+export async function PUT (request: NextRequest, response: NextResponse) {
+  const supabase = createServerComponentClient({ cookies })
+  const { formData, imageUrl, leagueId } = await request.json()
+  console.log(formData, imageUrl, leagueId)
   const { data: league, error } = await supabase
     .from('league')
     .update({
-      id: informationLeague.id,
-      name: nameLeague,
-      url_image: image,
-      createdBy: informationLeague.createdBy,
-      created_at: informationLeague.created_at
+      name: formData.nameLeague,
+      url_image: imageUrl
     })
-    .eq('id', informationLeague.id)
+    .eq('id', leagueId)
     .select('*')
   if (error !== null) {
     return error.code
   }
-  return league[0]
+  return NextResponse.json({ result: league })
 }

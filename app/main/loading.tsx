@@ -1,9 +1,9 @@
 import React from 'react'
-import FootyBallLogo from './assets/footy-ball-logo'
+import FootyBallLogo from '../assets/footy-ball-logo'
 
-const LoadingPage = () => {
+const LoadingMain = () => {
   return (
-    <div className='h-screen flex justify-center items-center'>
+    <div className='h-full flex justify-center items-center'>
       <div className='flex flex-col items-center font-semibold text-lg'>
         <FootyBallLogo height={300} width={300}/>
         Cargando informacion, por favor espere....
@@ -12,4 +12,4 @@ const LoadingPage = () => {
   )
 }
 
-export default LoadingPage
+export default LoadingMain
