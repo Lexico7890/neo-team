@@ -14,6 +14,7 @@ async function getData (): Promise<League[]> {
 
 export default async function LeagueList () {
   const data = await getData()
+  console.log('data ', data)
   return (
     <>
       {data?.map((item) => (
