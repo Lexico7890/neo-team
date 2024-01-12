@@ -2,6 +2,16 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { type NextRequest, NextResponse } from 'next/server'
 
+export async function GET () {
+  const supabase = createServerComponentClient({ cookies })
+  const { data, error } = await supabase.from('league').select('*')
+  if (error !== null) {
+    throw new Error(error.message)
+  }
+  console.log('l ', data)
+  return NextResponse.json({ result: data })
+}
+
 export async function POST (request: NextRequest, response: NextResponse) {
   const supabase = createServerComponentClient({ cookies })
   const { formData, idUser, imageUrl } = await request.json()
