@@ -6,7 +6,7 @@ const DashboardPage = () => {
   return (
     <main className="flex flex-col h-full">
       <Suspense fallback={<div>Loading...</div>}>
-      <ComponentDashboard />
+        <ComponentDashboard />
       </Suspense>
       <div className="absolute bottom-6 right-6">
         <BottomCreateTournament />
