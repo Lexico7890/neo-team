@@ -23,7 +23,6 @@ interface Props {
   tournamentData: Tournament[]
 }
 const ComponentListTournament = ({ tournamentData }: Props) => {
-  console.log('tour ', tournamentData)
   const [currentTournament, setCurrentTournament] = useState<Tournament[]>([])
   const [tournament, setTournamentList, resetTournament] = useSupabaseStore(
     (state) => [
@@ -44,7 +43,8 @@ const ComponentListTournament = ({ tournamentData }: Props) => {
   }, [tournament])
 
   return (
-    <Table>
+    <section className="border h-full rounded-lg overflow-auto">
+      <Table>
       <TableCaption>Lista de los torneos creados</TableCaption>
       <TableHeader>
         <TableRow>
@@ -79,6 +79,7 @@ const ComponentListTournament = ({ tournamentData }: Props) => {
         ))}
       </TableBody>
     </Table>
+    </section>
   )
 }
 
