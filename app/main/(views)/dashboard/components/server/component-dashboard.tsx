@@ -4,7 +4,6 @@ import { redirect } from 'next/navigation'
 import { type League } from '@/app/types/league'
 import ModalCreateLeague from '../../createLeague/server/modal-create-league'
 import ComponentListTournament from './component-list-tournament'
-import { Suspense } from 'react'
 
 export default async function ComponentDashboard () {
   let tournaments: Tournament[] = []
@@ -38,17 +37,7 @@ export default async function ComponentDashboard () {
         league={league}
         idUser={session.user.id}
       />
-      <Suspense fallback={<div>Loading...</div>}>
-        <ComponentListTournament tournamentData={tournaments} />
-      </Suspense>
+      <ComponentListTournament tournamentData={tournaments} />
     </div>
   )
 }
-
-/**
- * <ModalCreateLeague
-        isEdit={league !== undefined}
-        league={league}
-        idUser={session.user.id}
-      />
- */

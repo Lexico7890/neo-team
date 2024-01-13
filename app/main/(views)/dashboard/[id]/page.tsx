@@ -64,12 +64,12 @@ const Page = async ({ params }: { params: { id: string } }) => {
     }
   }
   return (
-    <div className="flex flex-col gap-2 h-full">
+    <div className="flex flex-col gap-2 h-full ">
       <header className="p-2 flex justify-between">
         <BottomBack />{' '}
         <HeaderShowTournament id={params.id} />
       </header>
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-full lg:grid-rows-6">
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-full">
         <Suspense fallback={<p>Cargando...</p>}>
           <article className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:col-span-2 gap-4 lg:max-h-[112px] lg:row-start-1 lg:row-end-2">
             <CardInformation
@@ -93,12 +93,12 @@ const Page = async ({ params }: { params: { id: string } }) => {
               value={data[0].total_players.toString()}
             />
           </article>
-          <article className="flex justify-center items-center w-full min-h-[400px] h-full row-start-2 row-end-7">
+          <article className="flex justify-center items-center w-full min-h-[400px] row-start-2 row-end-7">
             <ResizableAwardSanction dataAwards={dataAwards} dataSanction={dataSanction}/>
           {/* <div className='h-full flex justify-center items-center text-lg font-bold'>No hay datos que mostrar</div> */}
             {/* <BarChart data={DATA} /> */}
           </article>
-          <article className="flex flex-col gap-2 w-full overflow-auto border p-2 min-h-[400px] h-full lg:row-start-2 lg:row-end-7">
+          <article className="flex flex-col gap-2 w-full overflow-auto border p-2 min-h-[400px] lg:row-start-2 lg:row-end-7">
             {array.length > 0
               ? (array.map(
                   ({
