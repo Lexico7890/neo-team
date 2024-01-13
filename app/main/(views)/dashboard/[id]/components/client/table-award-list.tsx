@@ -10,12 +10,17 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
+import ButtonDeleteItem from './button-delete-item'
 
 interface Props {
   currentAward: Award[]
 }
 
 const TableAwardList = ({ currentAward }: Props) => {
+
+  const handleDeleteItem () => {
+    
+  }
   return (
     <Table>
       <TableCaption>Premiaciones creadas</TableCaption>
@@ -23,6 +28,7 @@ const TableAwardList = ({ currentAward }: Props) => {
         <TableRow>
           <TableHead>Nombre</TableHead>
           <TableHead>Valor</TableHead>
+          <TableHead>Eliminar</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -30,6 +36,7 @@ const TableAwardList = ({ currentAward }: Props) => {
           <TableRow key={id}>
             <TableCell>{name}</TableCell>
             <TableCell>{value}</TableCell>
+            <TableCell><ButtonDeleteItem handleClick={handleDeleteItem}/></TableCell>
           </TableRow>
         ))}
       </TableBody>
