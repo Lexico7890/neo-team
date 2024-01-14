@@ -284,7 +284,7 @@ export interface Database {
         Row: {
           created_at: string
           description: string | null
-          id: number
+          id: string
           name: string | null
           tournament_id: string | null
           value: number | null
@@ -292,7 +292,7 @@ export interface Database {
         Insert: {
           created_at?: string
           description?: string | null
-          id?: number
+          id?: string
           name?: string | null
           tournament_id?: string | null
           value?: number | null
@@ -300,7 +300,7 @@ export interface Database {
         Update: {
           created_at?: string
           description?: string | null
-          id?: number
+          id?: string
           name?: string | null
           tournament_id?: string | null
           value?: number | null
@@ -516,7 +516,7 @@ export interface Database {
           isFlag: boolean
           league_id: string
           name: string
-          state_id: string
+          state_id: string | null
           sub_category: string
           value: number
         }
@@ -531,7 +531,7 @@ export interface Database {
           isFlag: boolean
           league_id: string
           name: string
-          state_id: string
+          state_id?: string | null
           sub_category: string
           value: number
         }
@@ -546,7 +546,7 @@ export interface Database {
           isFlag?: boolean
           league_id?: string
           name?: string
-          state_id?: string
+          state_id?: string | null
           sub_category?: string
           value?: number
         }

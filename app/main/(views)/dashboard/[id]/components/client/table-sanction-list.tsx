@@ -10,12 +10,33 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
+import ButtonDeleteItem from './button-delete-item'
 
 interface Props {
   currentSanction: Sanction[]
+  setKeepDelete: (value: boolean) => void
+  setSelectedId: (value: string) => void
+  setDeleteTable: (value: 'award' | 'sanction') => void
 }
 
-const TableSanctionList = ({ currentSanction }: Props) => {
+const TableSanctionList = ({
+  currentSanction, setKeepDelete,
+  setSelectedId,
+  setDeleteTable
+}: Props) => {
+  const handleMouseDown = (id: string) => {
+    setDeleteTable('sanction')
+    setSelectedId(id)
+    setKeepDelete(true)
+  }
+
+  const handleMouseUpCapture = () => {
+    setKeepDelete(false)
+  }
+
+  const handleMouseLeave = () => {
+    setKeepDelete(false)
+  }
   return (
     <Table>
       <TableCaption>Sanciones creadas</TableCaption>
@@ -23,6 +44,7 @@ const TableSanctionList = ({ currentSanction }: Props) => {
         <TableRow>
           <TableHead>Nombre</TableHead>
           <TableHead>Valor</TableHead>
+          <TableHead>Eliminar</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -31,6 +53,16 @@ const TableSanctionList = ({ currentSanction }: Props) => {
             <TableCell>{name}</TableCell>
             <TableCell>{description}</TableCell>
             <TableCell>{value}</TableCell>
+            <TableCell>
+              <ButtonDeleteItem
+                handleMouseDown={() => {
+                  handleMouseDown(id)
+                }}
+                handleMouseLeave={handleMouseLeave}
+                handleMouseUpCapture={handleMouseUpCapture}
+                setKeepDelete={setKeepDelete}
+              />
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
