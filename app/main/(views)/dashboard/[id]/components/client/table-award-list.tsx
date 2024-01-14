@@ -14,12 +14,29 @@ import ButtonDeleteItem from './button-delete-item'
 
 interface Props {
   currentAward: Award[]
+  setKeepDelete: (value: boolean) => void
+  setSelectedId: (value: string) => void
+  setDeleteTable: (value: 'award' | 'sanction') => void
 }
 
-const TableAwardList = ({ currentAward }: Props) => {
+const TableAwardList = ({
+  currentAward,
+  setKeepDelete,
+  setSelectedId,
+  setDeleteTable
+}: Props) => {
+  const handleMouseDown = (id: string) => {
+    setDeleteTable('award')
+    setSelectedId(id)
+    setKeepDelete(true)
+  }
 
-  const handleDeleteItem () => {
-    
+  const handleMouseUpCapture = () => {
+    setKeepDelete(false)
+  }
+
+  const handleMouseLeave = () => {
+    setKeepDelete(false)
   }
   return (
     <Table>
@@ -36,7 +53,16 @@ const TableAwardList = ({ currentAward }: Props) => {
           <TableRow key={id}>
             <TableCell>{name}</TableCell>
             <TableCell>{value}</TableCell>
-            <TableCell><ButtonDeleteItem handleClick={handleDeleteItem}/></TableCell>
+            <TableCell>
+              <ButtonDeleteItem
+                handleMouseDown={() => {
+                  handleMouseDown(id)
+                }}
+                handleMouseLeave={handleMouseLeave}
+                handleMouseUpCapture={handleMouseUpCapture}
+                setKeepDelete={setKeepDelete}
+              />
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

@@ -19,5 +19,13 @@ export async function POST (request: NextRequest) {
 export async function DELETE (request: NextRequest) {
   const supabase = createServerComponentClient({ cookies })
   const { id } = await request.json()
-  const { data, error } = await supabase.from('award').delete().match({ id })
+  const { error: errorDelete } = await supabase.from('award').delete().eq('id', id)
+  if (errorDelete !== null) {
+    throw new Error(errorDelete.message)
+  }
+  const { data, error } = await supabase.from('award').select('*')
+  if (error !== null) {
+    throw new Error(error.message)
+  }
+  return NextResponse.json({ result: data })
 }

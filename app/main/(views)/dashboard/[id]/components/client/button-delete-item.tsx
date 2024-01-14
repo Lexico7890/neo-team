@@ -4,12 +4,21 @@ import { Button } from '@/components/ui/button'
 import { AiFillDelete } from 'react-icons/ai'
 
 interface Props {
-  handleClick: () => void
+  handleMouseDown: () => void
+  handleMouseUpCapture: () => void
+  handleMouseLeave: () => void
+  setKeepDelete: (value: boolean) => void
 }
 
-const ButtonDeleteItem = ({ handleClick }: Props) => {
+const ButtonDeleteItem = ({ handleMouseDown, handleMouseLeave, handleMouseUpCapture, setKeepDelete }: Props) => {
   return (
-    <Button size='sm' variant='destructive' onClick={handleClick}>
+    <Button
+      size="sm"
+      variant="destructive"
+      onMouseUpCapture={handleMouseUpCapture}
+      onMouseLeave={handleMouseLeave}
+      onMouseDown={handleMouseDown}
+    >
       <AiFillDelete />
     </Button>
   )
